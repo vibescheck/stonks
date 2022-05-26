@@ -1,36 +1,46 @@
 import { useRef, useState, useEffect, useContext } from "react"
 import { Link, Navigate } from "react-router-dom"
 import { LoginContext } from "./LoginContext";
+import axios from './api/axios';
 
 const Login = () => {
     const {loggedIn, setLoggedIn} = useContext(LoginContext);
     const userRef = useRef();
-    // const errRef = useRef();
     
     const [user, setUser] = useState('');
     const [pwd, setPwd] = useState('');
-    // const [errMsg, setErrMsg] = useState('');
-    // const [success, setSuccess] = useState(false);
+    const [errMsg, setErrMsg] = useState('');
 
     useEffect(() => {
         userRef.current.focus();
     }, [])
 
+    const loginurl = '/users/login';
+
     const handleSubmit = async (e) => {
+        setErrMsg('')
         e.preventDefault();
         try {
-            // TODO: check auth else throw error
-            setLoggedIn(true);
+            const response = await axios.post(loginurl, {"username": user, "password": pwd})
+            const token = response?.data?.token
+            setLoggedIn({user, pwd, token})
         } catch (err) {
-            // setErrMsg('Login Failed');
-            // errRef.current.focus();
+            console.log(err)
+            setErrMsg("Login Failed.")
+            setUser('')
+            setPwd('')
+            userRef.current.focus();
         }
     }
 
     return (
     <>
-        {loggedIn ? (<Navigate to="/dashboard" />) : (
+        {loggedIn.token ? (<Navigate to="/dashboard" />) : (
             <main>
+                <p className={errMsg ? "errmsg" : "offscreen"}>
+                    {errMsg}
+                </p>
+
                 <h2>login</h2>
                 <form onSubmit={handleSubmit}>
                     <div> <input
@@ -62,7 +72,6 @@ const Login = () => {
                     <Link to="/" className="stonks"> stonks! </Link>
                 </div>  
             </main>
-            
         )}
     </>
     )
