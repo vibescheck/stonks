@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, useContext } from "react"
 import { Link, Navigate } from "react-router-dom"
-import axios from './api/axios';
+import { userRegister } from "./api/userService.js"
 
 const Register = () => {
     const nameRef = useRef();
@@ -16,14 +16,12 @@ const Register = () => {
         nameRef.current.focus();
     }, [])
 
-    const registerurl = '/users/register';
-
     const handleSubmit = async (e) => {
         setErrMsg('')
         setSuccess(false)
         e.preventDefault();
         try {
-            const response = await axios.post(registerurl, {
+            const response = await userRegister({
                 "username": user, 
                 "email": email,
                 "password": pwd,
@@ -31,6 +29,7 @@ const Register = () => {
                 })
             console.log(response.data)
             const token = response?.data?.token
+            /* AUTH */
             setPwd('')
             setSuccess(true)
         } catch (err) {

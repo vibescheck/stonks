@@ -2,7 +2,7 @@ import { LoginContext } from "./LoginContext";
 import { useContext } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 
-const Home = () => {
+const LandingPage = () => {
     const {loggedIn} = useContext(LoginContext);
     const nav = useNavigate();
     
@@ -21,4 +21,4 @@ const Home = () => {
     )
 }
 
-export default Home
+export default LandingPage

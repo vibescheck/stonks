@@ -4,15 +4,15 @@ import Register from './Register';
 import Err404 from './Err404';
 import { BrowserRouter as Router, Routes, Route} from "react-router-dom"
 import Dashboard from './Dashboard';
-import Home from './Home';
+import Home from './LandingPage';
+import LandingPage from './LandingPage';
 
 function App() {
     return (
-        <>
         <div className='App'> 
             <Router>
                 <Routes>
-                    <Route path="/" element={<Home/>} />
+                    <Route path="/" element={<LandingPage/>} />
                     <Route path="/login" element={<Login/>} />
                     <Route path="/register" element={<Register/>} />
                     <Route path="*" element={<Err404 />} />
@@ -23,7 +23,6 @@ function App() {
                 </Routes>
             </Router>
         </div>
-        </>
     )
 }
 

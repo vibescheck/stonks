@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, useContext } from "react"
 import { Link, Navigate } from "react-router-dom"
 import { LoginContext } from "./LoginContext";
-import axios from './api/axios';
+import { userLogin } from "./api/userService.js"
 
 const Login = () => {
     const {loggedIn, setLoggedIn} = useContext(LoginContext);
@@ -15,13 +15,11 @@ const Login = () => {
         userRef.current.focus();
     }, [])
 
-    const loginurl = '/users/login';
-
     const handleSubmit = async (e) => {
         setErrMsg('')
         e.preventDefault();
         try {
-            const response = await axios.post(loginurl, {"username": user, "password": pwd})
+            const response = await userLogin({"username": user, "password": pwd})
             const token = response?.data?.token
             setLoggedIn({user, pwd, token})
         } catch (err) {
