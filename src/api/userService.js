@@ -15,10 +15,8 @@ const getUserDetails = (authData) => {
   return http.get('user/details', authData)
 }
 
-const UserService = {
+export {
   userLogin,
   userRegister,
   getUserDetails
 } 
-
-export default UserService

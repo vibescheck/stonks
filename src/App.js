@@ -1,11 +1,10 @@
 import './App.css';
-import Login from './Login';
-import Register from './Register';
-import Err404 from './Err404';
+import Login from './components/Login';
+import Register from './components/Register';
+import Err404 from './components/Err404';
 import { BrowserRouter as Router, Routes, Route} from "react-router-dom"
-import Dashboard from './Dashboard';
-import Home from './LandingPage';
-import LandingPage from './LandingPage';
+import Dashboard from './components/Dashboard';
+import LandingPage from './components/LandingPage';
 
 function App() {
     return (

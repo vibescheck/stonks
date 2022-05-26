@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import { LoginProvider } from './LoginProvider.js'
+import LoginProvider from './components/LoginProvider'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

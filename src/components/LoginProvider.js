@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { LoginContext } from "./LoginContext";
+import LoginContext from "./LoginContext";
 
-export const LoginProvider = ({ children }) => {
+const LoginProvider = ({ children }) => {
     const [loggedIn, setLoggedIn] = useState({});
 
     return (
@@ -10,3 +10,5 @@ export const LoginProvider = ({ children }) => {
         </LoginContext.Provider>
     )
 }
+
+export default LoginProvider
