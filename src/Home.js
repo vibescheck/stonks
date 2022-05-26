@@ -3,12 +3,12 @@ import { useContext } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 
 const Home = () => {
-    const {loggedIn, setLoggedIn} = useContext(LoginContext);
+    const {loggedIn} = useContext(LoginContext);
     const nav = useNavigate();
     
     return (
         <>
-            {loggedIn ? (<Navigate to="/dashboard" />) : (
+            {loggedIn.token ? (<Navigate to="/dashboard" />) : (
             <main>
                 <h1>
                     stonks!
