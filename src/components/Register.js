@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { userRegister } from "../api/userService.js";
+import { Link, useNavigate } from "react-router-dom";
+import { userRegister } from "../services/userService.js";
 import Footer from "./Footer.js";
 
 const Register = () => {
@@ -23,13 +23,12 @@ const Register = () => {
     setErrMessage("");
     setRegistrationStatus(false);
     try {
-      const response = await userRegister({
+      await userRegister({
         username,
         email,
         password,
         name,
       });
-      const token = response?.data?.token; // TODO
       setPassword("");
       setRegistrationStatus(true);
     } catch (err) {
@@ -108,6 +107,7 @@ const Register = () => {
 
       <p className={!registrationStatus ? "deez" : "offscreen"}>
         return to 
+        <br/>
         <Link to="/login">login</Link>
       </p>
 
@@ -116,6 +116,7 @@ const Register = () => {
         <br/>
         <span className="deez">
           go to 
+          <br/>
           <Link to="/login">login</Link>
         </span>
       </p>

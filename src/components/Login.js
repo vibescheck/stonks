@@ -1,37 +1,42 @@
-import { useRef, useState, useEffect, useContext } from "react";
-import { Link, Navigate } from "react-router-dom";
-import LoginContext from "./LoginContext";
-import { userLogin } from "../api/userService.js";
+import { useRef, useState, useEffect } from "react";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { userLogin } from "../services/userService.js";
 import Footer from "./Footer";
 
 const Login = () => {
-  const { loggedIn, setLoggedIn } = useContext(LoginContext);
-
   const usernameInputRef = useRef();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errMessage, setErrMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   // Start with focusing input field for username
   useEffect(() => {
-    usernameInputRef.current.focus();
+    if (usernameInputRef) {
+      usernameInputRef.current.focus();
+    }   
   }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setErrMessage("");
+    setLoading(true);
     try {
       const response = await userLogin({
         username,
         password,
-      });
-      const token = response?.data?.token; // TODO
-      setLoggedIn({ username, password, token }); // TODO
+      })
+      /* Currently adopted 'bad' practice' */
+      sessionStorage.setItem("token", response.data.token)
+      navigate("/dashboard")
+      // window.location.reload()
     } catch (err) {
       console.log(err);
       setErrMessage("Login Failed.");
       setUsername("");
       setPassword("");
+      setLoading(false);
       usernameInputRef.current.focus();
     }
   };
@@ -46,8 +51,7 @@ const Login = () => {
 
   return (
     <>
-      {/* Change if possible */}
-      {loggedIn.token ? (
+      {sessionStorage.getItem("token") ? (
         <Navigate to="/dashboard" />
       ) : (
         <main>
@@ -77,11 +81,12 @@ const Login = () => {
                 required
               />
             </div>
-            <button>login</button>
+            {loading ? <span>Loading...</span>
+                     : <button>login</button>}
           </form>
 
           <p className="deez">
-            not a username yet? 
+            not a user yet? 
             <br />
             <Link to="/register">register</Link>
           </p>
