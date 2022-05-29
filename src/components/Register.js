@@ -2,9 +2,11 @@ import { useRef, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { userRegister } from "../services/userService.js";
 import Footer from "./Footer.js";
+import loginStatus from "./loginStatus.js";
 
 const Register = () => {
   const nameInputRef = useRef();
+  const navigate = useNavigate()
 
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -15,7 +17,13 @@ const Register = () => {
 
   // Start by focusing on input for name field
   useEffect(() => {
-    nameInputRef.current.focus();
+    if (loginStatus()) {
+      navigate("/dashboard")
+      return
+    }
+    if (nameInputRef && nameInputRef.current) {
+      nameInputRef.current.focus();
+    }
   }, []);
 
   const handleSubmit = async (e) => {
@@ -33,7 +41,7 @@ const Register = () => {
       setRegistrationStatus(true);
     } catch (err) {
       console.log(err);
-      setErrMessage("Register Failed.");
+      setErrMessage("Register Failed. " + err.response.data);
       /* setUsername("");
       setPassword("");
       setName("");

@@ -1,7 +1,8 @@
 import { useRef, useState, useEffect } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { userLogin } from "../services/userService.js";
 import Footer from "./Footer";
+import loginStatus from "./loginStatus.js";
 
 const Login = () => {
   const usernameInputRef = useRef();
@@ -13,7 +14,11 @@ const Login = () => {
 
   // Start with focusing input field for username
   useEffect(() => {
-    if (usernameInputRef) {
+    if (loginStatus()) {
+      navigate("/dashboard")
+      return
+    }
+    if (usernameInputRef && usernameInputRef.current) {
       usernameInputRef.current.focus();
     }   
   }, []);
@@ -30,10 +35,9 @@ const Login = () => {
       /* Currently adopted 'bad' practice' */
       sessionStorage.setItem("token", response.data.token)
       navigate("/dashboard")
-      // window.location.reload()
     } catch (err) {
       console.log(err);
-      setErrMessage("Login Failed.");
+      setErrMessage("Login Failed. " + err.response.data);
       setUsername("");
       setPassword("");
       setLoading(false);
@@ -50,10 +54,6 @@ const Login = () => {
   }
 
   return (
-    <>
-      {sessionStorage.getItem("token") ? (
-        <Navigate to="/dashboard" />
-      ) : (
         <main>
           <p className={errMessage ? "errmsg" : "offscreen"}>{errMessage}</p>
 
@@ -93,8 +93,6 @@ const Login = () => {
 
           <Footer />
         </main>
-      )}
-    </>
   );
 };
 

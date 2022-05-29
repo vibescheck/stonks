@@ -1,5 +1,7 @@
+import loginStatus from "../components/loginStatus";
+
 export default function authenticationHeader() {
-  const token = sessionStorage.getItem('token');
+  const token = sessionStorage.getItem("token");
   if (token) {
     return { 'Authorization': `Bearer ${token}` };
   } else {

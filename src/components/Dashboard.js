@@ -1,24 +1,28 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUserDetails } from "../services/userService.js";
+import loginStatus from "./loginStatus.js";
 
 export default function Dashboard() {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  /* await getUserDetails(auth) */
 
   useEffect(() => {
-    if (sessionStorage.getItem("token")) {
+    if (loginStatus()) {
       setLoading(true);
       getUserDetails()
         .then((response) => {
           setUser(response.data);
           setLoading(false);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error)
+          navigate("*", { status: 500, message: ("Server error " + error.response.data) })
+        });
     } else {
-      navigate("*", { status: 401, message: "Not authorized" });
+      alert("Please login first.")
+      navigate("/login");
     }
   }, []);
 
@@ -30,7 +34,7 @@ export default function Dashboard() {
   return (
     <main>
       {loading ? (
-        <p>Loading ... </p>
+        <p>Retrieving info ... </p>
       ) : (
         <>
           <h1>Welcome, {user.username}</h1>
