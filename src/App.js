@@ -1,30 +1,23 @@
-import './App.css';
-import Login from './Login';
-import Register from './Register';
-import Err404 from './Err404';
-import { BrowserRouter as Router, Routes, Route} from "react-router-dom"
-import Dashboard from './Dashboard';
-import Home from './Home';
+import "./App.css";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import { Routes, Route } from "react-router-dom";
+import Dashboard from "./components/Dashboard";
+import LandingPage from "./components/LandingPage";
+import ErrorPage from "./components/ErrorPage";
 
 function App() {
-    return (
-        <>
-        <div className='App'> 
-            <Router>
-                <Routes>
-                    <Route path="/" element={<Home/>} />
-                    <Route path="/login" element={<Login/>} />
-                    <Route path="/register" element={<Register/>} />
-                    <Route path="*" element={<Err404 />} />
-                    <Route 
-                        path="/dashboard" 
-                        element={<Dashboard />}
-                    />
-                </Routes>
-            </Router>
-        </div>
-        </>
-    )
+  return (
+    <div className="App">
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="*" element={<ErrorPage status="404" message="Not Found" />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </div>
+  );
 }
 
 export default App;
