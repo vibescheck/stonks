@@ -22,7 +22,6 @@ export default function Dashboard() {
           Authorization: `Bearer ${token}`
         }
       });
-      console.log(response);
       setMessage(response.data.message);
     } catch (error) {
       console.log(error);
