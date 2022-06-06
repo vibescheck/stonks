@@ -2,7 +2,6 @@ import axios from 'axios';
 import authenticationHeader from './authenticationHeader';
 
 const url = `${process.env.REACT_APP_SERVER_URL}/api/v1`;
-const g
 
 // API call for logging user in and retrieving authentication token
 const userLogin = (loginData) => {
@@ -18,9 +17,5 @@ const userRegister = (registerData) => {
 const getUserDetails = () => {
   return axios.get(`${url}/users/details`, { headers: authenticationHeader() });
 };
-
-const getProtected = () => {
-  return axios.get()
-}
 
 export { userLogin, userRegister, getUserDetails };

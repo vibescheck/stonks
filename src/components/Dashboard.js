@@ -1,51 +1,45 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { getUserDetails } from '../services/userService';
-import loginStatus from './loginStatus';
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function Dashboard() {
-  const [user, setUser] = useState({});
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const [message, setMessage] = useState('');
   const { logout, getAccessTokenSilently } = useAuth0();
 
-  useEffect(() => {
-    if (loginStatus()) {
-      setLoading(true);
-      getUserDetails()
-        .then((response) => {
-          setUser(response.data);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.log(error);
-          navigate('*', { status: 500, message: `Server error ${error.response.data}` });
-        });
-    } else {
-      alert('Please login first.');
-      navigate('/login');
-    }
-  }, []);
+  const getMessage = async () => {
+    try {
+      const token = await getAccessTokenSilently();
 
-  /* const logout = () => {
-    sessionStorage.removeItem('token');
-    navigate('/');
-  }; */
+      /* {
+        audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+        scope: 'read:messages'
+      }); */
+      const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/v1/users/details`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console.log(response);
+      setMessage(response.data.message);
+    } catch (error) {
+      console.log(error);
+      navigate('*', { status: 500, message: error.message });
+    }
+  };
 
   return (
     <main>
-      {loading ? (
-        <p>Retrieving info ... </p>
-      ) : (
-        <>
-          <h1>Welcome, {user.username}</h1>
-          <h2>Name: {user.email}</h2>
-          <h2>Email: {user.name}</h2>
-        </>
-      )}
+      <button type="button" onClick={getMessage}>
+        Get Message
+      </button>
+      <h1>{message}</h1>
 
+      <Link to="/profile">
+        <button type="button">View Profile</button>
+      </Link>
       <button type="button" onClick={logout}>
         {' '}
         logout{' '}

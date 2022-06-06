@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Auth0Provider } from '@auth0/auth0-react';
 
 function Auth0ProviderWithHistory({ children }) {
@@ -7,10 +7,10 @@ function Auth0ProviderWithHistory({ children }) {
   const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID;
   const audience = process.env.REACT_APP_AUTH0_AUDIENCE;
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const onRedirectCallback = (appState) => {
-    history.push(appState?.returnTo || window.location.pathname);
+    navigate(appState?.returnTo || '/dashboard');
   };
 
   return (
@@ -18,7 +18,8 @@ function Auth0ProviderWithHistory({ children }) {
       domain={domain}
       clientId={clientId}
       redirectUri={window.location.origin}
-      onRedirectCallback={onRedirectCallback}>
+      onRedirectCallback={onRedirectCallback}
+      audience={audience}>
       {children}
     </Auth0Provider>
   );

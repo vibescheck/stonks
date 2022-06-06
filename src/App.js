@@ -7,8 +7,8 @@ import Dashboard from './components/Dashboard';
 import LandingPage from './components/LandingPage';
 import ErrorPage from './components/ErrorPage';
 import Profile from './components/Profile';
-import ProtectedRoute from './auth/ProtectedRoute';
 import Loading from './components/Loading';
+import ProtectedRoute from './auth/ProtectedRoute';
 
 function App() {
   const { isLoading } = useAuth0();
@@ -24,8 +24,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="*" element={<ErrorPage status="404" message="Not Found" />} />
-        <ProtectedRoute path="/dashboard" element={<Dashboard />} />
-        <ProtectedRoute path="/profile" component={Profile} />
+        <Route path="/dashboard" element={<ProtectedRoute component={Dashboard} />} />
+        <Route path="/profile" element={<ProtectedRoute component={Profile} />} />
       </Routes>
     </div>
   );
