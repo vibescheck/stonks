@@ -2,9 +2,6 @@ import axios from 'axios'
 import authenticationHeader from './authenticationHeader'
 
 const url = 'https://server-stonks.herokuapp.com/api/v1'
- //'http://localhost:5000'
-//const contentType = { 'Content-Type': 'application/x-www-form-urlencoded' }
-//{headers: contentType}
 
 // API call for logging user in and retrieving authentication token
 const userLogin = (loginData) => {
