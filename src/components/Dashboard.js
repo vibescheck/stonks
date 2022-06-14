@@ -39,6 +39,9 @@ export default function Dashboard() {
         <Link to="/investments">
           <Button type="button">View Investments</Button>
         </Link>
+        <Link to="/savings">
+          <Button type="button">SavingsWallet</Button>
+        </Link>
       </Stack>
       <Button type="button" onClick={logout}>
         {' '}
