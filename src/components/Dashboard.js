@@ -1,8 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
-<<<<<<< HEAD
 import { Stack, Button } from '@chakra-ui/react';
-=======
->>>>>>> origin/withsavings
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
@@ -16,15 +13,7 @@ export default function Dashboard() {
   const getMessage = async () => {
     try {
       const token = await getAccessTokenSilently();
-<<<<<<< HEAD
       /* scope: 'read:messages' */
-=======
-
-      /* {
-        audience: process.env.REACT_APP_AUTH0_AUDIENCE,
-        scope: 'read:messages'
-      }); */
->>>>>>> origin/withsavings
       const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/details`, {
         headers: {
           Authorization: `Bearer ${token}`
@@ -43,8 +32,6 @@ export default function Dashboard() {
         Get Message
       </button>
       <h1>{message}</h1>
-
-<<<<<<< HEAD
       <Stack spacing="20px" direction="row" align="center">
         <Link to="/profile">
           <Button type="button">View Profile</Button>
@@ -57,18 +44,6 @@ export default function Dashboard() {
         {' '}
         logout{' '}
       </Button>
-=======
-      <Link to="/profile">
-        <button type="button">View Profile</button>
-      </Link>
-      <Link to="/savings">
-        <button type="button">Savings Wallet</button>
-      </Link>
-      <button type="button" onClick={logout}>
-        {' '}
-        logout{' '}
-      </button>
->>>>>>> origin/withsavings
     </main>
   );
 }
