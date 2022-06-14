@@ -2,7 +2,6 @@ import { useAuth0 } from '@auth0/auth0-react';
 import axios from 'axios';
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import Transaction from './Transaction';
 
 export default function SavingsWallet() {
   const navigate = useNavigate();
@@ -24,20 +23,36 @@ export default function SavingsWallet() {
     return response.data;
   };
 
-  const getTxns = () => {
-    setTransactions(
-      getTransactions()
-        .then((response) => console.log(response))
-        .catch((err) => console.log(err))
+  async function deleteTransaction(id) {
+    const token = await getAccessTokenSilently();
+    const response = await axios.delete(
+      `${process.env.REACT_APP_SERVER_URL}/api/v1/transactions/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
     );
+  }
+
+  const getTxns = () => {
+    getTransactions()
+      .then((response) => {
+        console.log(response.data);
+        setTransactions(response.data);
+      })
+      .catch((err) => console.log(err));
   };
 
   useEffect(() => {
-    getTxns();
     if (amountInputRef && amountInputRef.current) {
       amountInputRef.current.focus();
     }
   }, []);
+
+  useEffect(() => {
+    getTxns();
+  });
 
   const addTransaction = async () => {
     const token = await getAccessTokenSilently();
@@ -128,9 +143,15 @@ export default function SavingsWallet() {
       </form>
       <h2> History </h2>
       <ul className="list">
-        {/* {transactions.map((transaction) => (
-          <Transaction key={transaction.id} transaction={transaction.amount} />
-        ))} */}
+        {[...transactions].reverse().map(({ _id, amount: amt }) => (
+          <li key={_id}>
+            {amt}
+            <button onClick={() => deleteTransaction(_id)} className="deletbtn" type="submit">
+              {' '}
+              x{' '}
+            </button>
+          </li>
+        ))}
       </ul>
       <Link to="/dashboard">
         <button type="button">back to dashboard</button>
