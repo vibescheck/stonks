@@ -6,7 +6,7 @@ function LandingPage() {
 
   const registerRedirect = () => {
     loginWithRedirect({
-      screen_hint: 'sign_up'
+      screen_hint: 'signup'
     });
   };
 
