@@ -1,6 +1,8 @@
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
+import Login from './components/Login';
+import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import LandingPage from './components/LandingPage';
 import ErrorPage from './components/ErrorPage';
@@ -9,6 +11,7 @@ import Loading from './components/Loading';
 import ProtectedRoute from './auth/ProtectedRoute';
 import AssetFinder from './components/investments/AssetFinder';
 import Portfolio from './components/investments/Portfolio';
+import SavingsWallet from './components/SavingsWallet';
 
 function App() {
   const { isLoading } = useAuth0();
@@ -26,6 +29,7 @@ function App() {
         <Route path="/profile" element={<ProtectedRoute component={Profile} />} />
         <Route path="/finder" element={<ProtectedRoute component={AssetFinder} />} />
         <Route path="/investments" element={<ProtectedRoute component={Portfolio} />} />
+        <Route path="/savings" element={<ProtectedRoute component={SavingsWallet} />} />
       </Routes>
     </div>
   );
