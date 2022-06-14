@@ -1,4 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import { Button } from '@chakra-ui/react';
 
 function LandingPage() {
   const { loginWithRedirect } = useAuth0();
@@ -12,12 +13,12 @@ function LandingPage() {
   return (
     <main>
       <h1>stonks!</h1>
-      <button type="button" onClick={loginWithRedirect}>
+      <Button type="button" onClick={loginWithRedirect}>
         Login with Auth0
-      </button>
-      <button type="button" className="btn btn-primary btn-block" onClick={registerRedirect}>
+      </Button>
+      <Button type="button" className="btn btn-primary btn-block" onClick={registerRedirect}>
         Register
-      </button>
+      </Button>
     </main>
   );
 }

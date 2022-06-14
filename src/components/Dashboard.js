@@ -1,4 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import { Stack, Button } from '@chakra-ui/react';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
@@ -12,12 +13,8 @@ export default function Dashboard() {
   const getMessage = async () => {
     try {
       const token = await getAccessTokenSilently();
-
-      /* {
-        audience: process.env.REACT_APP_AUTH0_AUDIENCE,
-        scope: 'read:messages'
-      }); */
-      const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/v1/users/details`, {
+      /* scope: 'read:messages' */
+      const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/details`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -36,13 +33,18 @@ export default function Dashboard() {
       </button>
       <h1>{message}</h1>
 
-      <Link to="/profile">
-        <button type="button">View Profile</button>
-      </Link>
-      <button type="button" onClick={logout}>
+      <Stack spacing="20px" direction="row" align="center">
+        <Link to="/profile">
+          <Button type="button">View Profile</Button>
+        </Link>
+        <Link to="/investments">
+          <Button type="button">View Investments</Button>
+        </Link>
+      </Stack>
+      <Button type="button" onClick={logout}>
         {' '}
         logout{' '}
-      </button>
+      </Button>
     </main>
   );
 }

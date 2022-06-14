@@ -1,3 +1,10 @@
-export default function Loading() {
-  return <main>Loading...</main>;
+import { CircularProgress } from '@chakra-ui/react';
+
+export default function Loading({ message }) {
+  return (
+    <div>
+      {message || 'Loading...'}
+      <CircularProgress isIndeterminate />
+    </div>
+  );
 }
