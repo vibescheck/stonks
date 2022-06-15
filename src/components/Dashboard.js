@@ -1,14 +1,15 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { Stack, Button } from '@chakra-ui/react';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import LogoutButton from './LogoutButton';
 
 export default function Dashboard() {
   const navigate = useNavigate();
 
   const [message, setMessage] = useState('');
-  const { logout, getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently } = useAuth0();
 
   const getMessage = async () => {
     try {
@@ -43,10 +44,7 @@ export default function Dashboard() {
           <Button type="button">SavingsWallet</Button>
         </Link>
       </Stack>
-      <Button type="button" onClick={logout}>
-        {' '}
-        logout{' '}
-      </Button>
+      <LogoutButton />
     </main>
   );
 }
