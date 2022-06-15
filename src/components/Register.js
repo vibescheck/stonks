@@ -1,25 +1,25 @@
-import { useRef, useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { userRegister } from "../services/userService.js";
-import Footer from "./Footer.js";
-import loginStatus from "./loginStatus.js";
+import { useRef, useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { userRegister } from '../services/userService';
+import Footer from './Footer';
+import loginStatus from './loginStatus';
 
-const Register = () => {
+function Register() {
   const nameInputRef = useRef();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [errMessage, setErrMessage] = useState("");
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [errMessage, setErrMessage] = useState('');
   const [registrationStatus, setRegistrationStatus] = useState(false);
 
   // Start by focusing on input for name field
   useEffect(() => {
     if (loginStatus()) {
-      navigate("/dashboard")
-      return
+      navigate('/dashboard');
+      return;
     }
     if (nameInputRef && nameInputRef.current) {
       nameInputRef.current.focus();
@@ -28,20 +28,20 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrMessage("");
+    setErrMessage('');
     setRegistrationStatus(false);
     try {
       await userRegister({
         username,
         email,
         password,
-        name,
+        name
       });
-      setPassword("");
+      setPassword('');
       setRegistrationStatus(true);
     } catch (err) {
       console.log(err);
-      setErrMessage("Register Failed. " + err.response.data);
+      setErrMessage(`Register Failed. ${err.response.data}`);
       /* setUsername("");
       setPassword("");
       setName("");
@@ -51,21 +51,21 @@ const Register = () => {
   };
 
   const onChangeUsername = (event) => {
-    setUsername(event.target.value)
-  }
+    setUsername(event.target.value);
+  };
   const onChangeEmail = (event) => {
-    setEmail(event.target.value)
-  }
+    setEmail(event.target.value);
+  };
   const onChangePassword = (event) => {
-    setPassword(event.target.value)
-  }
+    setPassword(event.target.value);
+  };
   const onChangeName = (event) => {
-    setName(event.target.value)
-  }
+    setName(event.target.value);
+  };
 
   return (
     <main>
-      <p className={errMessage ? "errmsg" : "offscreen"}>{errMessage}</p>
+      <p className={errMessage ? 'errmsg' : 'offscreen'}>{errMessage}</p>
 
       <h2>register</h2>
       <form onSubmit={handleSubmit}>
@@ -110,21 +110,21 @@ const Register = () => {
             required
           />
         </div>
-        <button>register</button>
+        <button type="button">register</button>
       </form>
 
-      <p className={!registrationStatus ? "deez" : "offscreen"}>
-        return to 
-        <br/>
+      <p className={!registrationStatus ? 'deez' : 'offscreen'}>
+        return to
+        <br />
         <Link to="/login">login</Link>
       </p>
 
-      <p className={registrationStatus ? "registrationStatus" : "offscreen"}>
+      <p className={registrationStatus ? 'registrationStatus' : 'offscreen'}>
         You have successfully registered.
-        <br/>
+        <br />
         <span className="deez">
-          go to 
-          <br/>
+          go to
+          <br />
           <Link to="/login">login</Link>
         </span>
       </p>
@@ -132,6 +132,6 @@ const Register = () => {
       <Footer />
     </main>
   );
-};
+}
 
 export default Register;

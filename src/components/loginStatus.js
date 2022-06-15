@@ -1,3 +1,3 @@
 export default function loginStatus() {
-  return sessionStorage.getItem("token")
+  return sessionStorage.getItem('token');
 }

@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
-const Footer = () => {
+function Footer() {
   return (
     <div className="footer">
       <Link to="/" className="stonks">
@@ -8,6 +8,6 @@ const Footer = () => {
       </Link>
     </div>
   );
-};
+}
 
-export default Footer
+export default Footer;

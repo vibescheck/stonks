@@ -57,3 +57,14 @@ button {
   padding: 0.5rem;
   margin-bottom: 0.5rem;
 }
+
+.list ul {
+  background-color: #fff;
+  box-shadow: var(--box-shadow);
+  color: #333;
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  padding: 10px;
+  margin: 10px 0;
+}
