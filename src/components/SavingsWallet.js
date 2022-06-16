@@ -1,13 +1,26 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import {
+  Box,
+  Button,
+  FormLabel,
+  Heading,
+  Input,
+  Table,
+  TableContainer,
+  Tbody,
+  Th,
+  Thead,
+  Tr
+} from '@chakra-ui/react';
 import axios from 'axios';
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
 export default function SavingsWallet() {
   const navigate = useNavigate();
-  const { logout, getAccessTokenSilently, user } = useAuth0();
+  const { getAccessTokenSilently, user } = useAuth0();
   const [amount, setAmount] = useState('');
-  const [date, setDate] = useState('');
+  const [date, setDate] = useState(Date.now);
   const [category, setCategory] = useState('');
   const [note, setNote] = useState('');
   const [transactions, setTransactions] = useState([]);
@@ -88,74 +101,98 @@ export default function SavingsWallet() {
 
   return (
     <main>
-      <h1> Savings Wallet </h1>
-      <h3>Add new transaction </h3>
+      <Heading align="left" p={10}>
+        Savings & Expenses
+      </Heading>
+      <TableContainer p="10" align="center">
+        <Table variant="simple">
+          <Thead alignItems="center">
+            <Tr>
+              <Th> Transaction </Th>
+              <Th> Amount </Th>
+              <Th> Category </Th>
+              <Th> Date </Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {[...transactions].reverse().map((txn) => {
+              return (
+                <tr key={txn._id}>
+                  <td> {txn.note} </td>
+                  <td>{txn.amount}</td>
+                  <td>{txn.category}</td>
+                  {/* TODO: If empty put - */}
+                  <td>{txn.date}</td>
+                  <Button
+                    onClick={() => deleteTransaction(txn._id)}
+                    className="deletbtn"
+                    type="submit"
+                    width={1}
+                    height={7}
+                    marginInline={5}
+                    marginBlock={2}>
+                    {' '}
+                    x{' '}
+                  </Button>
+                </tr>
+              );
+            })}
+          </Tbody>
+        </Table>
+      </TableContainer>
       <form onSubmit={onSubmit}>
-        <div>
-          <label htmlFor="amount">
-            Amount:
-            <input
-              type="text"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              placeholder="Enter amount..."
-              ref={amountInputRef}
-              required
-            />
-          </label>
-        </div>
-        <div>
-          <label htmlFor="date">
-            Date:
-            {/* <DatePicker selected={date} onChange={(date) => setStartDate(date)} /> */}
-            <input
-              type="text"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              placeholder="Enter date..."
-              required
-            />
-          </label>
-        </div>
-        <div>
-          <label htmlFor="Category">
-            Category:
-            <input
-              type="text"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              placeholder="Category (Optional)"
-            />
-          </label>
-        </div>
-        <div>
-          <label htmlFor="Note">
-            Note:
-            <input
-              type="text"
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-              placeholder="Note (Optional)"
-            />
-          </label>
-        </div>
-        <button type="submit">Add transaction</button>
+        <Box paddingInline="68vh">
+          <div>
+            <FormLabel htmlFor="Note">
+              Transaction Name:
+              <Input
+                type="text"
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                placeholder="Name (Optional)"
+              />
+            </FormLabel>
+          </div>
+          <div>
+            <FormLabel htmlFor="amount">
+              Amount:
+              <Input
+                type="Number"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                placeholder="Enter amount"
+                ref={amountInputRef}
+                required
+              />
+            </FormLabel>
+          </div>
+          <div>
+            <FormLabel htmlFor="date">
+              Date:
+              <Input type="Date" value={date} onChange={(e) => setDate(e.target.value)} />
+            </FormLabel>
+          </div>
+          <div>
+            <FormLabel htmlFor="Category">
+              Category:
+              <Input
+                type="text"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                placeholder="Category (Optional)"
+              />
+            </FormLabel>
+          </div>
+          <Box p={5}>
+            <Button type="submit">Add transaction</Button>
+          </Box>
+        </Box>
       </form>
-      <h2> History </h2>
-      <ul className="list">
-        {[...transactions].reverse().map(({ _id, amount: amt }) => (
-          <li key={_id}>
-            {amt}
-            <button onClick={() => deleteTransaction(_id)} className="deletbtn" type="submit">
-              {' '}
-              x{' '}
-            </button>
-          </li>
-        ))}
-      </ul>
-      <Link to="/dashboard">
-        <button type="button">back to dashboard</button>
-      </Link>
+      <Box p={5}>
+        <Link to="/dashboard">
+          <Button type="button">back to dashboard</Button>
+        </Link>
+      </Box>
     </main>
   );
 }
