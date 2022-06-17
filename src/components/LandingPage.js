@@ -34,35 +34,21 @@ function LandingPage() {
           stonks!
         </Heading>
         <Stack direction="column" spacing="5vh" align="center" mt="-30vh">
-          <Button
-            type="button"
-            onClick={loginWithRedirect}
-            h="50px"
-            _hover={{
-              bg: '#B5FFF4',
-              transform: 'scale(1.1)'
-            }}
-            _active={{
-              bg: '#36ffae',
-              transform: 'scale(0.98)'
-            }}
-            transition="200ms">
+          <Button type="button" onClick={loginWithRedirect} h="50px">
             Login
           </Button>
           <Button
             type="button"
             onClick={registerRedirect}
-            // isLoading ( TODO: loading onclick )
             h="50px"
             _hover={{
               bg: '#FFB6C1',
-              transform: 'scale(1.1)'
+              transform: 'scale(1.05)'
             }}
             _active={{
               bg: '#ff8396',
-              transform: 'scale(0.98)'
-            }}
-            transition="200ms">
+              transform: 'scale(0.99)'
+            }}>
             Register
           </Button>
         </Stack>

@@ -17,7 +17,7 @@ import { Link } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
 import { serverURL } from '../../services/investmentService';
-import Loading from '../Loading';
+import LoadingIcon from '../LoadingIcon';
 
 export default function Portfolio() {
   const [assets, setAssets] = useState([]);
@@ -65,7 +65,7 @@ export default function Portfolio() {
       <IconButton icon={<RepeatIcon />} aria-label="Refresh" onClick={promptRefresh} />
 
       {isLoading ? (
-        <Loading />
+        <LoadingIcon />
       ) : (
         <TableContainer>
           <Table size="md">

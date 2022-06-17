@@ -9,7 +9,7 @@ import Loading from './components/Loading';
 import ProtectedRoute from './auth/ProtectedRoute';
 import AssetFinder from './components/investments/AssetFinder';
 import Portfolio from './components/investments/Portfolio';
-import SavingsWallet from './components/SavingsWallet';
+import SavingsWallet from './components/savingswallet/SavingsWallet';
 
 function App() {
   const { isLoading } = useAuth0();

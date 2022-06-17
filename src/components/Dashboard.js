@@ -4,7 +4,6 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import LogoutButton from './LogoutButton';
-import navBar from './navBar';
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -30,19 +29,7 @@ export default function Dashboard() {
 
   return (
     <main>
-      <navBar />
       <Grid minH="100vh">
-        <Stack spacing="20px" direction="row" align="center" justify="center">
-          <Link to="/profile">
-            <Button type="button">View Profile</Button>
-          </Link>
-          <Link to="/investments">
-            <Button type="button">View Investments</Button>
-          </Link>
-          <Link to="/savings">
-            <Button type="button">SavingsWallet</Button>
-          </Link>
-        </Stack>
         <Stack direction="column" spacing="20px" align="center">
           <Button type="button" onClick={getMessage}>
             Get Message
