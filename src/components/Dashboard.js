@@ -1,5 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { Stack, Button, Grid, Box } from '@chakra-ui/react';
+import { Stack, Button, Grid, Box, Flex, Center } from '@chakra-ui/react';
 import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
@@ -29,15 +29,15 @@ export default function Dashboard() {
 
   return (
     <main>
-      <Grid minH="100vh">
-        <Stack direction="column" spacing="20px" align="center">
+      <Flex align="center" justify="center" w="100%" h="100%">
+        <Stack direction="column" spacing="20px" mt="15%">
           <Button type="button" onClick={getMessage}>
             Get Message
           </Button>
           <h1>{message}</h1>
           <LogoutButton />
         </Stack>
-      </Grid>
+      </Flex>
     </main>
   );
 }
