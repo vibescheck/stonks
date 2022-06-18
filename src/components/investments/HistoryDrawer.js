@@ -5,7 +5,6 @@ import {
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
-  Box,
   Table,
   Thead,
   Tr,
@@ -18,7 +17,8 @@ import {
   IconButton,
   Button,
   useDisclosure,
-  Flex
+  Flex,
+  TableContainer
 } from '@chakra-ui/react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useState, useEffect } from 'react';
@@ -78,39 +78,40 @@ export default function HistoryDrawer() {
             {isLoading ? (
               <Loading message="fetching history" />
             ) : (
-              <Flex flexDir="column">
-                <Table>
-                  <Thead>
-                    <Tr color="gray.200">
-                      <Th>SYMBOL/NAME</Th>
-                      <Th>UNITS</Th>
-                      <Th>TYPE</Th>
-                      <Th>DATE</Th>
-                      <Th>MARKET VALUE</Th>
-                      <Th />
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    {history.map((item) => (
-                      <Tr key={uuidv4()} _hover={{ background: 'gray.100' }}>
-                        <Td>
-                          <VStack alignItems="start">
-                            <Heading size="sm" letterSpacing="tight">
-                              {item.symbol}
-                            </Heading>
-                            <Text fontWeight="semibold" fontSize="sm">
-                              {item.name}
-                            </Text>
-                          </VStack>
-                        </Td>
-                        <Td>{item.position}</Td>
-                        <Td>{item.type}</Td>
-                        <Td>{item.date}</Td>
-                        <Td>{item.action}</Td>
+              <Flex flexDir="column" gap={3} maxH="99%">
+                {/* OverflowX auto if cut out column */}
+                <TableContainer overflowY="auto" overflowX="hidden">
+                  <Table>
+                    <Thead>
+                      <Tr color="gray.200">
+                        <Th>SYMBOL/NAME</Th>
+                        <Th>UNITS</Th>
+                        <Th>TYPE</Th>
+                        <Th>DATE</Th>
                       </Tr>
-                    ))}
-                  </Tbody>
-                </Table>
+                    </Thead>
+                    <Tbody>
+                      {history.map((item) => (
+                        <Tr key={uuidv4()} _hover={{ background: 'gray.100' }}>
+                          <Td>
+                            <VStack alignItems="start">
+                              <Heading size="sm" letterSpacing="tight">
+                                {item.symbol}
+                              </Heading>
+                              <Text fontWeight="semibold" fontSize="sm">
+                                {item.name}
+                              </Text>
+                            </VStack>
+                          </Td>
+                          <Td>{item.position}</Td>
+                          <Td>{item.type}</Td>
+                          <Td>{item.date}</Td>
+                          <Td>{item.action}</Td>
+                        </Tr>
+                      ))}
+                    </Tbody>
+                  </Table>
+                </TableContainer>
                 <IconButton
                   variant="ghost"
                   size="md"

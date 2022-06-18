@@ -1,15 +1,9 @@
 import { Tr, Td, IconButton, Heading, Text, VStack } from '@chakra-ui/react';
-import { useState } from 'react';
 import { DeleteIcon } from '@chakra-ui/icons';
+import useHover from '../hooks/useHover';
 
-export default function RowAsset({ asset, deleteAsset }) {
-  const [hover, setHover] = useState(false);
-  const handleMouseIn = () => {
-    setHover(true);
-  };
-  const handleMouseOut = () => {
-    setHover(false);
-  };
+export default function OwnedRowAsset({ asset, deleteAsset }) {
+  const [hover, handleMouseIn, handleMouseOut] = useHover();
 
   return (
     <Tr
@@ -34,12 +28,16 @@ export default function RowAsset({ asset, deleteAsset }) {
       <Td>
         {hover && (
           <IconButton
+            size="sm"
+            m={0}
+            p={0}
             icon={<DeleteIcon />}
             aria-label="Delete Asset"
             onClick={() => deleteAsset(asset._id)}
           />
         )}
       </Td>
+      <Td />
     </Tr>
   );
 }

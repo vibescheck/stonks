@@ -10,20 +10,18 @@ import {
   Th,
   Td,
   Flex,
-  Text,
   HStack,
-  VStack,
   Heading,
-  Box
+  TableContainer
 } from '@chakra-ui/react';
-import { RepeatIcon, DeleteIcon, ChevronDownIcon } from '@chakra-ui/icons';
+import { RepeatIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import { v4 as uuidv4 } from 'uuid';
 
 import { serverURL } from '../../services/investmentService';
 import Loading from '../Loading';
-import AddAssetModal from './AddAssetModal';
+import SearchPopover from './SearchPopover';
 import HistoryDrawer from './HistoryDrawer';
-import RowAsset from './RowAsset';
+import OwnedAssetRow from './OwnedAssetRow';
 
 export default function Portfolio() {
   const [assets, setAssets] = useState([]);
@@ -82,46 +80,57 @@ export default function Portfolio() {
         <Flex
           flexDir="column"
           maxW="1200px"
+          maxH="90%"
           size="md"
           bgColor="white"
           borderRadius={15}
-          boxShadow="base"
+          boxShadow="lg"
           alignItems="center"
-          p={5}
-          overflow="auto">
-          <Heading size="lg" my={4}>
-            {`${user.name || user.nickname}'s `}assets
-          </Heading>
-          <Table>
-            <Thead>
-              <Tr color="gray.200">
-                <Th>SYMBOL/NAME</Th>
-                <Th>POSITION</Th>
-                <Th>COST BASIS</Th>
-                <Th>TYPE</Th>
-                <Th>DATE</Th>
-                <Th>MARKET VALUE</Th>
-                <Th>P/L</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {assets.map((asset) => (
-                <RowAsset key={uuidv4()} asset={asset} deleteAsset={deleteAsset} />
-              ))}
-            </Tbody>
-          </Table>
+          px={6}
+          py={2}
+          gap={3}>
+          <Flex w="100%" justifyContent="space-between" px={3}>
+            <Heading size="lg" my={4}>
+              {`${user.name || user.nickname}'s `}assets
+            </Heading>
+            <IconButton
+              icon={<RepeatIcon />}
+              aria-label="Refresh"
+              onClick={promptRefresh}
+              alignSelf="center"
+            />
+          </Flex>
+          <TableContainer overflowY="auto">
+            <Table colorScheme="blackAlpha">
+              <Thead>
+                <Tr color="gray.200">
+                  <Th>SYMBOL/NAME</Th>
+                  <Th>POSITION</Th>
+                  <Th>COST BASIS</Th>
+                  <Th>TYPE</Th>
+                  <Th>DATE</Th>
+                  <Th>MARKET VALUE</Th>
+                  <Th>P/L</Th>
+                  <Td />
+                </Tr>
+              </Thead>
+              <Tbody>
+                {assets.map((asset) => (
+                  <OwnedAssetRow key={uuidv4()} asset={asset} deleteAsset={deleteAsset} />
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
           <IconButton
             variant="ghost"
-            size="md"
+            size="sm"
             icon={<ChevronDownIcon w={10} h={10} />}
             onClick={loadMore}
-            m={2}
           />
         </Flex>
       )}
       <HStack pos="absolute" bottom="0" zIndex={10} m={2}>
-        <AddAssetModal />
-        <IconButton icon={<RepeatIcon />} aria-label="Refresh" onClick={promptRefresh} />
+        <SearchPopover />
       </HStack>
       <HistoryDrawer />
     </Flex>
