@@ -1,8 +1,8 @@
-import { useState, useEffect, Fragment } from 'react';
+import { useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import axios from 'axios';
+
 import {
-  Input,
   Flex,
   NumberInput,
   NumberInputField,
@@ -20,9 +20,9 @@ import {
   ModalHeader,
   ModalBody,
   ModalCloseButton,
+  ModalFooter,
   HStack,
   Text,
-  TableContainer,
   Table,
   Tbody,
   Tr,
@@ -30,59 +30,39 @@ import {
   RadioGroup,
   Radio,
   Stack,
-  Box
+  Box,
+  useDisclosure
 } from '@chakra-ui/react';
 import { CalendarIcon } from '@chakra-ui/icons';
-import { v4 as uuidv4 } from 'uuid';
-import { findCryptoSymbol, findStockSymbol, serverURL } from '../../services/investmentService';
+import { serverURL } from '../../services/investmentService';
 import Loading from '../Loading';
 
-export default function AddAssetModal({ isOpen, onClose }) {
+import AssetSelect from './AssetSelect';
+
+export default function AddAssetModal() {
   // use CONSTANTS for asset type
-  const [search, setSearch] = useState('');
+  // const [search, setSearch] = useState('');
+  const [selected, setSelected] = useState(null);
   const [type, setType] = useState('stocks');
-  const [assets, setAssets] = useState([]);
   const [position, setPosition] = useState(1);
   const [note, setNote] = useState('');
   const [isLoading, setLoading] = useState(false);
   const { getAccessTokenSilently } = useAuth0();
   const toast = useToast();
-
-  const updateAssets = async (keyword) => {
-    let results = [];
-    setLoading(true);
-    try {
-      if (!keyword) {
-        setAssets([]);
-        return;
-      }
-      if (type === 'stocks') {
-        results = findStockSymbol(keyword);
-        setAssets(results);
-      } else if (type === 'crypto') {
-        results = findCryptoSymbol(keyword);
-        setAssets(results);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    updateAssets(search).then(() => setLoading(false));
-  }, [search, type]);
-
+  const { isOpen, onOpen, onClose } = useDisclosure();
   /**
    * Switch to useReducer as soon as possible!!!
    */
-  const handleSearchChange = (event) => {
-    setSearch(event.target.value);
-  };
+
   const handlePositionChange = (event) => {
     setPosition(event.target.value);
   };
   const handleNoteChange = (event) => {
     setNote(event.target.value);
+  };
+  const handleRadioTypeChange = (event) => {
+    setSelected(null);
+    setType(event);
   };
   const showSuccessToast = (name) => {
     toast({
@@ -102,121 +82,102 @@ export default function AddAssetModal({ isOpen, onClose }) {
       isClosable: true
     });
   };
-  const onClickAdd = async (asset, assetType) => {
+  const onSubmitAdd = async () => {
+    /* Form validation to be improved */
+    console.log(selected);
+    if (!selected || !position) {
+      showErrorToast('Missing fields');
+      return;
+    }
+
     const token = await getAccessTokenSilently();
-    const { id, name } = asset;
+    /** Query cost_basis based on indicated date and time */
+    const { id, name } = selected;
     const assetData = { type, name, position, note, cost_basis: 100, api_id: id };
-    assetData.symbol = assetType === 'stocks' ? asset.short_name : asset.symbol;
+    assetData.symbol = type === 'stocks' ? selected.short_name : selected.symbol;
 
     try {
       await axios.post(serverURL, assetData, { headers: { Authorization: `Bearer ${token}` } });
       showSuccessToast(name);
+      onClose();
     } catch (error) {
       showErrorToast(error);
     }
   };
-  // Modal popup ask to input quantity / position && cost_basis && note
-  // POST data should include name, symbol, api_id(relevant), position, cost_basis, type, note
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered size="4xl">
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>FIND & ADD</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-          <HStack spacing={10}>
-            {/* Column 1: Searcher & Results */}
-            <Flex w="50%" flexDir="column">
-              <FormLabel htmlFor="search">TICKER / NAME</FormLabel>
-              <Input
-                size="md"
-                id="search"
-                onChange={handleSearchChange}
-                value={search}
-                placeholder="Name / Symbol"
-              />
-              <RadioGroup onChange={setType} value={type}>
-                <Stack direction="row">
-                  <Radio value="stocks">Stocks</Radio>
-                  <Radio value="crypto">Cryptocurrency</Radio>
-                </Stack>
-              </RadioGroup>
-              {isLoading && <Loading />}
-              {assets ? (
-                <Box h="300px" overflow="auto" my={5}>
-                  <Table>
-                    <Tbody>
-                      {type === 'stocks'
-                        ? assets.map((stock) => (
-                            <Tr key={uuidv4()} _hover={{ bgColor: 'gray.50' }}>
-                              <Td>{stock.short_name}</Td>
-                              <Td>{stock.name}</Td>
-                              <Td>{stock.exch}</Td>
-                            </Tr>
-                            /** BUTTON FOR SUBMIT
-                            <IconButton
-                              icon={<AddIcon />}
-                              aria-label="Add asset"
-                              onClick={() => addOnClick(stock, 'stocks')}
-                            /> */
-                          ))
-                        : assets.map((coin) => (
-                            <Tr key={uuidv4()} _hover={{ bgColor: 'gray.50' }}>
-                              <Td>{coin.symbol}</Td>
-                              <Td>{coin.name}</Td>
-                            </Tr>
-                            /** <IconButton
-                              icon={<AddIcon />}
-                              colorScheme="teal"
-                              onClick={() => addOnClick(coin, 'crypto')}
-                              aria-label="Add asset"
-                                /> */
-                          ))}
-                    </Tbody>
-                  </Table>
-                </Box>
-              ) : (
-                <Flex justifySelf="center">No results</Flex>
-              )}
-            </Flex>
-            {/* Column 2: Other inputs for Form */}
-            <Flex w="50%" flexDir="column" h="100%">
-              <HStack h="50%" alignSelf="start">
-                <Box>
-                  <FormLabel htmlFor="position">POSITION</FormLabel>
-                  <NumberInput
-                    min={0}
+    <>
+      <Button
+        mt={4}
+        bgColor="black"
+        _hover={{ bgColor: 'gray.700' }}
+        p={6}
+        borderRadius={15}
+        onClick={onOpen}>
+        <Text color="white">add asset</Text>
+      </Button>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered size="4xl">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>FIND & ADD</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <HStack spacing={10}>
+              {/* Column 1: Searcher & Results */}
+              <Flex w="50%" flexDir="column">
+                <FormLabel htmlFor="search">TICKER / NAME</FormLabel>
+                <AssetSelect type={type} selected={selected} setSelected={setSelected} />
+                <RadioGroup onChange={handleRadioTypeChange} value={type}>
+                  <Stack direction="row">
+                    <Radio value="stocks">Stocks</Radio>
+                    <Radio value="crypto">Cryptocurrency</Radio>
+                  </Stack>
+                </RadioGroup>
+                {isLoading && <Loading />}
+              </Flex>
+              {/* Column 2: Other inputs for Form */}
+              <Flex w="50%" flexDir="column" h="100%">
+                <HStack h="50%" alignSelf="start">
+                  <Box>
+                    <FormLabel htmlFor="position">POSITION</FormLabel>
+                    <NumberInput
+                      min={0}
+                      size="md"
+                      id="position"
+                      step={1}
+                      defaultValue={1}
+                      precision={2}>
+                      <NumberInputField value={position} onChange={handlePositionChange} />
+                      <NumberInputStepper>
+                        <NumberIncrementStepper />
+                        <NumberDecrementStepper />
+                      </NumberInputStepper>
+                    </NumberInput>
+                  </Box>
+                  <Box>
+                    <Text>DATE</Text>
+                    <CalendarIcon />
+                  </Box>
+                </HStack>
+                <Box h="50%">
+                  <FormLabel htmlFor="note">NOTE</FormLabel>
+                  <Textarea
                     size="md"
-                    id="position"
-                    step={1}
-                    defaultValue={1}
-                    precision={2}>
-                    <NumberInputField value={position} onChange={handlePositionChange} />
-                    <NumberInputStepper>
-                      <NumberIncrementStepper />
-                      <NumberDecrementStepper />
-                    </NumberInputStepper>
-                  </NumberInput>
+                    name="note"
+                    onChange={handleNoteChange}
+                    value={note}
+                    placeholder="Optional Notes"
+                  />
                 </Box>
-                <Box>
-                  <Text>DATE</Text>
-                  <CalendarIcon />
-                </Box>
-              </HStack>
-              <Box h="50%">
-                <FormLabel htmlFor="note">NOTE</FormLabel>
-                <Textarea
-                  size="md"
-                  name="note"
-                  onChange={handleNoteChange}
-                  value={note}
-                  placeholder="Optional Notes"
-                />
-              </Box>
-            </Flex>
-          </HStack>
-        </ModalBody>
-      </ModalContent>
-    </Modal>
+              </Flex>
+            </HStack>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={onSubmitAdd}>
+              Save
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   );
 }
