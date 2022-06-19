@@ -1,3 +1,6 @@
+import { useRef } from 'react';
+import axios from 'axios';
+import { useAuth0 } from '@auth0/auth0-react';
 import {
   AlertDialog,
   AlertDialogBody,
@@ -7,25 +10,45 @@ import {
   AlertDialogOverlay,
   Button
 } from '@chakra-ui/react';
+import { serverURL } from '../services/investmentService';
+import useCompletionToast from './hooks/useCompletionToast';
 
-export default function DeleteAlert({ isOpen, onClose, cancelRef, item }) {
+export default function DeleteAlert({ isOpen, onClose, assetId, name, promptRefresh }) {
+  const cancelRef = useRef();
+  const { getAccessTokenSilently } = useAuth0();
+  const [showSuccessToast, showErrorToast] = useCompletionToast();
+
+  const onClickDelete = async () => {
+    try {
+      const token = await getAccessTokenSilently();
+      await axios.delete(`${serverURL}${assetId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      showSuccessToast('Asset Deleted', `${name} has been deleted.`);
+      onClose();
+      promptRefresh();
+    } catch (error) {
+      showErrorToast(error);
+    }
+  };
+
   return (
     <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
       <AlertDialogOverlay>
         <AlertDialogContent>
           <AlertDialogHeader fontSize="lg" fontWeight="bold">
-            Delete {item}
+            Delete {name}
           </AlertDialogHeader>
 
           <AlertDialogBody>
-            Are you sure? You can`&apos`t undo this action afterwards.
+            {`Are you sure? You can't undo this action afterwards.`}
           </AlertDialogBody>
 
           <AlertDialogFooter>
             <Button ref={cancelRef} onClick={onClose}>
               Cancel
             </Button>
-            <Button colorScheme="red" onClick={onClose} ml={3}>
+            <Button colorScheme="red" onClick={onClickDelete} ml={3}>
               Delete
             </Button>
           </AlertDialogFooter>

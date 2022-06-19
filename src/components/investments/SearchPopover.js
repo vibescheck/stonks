@@ -28,7 +28,7 @@ import SearchAssetRow from './SearchAssetRow';
 import { findCryptoSymbol, findStockSymbol } from '../../services/investmentService';
 import AssetFormModal from './AssetFormModal';
 
-export default function SearchPopover() {
+export default function SearchPopover({ promptRefresh }) {
   // use CONSTANTS for asset type
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState(null);
@@ -110,18 +110,21 @@ export default function SearchPopover() {
                   <Box maxHeight="300px" overflowY="auto" my={3}>
                     <Table size="sm">
                       <Tbody>
-                        {searchResults.map((result) => (
-                          <Tr
-                            key={uuidv4()}
-                            _hover={{ bgColor: 'gray.50' }}
-                            blockSize="10"
-                            onClick={() => {
-                              setSelected(result);
-                              onOpen();
-                            }}>
-                            <SearchAssetRow type={type} asset={result} />
-                          </Tr>
-                        ))}
+                        {
+                          // Can use _focus if it can be seen
+                          searchResults.map((result) => (
+                            <Tr
+                              key={uuidv4()}
+                              _hover={{ bgColor: 'gray.50' }}
+                              blockSize="10"
+                              onClick={() => {
+                                setSelected(result);
+                                onOpen();
+                              }}>
+                              <SearchAssetRow type={type} asset={result} />
+                            </Tr>
+                          ))
+                        }
                       </Tbody>
                     </Table>
                   </Box>
@@ -136,7 +139,13 @@ export default function SearchPopover() {
         </Portal>
       </Popover>
 
-      <AssetFormModal isOpen={isOpen} onClose={onClose} type={type} asset={selected} />
+      <AssetFormModal
+        isOpen={isOpen}
+        onClose={onClose}
+        type={type}
+        asset={selected}
+        promptRefresh={promptRefresh}
+      />
     </>
   );
 }

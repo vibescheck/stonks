@@ -1,9 +1,12 @@
-import { Tr, Td, IconButton, Heading, Text, VStack } from '@chakra-ui/react';
+import { Tr, Td, IconButton, Heading, Text, VStack, useDisclosure } from '@chakra-ui/react';
+import { format, parseISO } from 'date-fns';
 import { DeleteIcon } from '@chakra-ui/icons';
 import useHover from '../hooks/useHover';
+import DeleteAlert from '../DeleteAlert';
 
-export default function OwnedRowAsset({ asset, deleteAsset }) {
+export default function OwnedRowAsset({ asset, promptRefresh }) {
   const [hover, handleMouseIn, handleMouseOut] = useHover();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
     <Tr
@@ -24,17 +27,19 @@ export default function OwnedRowAsset({ asset, deleteAsset }) {
       <Td>{asset.position}</Td>
       <Td>${asset.cost_basis}</Td>
       <Td>{asset.type}</Td>
-      <Td>{asset.date}</Td>
+      <Td>{format(parseISO(asset.date), 'MMM dd, yyyy')}</Td>
       <Td>
         {hover && (
-          <IconButton
-            size="sm"
-            m={0}
-            p={0}
-            icon={<DeleteIcon />}
-            aria-label="Delete Asset"
-            onClick={() => deleteAsset(asset._id)}
-          />
+          <>
+            <IconButton size="sm" m={0} p={0} icon={<DeleteIcon />} onClick={onOpen} />
+            <DeleteAlert
+              isOpen={isOpen}
+              onClose={onClose}
+              assetId={asset?._id}
+              name={asset?.name}
+              promptRefresh={promptRefresh}
+            />
+          </>
         )}
       </Td>
       <Td />

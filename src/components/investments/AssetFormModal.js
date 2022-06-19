@@ -7,9 +7,8 @@ import {
   NumberDecrementStepper,
   FormLabel,
   Box,
-  Text,
+  Input,
   Textarea,
-  useToast,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -20,61 +19,47 @@ import {
   Button
 } from '@chakra-ui/react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { CalendarIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
 import axios from 'axios';
 import { serverURL } from '../../services/investmentService';
+import useCompletionToast from '../hooks/useCompletionToast';
 
-export default function AssetFormModal({ isOpen, onClose, type, asset }) {
+export default function AssetFormModal({ isOpen, onClose, type, asset, promptRefresh }) {
   const [position, setPosition] = useState(1);
   const [note, setNote] = useState('');
-  const toast = useToast();
+  const [date, setDate] = useState(Date.now);
   const { getAccessTokenSilently } = useAuth0();
+  const [showSuccessToast, showErrorToast] = useCompletionToast();
 
-  const handlePositionChange = (event) => {
-    setPosition(event.target.value);
-  };
-  const showSuccessToast = (name) => {
-    toast({
-      title: 'Asset Added.',
-      description: `${name} asset added`,
-      status: 'success',
-      duration: 3000,
-      isClosable: true
-    });
-  };
-  const showErrorToast = (err) => {
-    toast({
-      title: 'Error occurred',
-      description: `${err}`,
-      status: 'error',
-      duration: 3000,
-      isClosable: true
-    });
-  };
   const onSubmitAdd = async () => {
     /* Form validation to be improved, include date */
     if (!asset || !position) {
       showErrorToast('Missing fields');
       return;
     }
-
     const token = await getAccessTokenSilently();
     /** Query cost_basis based on indicated date and time */
     const { id, name } = asset;
-    const assetData = { type, name, position, note, cost_basis: 100, api_id: id };
+    const assetData = { type, name, position, note, cost_basis: 100, api_id: id, date };
     assetData.symbol = type === 'stocks' ? asset.short_name : asset.symbol;
 
     try {
       await axios.post(serverURL, assetData, { headers: { Authorization: `Bearer ${token}` } });
-      showSuccessToast(name);
+      showSuccessToast('Asset Added', `${name} has been added.`);
       onClose();
+      promptRefresh();
     } catch (error) {
       showErrorToast(error);
     }
   };
   const handleNoteChange = (event) => {
     setNote(event.target.value);
+  };
+  const handlePositionChange = (event) => {
+    setPosition(event.target.value);
+  };
+  const handleDateChange = (event) => {
+    setDate(event.target.value);
   };
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -96,8 +81,8 @@ export default function AssetFormModal({ isOpen, onClose, type, asset }) {
               </NumberInput>
             </Box>
             <Box>
-              <Text>DATE</Text>
-              <CalendarIcon />
+              <FormLabel htmlFor="date">Date:</FormLabel>
+              <Input type="Date" defaultValue={Date.now} value={date} onChange={handleDateChange} />
             </Box>
           </HStack>
           {/* Note */}

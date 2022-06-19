@@ -28,7 +28,7 @@ export default function Portfolio() {
   const [isLoading, setLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
   const { getAccessTokenSilently, user } = useAuth0();
-
+  /* Prop drilling of assets and Refresh state, consider Context */
   const promptRefresh = () => setRefresh(!refresh);
 
   const getOwnedAssets = async () => {
@@ -49,18 +49,6 @@ export default function Portfolio() {
   useEffect(() => setAssets(getOwnedAssets()), [refresh]);
 
   const loadMore = () => {};
-
-  const deleteAsset = async (assetId) => {
-    try {
-      const token = await getAccessTokenSilently();
-      await axios.delete(`${serverURL}${assetId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      promptRefresh();
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   return (
     <Flex
@@ -116,7 +104,7 @@ export default function Portfolio() {
               </Thead>
               <Tbody>
                 {assets.map((asset) => (
-                  <OwnedAssetRow key={uuidv4()} asset={asset} deleteAsset={deleteAsset} />
+                  <OwnedAssetRow key={uuidv4()} asset={asset} promptRefresh={promptRefresh} />
                 ))}
               </Tbody>
             </Table>
@@ -130,7 +118,7 @@ export default function Portfolio() {
         </Flex>
       )}
       <HStack pos="absolute" bottom="0" zIndex={10} m={2}>
-        <SearchPopover />
+        <SearchPopover promptRefresh={promptRefresh} />
       </HStack>
       <HistoryDrawer />
     </Flex>
