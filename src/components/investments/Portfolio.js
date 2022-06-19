@@ -27,20 +27,23 @@ export default function Portfolio() {
   const [assets, setAssets] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [metamaskLogin, setMetamaskLogin] = useState(false);
   const { getAccessTokenSilently, user } = useAuth0();
   /* Prop drilling of assets and Refresh state, consider Context */
   const promptRefresh = () => setRefresh(!refresh);
-
   const getOwnedAssets = async () => {
     setLoading(true);
     try {
       const token = await getAccessTokenSilently();
       const results = await axios.get(serverURL, { headers: { Authorization: `Bearer ${token}` } });
+
       if (results) {
         // bruh
         setAssets(results.data.data);
       }
       setLoading(false);
+
+      setMetamaskLogin(user.sub.startsWith('oauth2|siwe'));
     } catch (error) {
       console.log(error);
     }
