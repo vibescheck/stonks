@@ -9,34 +9,42 @@ import {
   Tr,
   Th,
   Td,
-  TableContainer,
-  Button
+  Flex,
+  HStack,
+  Heading,
+  TableContainer
 } from '@chakra-ui/react';
-import { RepeatIcon, DeleteIcon } from '@chakra-ui/icons';
-import { Link } from 'react-router-dom';
+import { RepeatIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import { v4 as uuidv4 } from 'uuid';
 
 import { serverURL } from '../../services/investmentService';
+
 import LoadingIcon from '../LoadingIcon';
+import SearchPopover from './SearchPopover';
+import HistoryDrawer from './HistoryDrawer';
+import OwnedAssetRow from './OwnedAssetRow';
 
 export default function Portfolio() {
   const [assets, setAssets] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
+  const [metamaskLogin, setMetamaskLogin] = useState(false);
   const { getAccessTokenSilently, user } = useAuth0();
-
+  /* Prop drilling of assets and Refresh state, consider Context */
   const promptRefresh = () => setRefresh(!refresh);
-
   const getOwnedAssets = async () => {
     setLoading(true);
     try {
       const token = await getAccessTokenSilently();
       const results = await axios.get(serverURL, { headers: { Authorization: `Bearer ${token}` } });
+
       if (results) {
         // bruh
         setAssets(results.data.data);
       }
       setLoading(false);
+
+      setMetamaskLogin(user.sub.startsWith('oauth2|siwe'));
     } catch (error) {
       console.log(error);
     }
@@ -44,62 +52,79 @@ export default function Portfolio() {
 
   useEffect(() => setAssets(getOwnedAssets()), [refresh]);
 
-  const deleteAsset = async (assetId) => {
-    try {
-      const token = await getAccessTokenSilently();
-      await axios.delete(`${serverURL}${assetId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      promptRefresh();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const loadMore = () => {};
 
   return (
-    <main>
-      <h1>{`${user.name || user.nickname}'s `}Investment Portfolio</h1>
-      <Link to="/finder">
-        <Button>Add/Find</Button>
-      </Link>
-      <IconButton icon={<RepeatIcon />} aria-label="Refresh" onClick={promptRefresh} />
-
+    <Flex
+      h="100vh"
+      flexDir="column"
+      overflow="hidden"
+      alignItems="center"
+      gap={4}
+      bgColor="gray.100">
+      <HStack>
+        <Flex>{/** Chart1 */}</Flex>
+        <Flex>{/** Chart2 */}</Flex>
+      </HStack>
       {isLoading ? (
         <LoadingIcon />
       ) : (
-        <TableContainer>
-          <Table size="md">
-            <Thead>
-              <Tr>
-                <Th>Symbol</Th>
-                <Th>Name</Th>
-                <Th>Position</Th>
-                <Th>Cost Basis</Th>
-                <Th>Type</Th>
-                <Th> </Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {assets.map((asset) => (
-                <Tr key={uuidv4()}>
-                  <Td>{asset.symbol}</Td>
-                  <Td>{asset.name}</Td>
-                  <Td>{asset.position}</Td>
-                  <Td>{asset.cost_basis}</Td>
-                  <Td>{asset.type}</Td>
-                  <Td>
-                    <IconButton
-                      icon={<DeleteIcon />}
-                      aria-label="Delete Asset"
-                      onClick={() => deleteAsset(asset._id)}
-                    />
-                  </Td>
+        <Flex
+          flexDir="column"
+          maxW="1200px"
+          maxH="90%"
+          size="md"
+          bgColor="white"
+          borderRadius={15}
+          boxShadow="lg"
+          alignItems="center"
+          px={6}
+          py={2}
+          gap={3}>
+          <Flex w="100%" justifyContent="space-between" px={3}>
+            <Heading size="lg" my={4}>
+              {`${user.name || user.nickname}'s `}assets
+            </Heading>
+            <IconButton
+              icon={<RepeatIcon />}
+              aria-label="Refresh"
+              onClick={promptRefresh}
+              alignSelf="center"
+            />
+          </Flex>
+          <TableContainer overflowY="auto">
+            <Table colorScheme="blackAlpha">
+              <Thead>
+                <Tr color="gray.200">
+                  <Th>SYMBOL/NAME</Th>
+                  <Th>POSITION</Th>
+                  <Th>COST BASIS</Th>
+                  <Th>TYPE</Th>
+                  <Th>DATE</Th>
+                  <Th>MARKET VALUE</Th>
+                  <Th>P/L</Th>
+                  <Td />
                 </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        </TableContainer>
+              </Thead>
+              <Tbody>
+                {assets.map((asset) => (
+                  <OwnedAssetRow key={uuidv4()} asset={asset} promptRefresh={promptRefresh} />
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+          <IconButton
+            variant="ghost"
+            size="sm"
+            icon={<ChevronDownIcon w={10} h={10} />}
+            onClick={loadMore}
+          />
+        </Flex>
       )}
-    </main>
+      <HStack pos="absolute" bottom="0" zIndex={10} m={2}>
+        <SearchPopover promptRefresh={promptRefresh} />
+      </HStack>
+      <HistoryDrawer />
+    </Flex>
   );
 }
