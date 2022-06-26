@@ -79,14 +79,16 @@ export default function AddTransactionModal({ setRefresh, refresh }) {
                       type="text"
                       value={note}
                       onChange={(e) => setNote(e.target.value)}
-                      placeholder="Enter transaction label (optional)"
+                      placeholder="Enter transaction label"
                       ref={noteInputRef}
+                      required
                     />
                   </FormLabel>
                 </div>
                 <div>
                   <FormLabel htmlFor="amount">
                     Amount:
+                    {/* TODO form validation: prevent zero input */}
                     <Input
                       type="Number"
                       value={amount}

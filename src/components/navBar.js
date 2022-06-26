@@ -21,6 +21,7 @@ export default function NavBar() {
       <Flex align="center" justify="center" w="100%" pos="fixed">
         <Tabs isFitted variant="unstyled" size="lg" align="center" color="lightgray">
           <TabList>
+            {/* <Box> */}
             <Link to="/dashboard">
               <Tab
                 _selected={{
@@ -73,6 +74,7 @@ export default function NavBar() {
                 Profile
               </Tab>
             </Link>
+            {/* </Box> */}
           </TabList>
         </Tabs>
       </Flex>
