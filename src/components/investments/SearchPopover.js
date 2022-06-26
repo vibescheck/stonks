@@ -75,8 +75,8 @@ export default function SearchPopover({ promptRefresh }) {
     <>
       <Popover initialFocusRef={initialFocusRef} placement="top" isLazy arrowSize={10} closeOnBlur>
         <PopoverTrigger>
-          <Button mt={4} bgColor="black" _hover={{ bgColor: 'gray.700' }} p={6} borderRadius={15}>
-            <Text color="white">add asset</Text>
+          <Button variant="black">
+            <Text color="white">Add New Asset</Text>
           </Button>
         </PopoverTrigger>
         <Portal>

@@ -90,6 +90,7 @@ export default function Portfolio() {
               aria-label="Refresh"
               onClick={promptRefresh}
               alignSelf="center"
+              width={20}
             />
           </Flex>
           <TableContainer overflowY="auto">

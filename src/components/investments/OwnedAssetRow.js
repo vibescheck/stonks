@@ -3,6 +3,7 @@ import { format, parseISO } from 'date-fns';
 import { DeleteIcon } from '@chakra-ui/icons';
 import useHover from '../hooks/useHover';
 import DeleteAlert from '../DeleteAlert';
+import { serverURL } from '../../services/investmentService';
 
 export default function OwnedRowAsset({ asset, promptRefresh }) {
   const [hover, handleMouseIn, handleMouseOut] = useHover();
@@ -31,13 +32,14 @@ export default function OwnedRowAsset({ asset, promptRefresh }) {
       <Td>
         {hover && (
           <>
-            <IconButton size="sm" m={0} p={0} icon={<DeleteIcon />} onClick={onOpen} />
+            <IconButton size="sm" m={0} p={0} icon={<DeleteIcon />} onClick={onOpen} width={20} />
             <DeleteAlert
               isOpen={isOpen}
               onClose={onClose}
               assetId={asset?._id}
               name={asset?.name}
               promptRefresh={promptRefresh}
+              serverURL={serverURL}
             />
           </>
         )}

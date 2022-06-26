@@ -71,7 +71,7 @@ export default function AssetFormModal({ isOpen, onClose, type, asset, promptRef
           <HStack justifyContent="space-between">
             {/* Position & DatePicker */}
             <Box>
-              <FormLabel htmlFor="position">POSITION</FormLabel>
+              <FormLabel htmlFor="position">Position:</FormLabel>
               <NumberInput min={0} size="md" id="position" step={1} defaultValue={1} precision={2}>
                 <NumberInputField value={position} onChange={handlePositionChange} />
                 <NumberInputStepper>
@@ -87,24 +87,22 @@ export default function AssetFormModal({ isOpen, onClose, type, asset, promptRef
           </HStack>
           {/* Note */}
           <Box>
-            <FormLabel htmlFor="note">NOTE</FormLabel>
+            <FormLabel htmlFor="note">Note:</FormLabel>
             <Textarea
               size="md"
               name="note"
               onChange={handleNoteChange}
               value={note}
-              placeholder="Optional Notes"
+              placeholder="Add Note (Optional)"
             />
           </Box>
         </ModalBody>
 
         <ModalFooter>
-          <Button colorScheme="green" mr={3} onClick={onSubmitAdd}>
-            Submit
+          <Button colorScheme="green" marginInline={3} onClick={onSubmitAdd}>
+            Add Asset
           </Button>
-          <Button colorScheme="gray" mr={3} onClick={onClose}>
-            Cancel
-          </Button>
+          <Button onClick={onClose}>Cancel</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

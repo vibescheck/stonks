@@ -5,6 +5,7 @@ import {
   Flex,
   FormLabel,
   Heading,
+  HStack,
   IconButton,
   Input,
   Table,
@@ -15,19 +16,24 @@ import {
   Thead,
   Tr
 } from '@chakra-ui/react';
-import { RepeatIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon, RepeatIcon } from '@chakra-ui/icons';
 import axios from 'axios';
 import { useEffect, useState, useRef } from 'react';
 import { Link, renderMatches } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
 import chroma from 'chroma-js';
+import LoadingIcon from '../LoadingIcon';
 import AddTransactionModal from './AddTransactionModal';
 import PieChart from '../Charts';
+import TransactionHistory from './TransactionHistory';
 
 export default function SavingsWallet() {
   const { getAccessTokenSilently, user } = useAuth0();
   const [transactions, setTransactions] = useState([]);
   const [refresh, setRefresh] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+
+  const promptRefresh = () => setRefresh(!refresh);
 
   const getTransactions = async () => {
     const token = await getAccessTokenSilently();
@@ -113,83 +119,108 @@ export default function SavingsWallet() {
     });
   }, [transactions]);
 
+  const loadMore = () => {};
+
   return (
-    <main>
-      <Box>
-        <Heading align="left" p={10}>
-          Savings & Expenses
-        </Heading>
-      </Box>
-      <Box width={350} display="inline-block">
-        <PieChart chartData={posTxns} chartTitle="Income" />
-      </Box>
-      <Box width={350} display="inline-block">
-        <PieChart chartData={negTxns} chartTitle="Expenses" />
-      </Box>
-      <IconButton
-        icon={<RepeatIcon />}
-        aria-label="Refresh"
-        onClick={() => setRefresh(!refresh)}
-        width={15}
-      />
-      <TableContainer display="inline-block" padding={10}>
-        <Table variant="simple" size="lg" fontSize="xl">
-          <Thead alignItems="center">
-            <Tr>
-              <Th> Transaction </Th>
-              <Th> Amount </Th>
-              <Th> Category </Th>
-              <Th> Date </Th>
-              <Th> </Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {[...transactions]
-              // sort array by date
-              .sort((a, b) => -a.date.localeCompare(b.date))
-              // map array to table
-              .map((txn) => {
-                return (
-                  <tr key={txn._id}>
-                    <td> {txn.note || '-'} </td>
-                    <td>
-                      <Text color={txn.amount > 0 ? 'green' : 'red'}>
-                        {txn.amount > 0
-                          ? `$${txn.amount
-                              .toFixed(2)
-                              .toString()
-                              .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')}`
-                          : `-$${Math.abs(txn.amount).toFixed(2).toString()}`}
-                      </Text>
-                    </td>
-                    <td>{txn.category || '-'}</td>
-                    <td>
-                      {format(parseISO(txn.date), 'MMM dd, yyyy')}
-                      <Button
-                        onClick={() => {
-                          deleteTransaction(txn._id).then(() => getTxns());
-                        }}
-                        className="deletbtn"
-                        type="submit"
-                        width={1}
-                        height={7}
-                        marginInline={5}
-                        marginBlock={2}>
-                        x
-                      </Button>
-                    </td>
-                  </tr>
-                );
-              })}
-          </Tbody>
-        </Table>
-      </TableContainer>
-      <AddTransactionModal setRefresh={setRefresh} refresh={refresh} />
-      <Box p={5}>
-        <Link to="/dashboard">
-          <Button type="button">Back to Dashboard</Button>
-        </Link>
-      </Box>
-    </main>
+    <Flex
+      h="100vh"
+      flexDir="column"
+      overflowY="auto"
+      alignItems="center"
+      gap={4}
+      bgColor="gray.100">
+      <HStack gap={6} py={4}>
+        {posTxns.labels.length ? (
+          <Flex
+            width={350}
+            flexDir="column"
+            size="md"
+            bgColor="white"
+            borderRadius={15}
+            boxShadow="lg"
+            alignItems="center"
+            px={2}
+            paddingTop={3}
+            paddingBottom={6}
+            gap={3}
+            display="inline-block">
+            <PieChart chartData={posTxns} chartTitle="Income" />
+          </Flex>
+        ) : null}
+        {negTxns.labels.length > 0 ? (
+          <Flex
+            width={350}
+            flexDir="column"
+            size="md"
+            bgColor="white"
+            borderRadius={15}
+            boxShadow="lg"
+            alignItems="center"
+            px={2}
+            paddingTop={3}
+            paddingBottom={6}
+            gap={3}
+            display="inline-block">
+            <PieChart chartData={negTxns} chartTitle="Expenses" />
+          </Flex>
+        ) : null}
+      </HStack>
+
+      {isLoading ? (
+        <LoadingIcon />
+      ) : (
+        <Flex
+          flexDir="column"
+          maxH="90%"
+          size="md"
+          bgColor="white"
+          borderRadius={15}
+          boxShadow="lg"
+          alignItems="center"
+          px={10}
+          marginBottom={10}
+          gap={3}>
+          <Flex w="100%" justifyContent="space-between" px={4}>
+            <Heading size="lg" my={4}>
+              {`${user.name || user.nickname}'s `}savings
+            </Heading>
+            <IconButton
+              icon={<RepeatIcon />}
+              aria-label="Refresh"
+              onClick={() => promptRefresh()}
+              alignSelf="center"
+              width={20}
+            />
+          </Flex>
+          <TableContainer overflowY="auto" w={800}>
+            <Table colorScheme="blackAlpha">
+              <Thead alignItems="center">
+                <Tr color="gray.200">
+                  <Th> TRANSACTION </Th>
+                  <Th> AMOUNT </Th>
+                  <Th> CATEGORY </Th>
+                  <Th> DATE </Th>
+                  <Th> </Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {[...transactions]
+                  .sort((a, b) => -a.date.localeCompare(b.date))
+                  .map((txn) => (
+                    <TransactionHistory key={txn._id} txn={txn} promptRefresh={promptRefresh} />
+                  ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+          {/* <IconButton
+            variant="ghost"
+            size="sm"
+            icon={<ChevronDownIcon w={10} h={10} />}
+            onClick={loadMore}
+          /> */}
+        </Flex>
+      )}
+      <AddTransactionModal promptRefresh={promptRefresh} refresh={refresh} />
+    </Flex>
   );
 }

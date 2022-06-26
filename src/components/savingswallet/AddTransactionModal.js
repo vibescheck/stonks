@@ -58,8 +58,8 @@ export default function AddTransactionModal({ setRefresh, refresh }) {
 
   return (
     <>
-      <Box justify="center" align="center">
-        <Button onClick={onOpen} colorScheme="green">
+      <Box justify="center" align="center" pb={10}>
+        <Button onClick={onOpen} variant="black">
           Add New Transaction
         </Button>
       </Box>
@@ -67,7 +67,7 @@ export default function AddTransactionModal({ setRefresh, refresh }) {
       <Modal isOpen={isOpen} onClose={onClose} initialFocusRef={noteInputRef} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader>Add Transaction</ModalHeader>
           <ModalCloseButton />
           <form onSubmit={onSubmit}>
             <ModalBody>
@@ -122,26 +122,11 @@ export default function AddTransactionModal({ setRefresh, refresh }) {
               </Box>
             </ModalBody>
 
-            <ModalFooter flexDirection="column">
+            <ModalFooter>
               <Button type="submit" colorScheme="green" marginInline={3}>
-                Add transaction
+                Add Transaction
               </Button>
-              <Button
-                variant="ghost"
-                mt="3"
-                _hover={{
-                  bg: 0,
-                  transform: 'scale(1.05)',
-                  fontWeight: 900
-                }}
-                _active={{
-                  bg: 0,
-                  transform: 'scale(0.95)',
-                  fontWeight: 900
-                }}
-                onClick={onClose}>
-                Cancel
-              </Button>
+              <Button onClick={onClose}>Cancel</Button>
             </ModalFooter>
           </form>
         </ModalContent>

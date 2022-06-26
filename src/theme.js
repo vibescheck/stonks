@@ -5,6 +5,7 @@ const theme = extendTheme({
     Button: {
       baseStyle: {
         w: '200px',
+        p: '23px',
         fontFamily: 'monospace',
         _hover: {
           transform: 'scale(1.05)'
@@ -12,7 +13,17 @@ const theme = extendTheme({
         _active: {
           transform: 'scale(0.99)'
         },
-        transition: '200ms'
+        transition: '200ms',
+        borderRadius: 15
+      },
+      variants: {
+        black: {
+          color: 'white',
+          bgColor: 'black',
+          _hover: {
+            bgColor: 'gray.700'
+          }
+        }
       }
     }
   },

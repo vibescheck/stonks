@@ -10,10 +10,9 @@ import {
   AlertDialogOverlay,
   Button
 } from '@chakra-ui/react';
-import { serverURL } from '../services/investmentService';
 import useCompletionToast from './hooks/useCompletionToast';
 
-export default function DeleteAlert({ isOpen, onClose, assetId, name, promptRefresh }) {
+export default function DeleteAlert({ isOpen, onClose, assetId, name, promptRefresh, serverURL }) {
   const cancelRef = useRef();
   const { getAccessTokenSilently } = useAuth0();
   const [showSuccessToast, showErrorToast] = useCompletionToast();
