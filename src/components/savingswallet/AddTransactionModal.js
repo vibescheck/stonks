@@ -15,8 +15,9 @@ import {
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
+import useCompletionToast from '../hooks/useCompletionToast';
 
-export default function AddTransactionModal({ setRefresh, refresh }) {
+export default function AddTransactionModal({ promptRefresh }) {
   const { getAccessTokenSilently, user } = useAuth0();
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState(Date.now);
@@ -24,6 +25,7 @@ export default function AddTransactionModal({ setRefresh, refresh }) {
   const [note, setNote] = useState('');
   const { isOpen, onOpen, onClose } = useDisclosure();
   const noteInputRef = useRef();
+  const [showSuccessToast, showErrorToast] = useCompletionToast();
 
   const addTransaction = async () => {
     const token = await getAccessTokenSilently();
@@ -47,13 +49,16 @@ export default function AddTransactionModal({ setRefresh, refresh }) {
   const onSubmit = (event) => {
     event.preventDefault();
     addTransaction()
-      .then(onClose, setRefresh(!refresh))
+      .then(
+        onClose,
+        promptRefresh(),
+        showSuccessToast('Transaction Added', `${note} has been added.`)
+      )
       .catch((err) => console.log(err));
     setAmount('');
     setNote('');
     setDate(Date.now);
     setCategory('');
-    setRefresh(!refresh);
   };
 
   return (

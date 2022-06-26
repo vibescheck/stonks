@@ -220,7 +220,7 @@ export default function SavingsWallet() {
           /> */}
         </Flex>
       )}
-      <AddTransactionModal promptRefresh={promptRefresh} refresh={refresh} />
+      <AddTransactionModal promptRefresh={promptRefresh} />
     </Flex>
   );
 }
