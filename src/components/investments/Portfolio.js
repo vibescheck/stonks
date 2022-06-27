@@ -12,7 +12,8 @@ import {
   Flex,
   HStack,
   Heading,
-  TableContainer
+  TableContainer,
+  Box
 } from '@chakra-ui/react';
 import { RepeatIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import { v4 as uuidv4 } from 'uuid';
@@ -23,6 +24,7 @@ import LoadingIcon from '../LoadingIcon';
 import SearchPopover from './SearchPopover';
 import HistoryDrawer from './HistoryDrawer';
 import OwnedAssetRow from './OwnedAssetRow';
+import MetamaskAsset from './MetamaskAsset';
 
 export default function Portfolio() {
   const [assets, setAssets] = useState([]);
@@ -55,13 +57,7 @@ export default function Portfolio() {
   const loadMore = () => {};
 
   return (
-    <Flex
-      h="100vh"
-      flexDir="column"
-      overflow="hidden"
-      alignItems="center"
-      gap={4}
-      bgColor="gray.100">
+    <Flex flexDir="column" overflow="auto" alignItems="center" gap={4} bgColor="gray.100">
       <HStack>
         <Flex>{/** Chart1 */}</Flex>
         <Flex>{/** Chart2 */}</Flex>
@@ -121,6 +117,19 @@ export default function Portfolio() {
           />
         </Flex>
       )}
+      <Flex
+        flexDir="column"
+        width={{ base: '90%', md: '5xl' }}
+        bgColor="white"
+        borderRadius={15}
+        boxShadow="lg"
+        alignItems="center"
+        px={6}
+        py={2}
+        gap={3}>
+        <MetamaskAsset />
+      </Flex>
+      <Box h="14" />
       <HStack pos="absolute" bottom="0" zIndex={10} m={2}>
         <SearchPopover promptRefresh={promptRefresh} />
       </HStack>
