@@ -18,12 +18,14 @@ import {
 import { RepeatIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import { v4 as uuidv4 } from 'uuid';
 
+import chroma from 'chroma-js';
 import { serverURL } from '../../services/investmentService';
 
 import LoadingIcon from '../LoadingIcon';
 import SearchPopover from './SearchPopover';
 import HistoryDrawer from './HistoryDrawer';
 import OwnedAssetRow from './OwnedAssetRow';
+import { BarChart } from '../Charts';
 
 export default function Portfolio() {
   const [assets, setAssets] = useState([]);
@@ -51,7 +53,27 @@ export default function Portfolio() {
     }
   };
 
+  useEffect(() => {
+    setAssets(getOwnedAssets());
+  }, []);
   useEffect(() => setAssets(getOwnedAssets()), [refresh]);
+
+  const [chartData, setChartData] = useState();
+
+  useEffect(
+    () =>
+      setChartData({
+        labels: assets.map((asset) => asset.symbol),
+        datasets: [
+          {
+            label: 'Amount',
+            data: assets.map((asset) => asset.position * asset.cost_basis),
+            backgroundColor: chroma.scale('Spectral').padding(0.7).colors(assets.length)
+          }
+        ]
+      }),
+    [refresh]
+  );
 
   const loadMore = () => {};
 
@@ -66,10 +88,23 @@ export default function Portfolio() {
       <Box display="block" padding={6}>
         {' '}
       </Box>
-      <HStack>
-        <Flex>{/** Chart1 */}</Flex>
-        <Flex>{/** Chart2 */}</Flex>
-      </HStack>
+      {chartData ? (
+        <Flex
+          width={500}
+          flexDir="column"
+          size="md"
+          bgColor="white"
+          borderRadius={15}
+          boxShadow="lg"
+          alignItems="center"
+          px={2}
+          paddingTop={3}
+          paddingBottom={6}
+          gap={3}
+          display="inline-block">
+          <BarChart chartData={chartData} chartTitle="Investments" />
+        </Flex>
+      ) : null}
       {isLoading ? (
         <LoadingIcon />
       ) : (

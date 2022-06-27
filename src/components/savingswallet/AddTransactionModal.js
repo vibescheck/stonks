@@ -63,7 +63,7 @@ export default function AddTransactionModal({ promptRefresh }) {
 
   return (
     <>
-      <Box justify="center" align="center" pb={10}>
+      <Box justify="center" align="center" pb={2}>
         <Button onClick={onOpen} variant="black">
           Add New Transaction
         </Button>

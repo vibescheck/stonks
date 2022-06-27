@@ -24,7 +24,9 @@ import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
 export default function NavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { user, logout } = useAuth0();
-  const { name, picture, email } = user;
+  // const { name, picture, email } = user;
+
+  // TODO: user avatar, check route for correct tab, responsive UI (hamburger menu)
 
   return (
     <Flex justifyContent="space-between">
@@ -94,7 +96,8 @@ export default function NavBar() {
               w="50px"
               pt={2.5}
               _focusVisible="false">
-              <Avatar size="sm" src={picture} />
+              <Avatar size="sm" />
+              {/* <Avatar size="sm" src={picture} /> */}
             </MenuButton>
             <MenuList>
               <Link to="/profile">

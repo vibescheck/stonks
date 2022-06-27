@@ -24,7 +24,7 @@ import { format, parseISO } from 'date-fns';
 import chroma from 'chroma-js';
 import LoadingIcon from '../LoadingIcon';
 import AddTransactionModal from './AddTransactionModal';
-import PieChart from '../Charts';
+import { PieChart } from '../Charts';
 import TransactionHistory from './TransactionHistory';
 
 export default function SavingsWallet() {
@@ -168,7 +168,7 @@ export default function SavingsWallet() {
           </Flex>
         ) : null}
       </HStack>
-
+      <AddTransactionModal promptRefresh={promptRefresh} />
       {isLoading ? (
         <LoadingIcon />
       ) : (
@@ -223,7 +223,6 @@ export default function SavingsWallet() {
           /> */}
         </Flex>
       )}
-      <AddTransactionModal promptRefresh={promptRefresh} />
     </Flex>
   );
 }

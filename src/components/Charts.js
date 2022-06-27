@@ -5,7 +5,7 @@ export function BarChart({ chartData }) {
   return <Bar data={chartData} />;
 }
 
-export default function PieChart({ chartData, chartTitle }) {
+export function PieChart({ chartData, chartTitle }) {
   return (
     <Pie
       data={chartData}
