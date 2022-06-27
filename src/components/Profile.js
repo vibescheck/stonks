@@ -13,7 +13,7 @@ export default function Profile() {
         borderRadius={15}
         boxShadow="lg"
         alignItems="center"
-        width={{ base: '90%', md: '5xl' }}
+        width="fit-content"
         gap={4}
         px={6}
         py={4}
@@ -21,8 +21,8 @@ export default function Profile() {
         <div className="rounded">
           <Image src={picture} alt="Profile" borderRadius="full" boxSize="150px" />
         </div>
-        <div className="row">
-          <pre className="col-12 text-light bg-dark p-4">{JSON.stringify(user, null, 2)}</pre>
+        <div>
+          <pre className="text-light bg-dark p-4">{JSON.stringify(user, null, 2)}</pre>
         </div>
       </Flex>
     </Flex>

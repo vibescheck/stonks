@@ -20,7 +20,7 @@ export default function NavBar() {
       </Box>
       <Flex align="center" justify="center" w="100%" pos="fixed">
         <Tabs isFitted variant="unstyled" size="lg" align="center" color="lightgray">
-          <TabList>
+          <TabList gap={10}>
             <Link to="/dashboard">
               <Tab
                 _selected={{
@@ -29,8 +29,7 @@ export default function NavBar() {
                   borderBottom: '3px solid white',
                   paddingBottom: '2px',
                   transition: '200ms'
-                }}
-                marginInline="50px ">
+                }}>
                 Dashboard
               </Tab>
             </Link>
@@ -42,8 +41,7 @@ export default function NavBar() {
                   borderBottom: '3px solid white',
                   paddingBottom: '2px',
                   transition: '200ms'
-                }}
-                marginInline="50px ">
+                }}>
                 Wallet
               </Tab>
             </Link>
@@ -55,8 +53,7 @@ export default function NavBar() {
                   borderBottom: '3px solid white',
                   paddingBottom: '2px',
                   transition: '200ms'
-                }}
-                marginInline="50px ">
+                }}>
                 Investments
               </Tab>
             </Link>
@@ -68,8 +65,7 @@ export default function NavBar() {
                   borderBottom: '3px solid white',
                   paddingBottom: '2px',
                   transition: '200ms'
-                }}
-                marginInline="50px ">
+                }}>
                 Profile
               </Tab>
             </Link>
