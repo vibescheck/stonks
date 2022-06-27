@@ -1,4 +1,5 @@
 import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
+import { Box } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 
 export default function Profile() {
@@ -7,6 +8,9 @@ export default function Profile() {
 
   return (
     <div>
+      <Box display="block" padding={6}>
+        {' '}
+      </Box>
       <div className="row align-items-center profile-header">
         <div className="col-md-2 mb-3">
           <img

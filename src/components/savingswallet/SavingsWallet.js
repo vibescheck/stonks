@@ -129,6 +129,9 @@ export default function SavingsWallet() {
       alignItems="center"
       gap={4}
       bgColor="gray.100">
+      <Box display="block" padding={6}>
+        {' '}
+      </Box>
       <HStack gap={6} py={4}>
         {posTxns.labels.length ? (
           <Flex

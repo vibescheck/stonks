@@ -26,26 +26,6 @@ const theme = extendTheme({
         }
       }
     }
-  },
-  Tabs: {
-    variants: {
-      unstyled: {
-        size: 'lg',
-        paddingY: '4',
-        marging: '0',
-        align: 'center',
-        bg: 'black',
-        color: 'lightgray',
-        tab: {
-          _selected: {
-            color: 'white',
-            fontWeight: 900,
-            decoration: 'underline',
-            transition: '200ms'
-          }
-        }
-      }
-    }
   }
 });
 

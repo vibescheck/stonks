@@ -1,11 +1,34 @@
-import { Tabs, TabList, Tab, Box, Flex, Grid, Heading, Text } from '@chakra-ui/react';
+import {
+  Tabs,
+  TabList,
+  Tab,
+  Box,
+  Flex,
+  Grid,
+  Heading,
+  Text,
+  background,
+  useDisclosure,
+  Button,
+  MenuButton,
+  Menu,
+  MenuList,
+  MenuItem,
+  MenuDivider,
+  Avatar
+} from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
+import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
+import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
 
 export default function NavBar() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { user, logout } = useAuth0();
+  const { name, picture, email } = user;
+
   return (
-    <Flex bg="black">
-      <Box>
-        {/* TODO: make this clickable to dashboard */}
+    <Flex justifyContent="space-between">
+      <Flex pos="fixed" zIndex={2}>
         <Heading
           size="xl"
           color="white"
@@ -15,23 +38,23 @@ export default function NavBar() {
           mt={1}
           ml={3}
           mb={1}>
-          stonks!
+          <Link to="/dashboard">stonks!</Link>
         </Heading>
+      </Flex>
+      <Box>
+        <Heading> </Heading>
       </Box>
-      <Flex align="center" justify="center" w="100%" pos="fixed">
+      <Flex bg="black" align="center" justify="center" w="100%" pos="fixed" zIndex={1}>
         <Tabs isFitted variant="unstyled" size="lg" align="center" color="lightgray">
-          <TabList>
-            {/* <Box> */}
+          <TabList gap={50}>
             <Link to="/dashboard">
               <Tab
                 _selected={{
                   color: 'white',
-                  fontWeight: 900,
-                  borderBottom: '3px solid white',
-                  paddingBottom: '2px',
+                  fontWeight: 800,
+                  borderBottom: '2x solid white',
                   transition: '200ms'
-                }}
-                marginInline="50px ">
+                }}>
                 Dashboard
               </Tab>
             </Link>
@@ -39,12 +62,10 @@ export default function NavBar() {
               <Tab
                 _selected={{
                   color: 'white',
-                  fontWeight: 900,
-                  borderBottom: '3px solid white',
-                  paddingBottom: '2px',
+                  fontWeight: 800,
+                  borderBottom: '2x solid white',
                   transition: '200ms'
-                }}
-                marginInline="50px ">
+                }}>
                 Wallet
               </Tab>
             </Link>
@@ -52,48 +73,46 @@ export default function NavBar() {
               <Tab
                 _selected={{
                   color: 'white',
-                  fontWeight: 900,
-                  borderBottom: '3px solid white',
-                  paddingBottom: '2px',
+                  fontWeight: 800,
+                  borderBottom: '2x solid white',
                   transition: '200ms'
-                }}
-                marginInline="50px ">
+                }}>
                 Investments
               </Tab>
             </Link>
-            <Link to="/profile">
-              <Tab
-                _selected={{
-                  color: 'white',
-                  fontWeight: 900,
-                  borderBottom: '3px solid white',
-                  paddingBottom: '2px',
-                  transition: '200ms'
-                }}
-                marginInline="50px ">
-                Profile
-              </Tab>
-            </Link>
-            {/* </Box> */}
           </TabList>
         </Tabs>
       </Flex>
-      {/* <Flex align="right" justify="right" w="100%" pos="fixed">
-        <Box>
-          //TODO: make this profile dropdown
-          <Heading
-            size="xl"
-            color="white"
-            fontFamily="alegreya"
-            fontWeight={900}
-            align="center"
-            mt={1}
-            mr={3}
-            mb={1}>
-            stonks!
-          </Heading>
-        </Box>
-      </Flex> */}
+      <Flex top={0} right={0} pos="fixed" zIndex={2} pr={4}>
+        <Flex align="center" justify="center">
+          <Menu>
+            <MenuButton
+              as={Button}
+              rounded="full"
+              variant="link"
+              cursor="pointer"
+              w="50px"
+              pt={2.5}
+              _focusVisible="false">
+              <Avatar size="sm" src={picture} />
+            </MenuButton>
+            <MenuList>
+              <Link to="/profile">
+                <MenuItem>Profile</MenuItem>
+              </Link>
+              <MenuDivider />
+              <MenuItem
+                onClick={() =>
+                  logout({
+                    returnTo: process.env.REACT_APP_CLIENT_URL
+                  })
+                }>
+                Log out
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        </Flex>
+      </Flex>
     </Flex>
   );
 }

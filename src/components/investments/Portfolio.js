@@ -12,7 +12,8 @@ import {
   Flex,
   HStack,
   Heading,
-  TableContainer
+  TableContainer,
+  Box
 } from '@chakra-ui/react';
 import { RepeatIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import { v4 as uuidv4 } from 'uuid';
@@ -62,6 +63,9 @@ export default function Portfolio() {
       alignItems="center"
       gap={4}
       bgColor="gray.100">
+      <Box display="block" padding={6}>
+        {' '}
+      </Box>
       <HStack>
         <Flex>{/** Chart1 */}</Flex>
         <Flex>{/** Chart2 */}</Flex>

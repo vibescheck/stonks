@@ -1,4 +1,5 @@
 import { withAuthenticationRequired } from '@auth0/auth0-react';
+import { Box, Flex } from '@chakra-ui/react';
 import { useMemo, useState } from 'react';
 import Loading from '../components/Loading';
 import NavBar from '../components/NavBar';
