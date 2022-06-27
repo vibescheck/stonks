@@ -26,6 +26,7 @@ import SearchPopover from './SearchPopover';
 import HistoryDrawer from './HistoryDrawer';
 import OwnedAssetRow from './OwnedAssetRow';
 import { BarChart } from '../Charts';
+import MetamaskAsset from './MetamaskAsset';
 
 export default function Portfolio() {
   const [assets, setAssets] = useState([]);
@@ -78,13 +79,7 @@ export default function Portfolio() {
   const loadMore = () => {};
 
   return (
-    <Flex
-      h="100vh"
-      flexDir="column"
-      overflow="hidden"
-      alignItems="center"
-      gap={4}
-      bgColor="gray.100">
+    <Flex h="100vh" flexDir="column" overflow="auto" alignItems="center" gap={4} bgColor="gray.100">
       <Box display="block" padding={6}>
         {' '}
       </Box>
@@ -112,7 +107,7 @@ export default function Portfolio() {
           flexDir="column"
           maxW="1200px"
           maxH="90%"
-          size="md"
+          width={{ base: '90%', md: '5xl' }}
           bgColor="white"
           borderRadius={15}
           boxShadow="lg"
@@ -161,10 +156,24 @@ export default function Portfolio() {
           />
         </Flex>
       )}
+      <Flex
+        flexDir="column"
+        width={{ base: '90%', md: '5xl' }}
+        bgColor="white"
+        borderRadius={15}
+        boxShadow="lg"
+        alignItems="center"
+        px={6}
+        py={2}
+        gap={3}>
+        <MetamaskAsset />
+      </Flex>
+      <Box h="14" />
       <HStack pos="absolute" bottom="0" zIndex={10} m={2}>
         <SearchPopover promptRefresh={promptRefresh} />
       </HStack>
       <HistoryDrawer />
+      <Box pb={10}> </Box>
     </Flex>
   );
 }

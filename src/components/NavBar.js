@@ -24,7 +24,7 @@ import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
 export default function NavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { user, logout } = useAuth0();
-  // const { name, picture, email } = user;
+  // const { picture } = user;
 
   // TODO: user avatar, check route for correct tab, responsive UI (hamburger menu)
 
