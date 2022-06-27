@@ -73,7 +73,7 @@ export default function Portfolio() {
           flexDir="column"
           maxW="1200px"
           maxH="90%"
-          size="md"
+          width={{ base: '90%', md: '5xl' }}
           bgColor="white"
           borderRadius={15}
           boxShadow="lg"
