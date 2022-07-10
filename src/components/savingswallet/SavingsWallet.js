@@ -18,7 +18,7 @@ import {
 } from '@chakra-ui/react';
 import { ChevronDownIcon, RepeatIcon } from '@chakra-ui/icons';
 import axios from 'axios';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useContext } from 'react';
 import { Link, renderMatches } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
 import chroma from 'chroma-js';
@@ -26,48 +26,21 @@ import LoadingIcon from '../LoadingIcon';
 import AddTransactionModal from './AddTransactionModal';
 import { PieChart } from '../Charts';
 import TransactionHistory from './TransactionHistory';
+import useCompletionToast from '../hooks/useCompletionToast';
+import TransactionContext from '../../contexts/TransactionContext';
+import GetTransactions from './GetTransactions';
 
 export default function SavingsWallet() {
   const { getAccessTokenSilently, user } = useAuth0();
-  const [transactions, setTransactions] = useState([]);
+  const { transactions } = useContext(TransactionContext);
   const [refresh, setRefresh] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  const [showSuccessToast, showErrorToast] = useCompletionToast();
 
   const promptRefresh = () => setRefresh(!refresh);
 
-  const getTransactions = async () => {
-    const token = await getAccessTokenSilently();
-    const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/v1/transactions/`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-    return response.data;
-  };
-
-  const getTxns = () => {
-    getTransactions()
-      .then((response) => {
-        console.log(response.data);
-        setTransactions(response.data);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  async function deleteTransaction(id) {
-    const token = await getAccessTokenSilently();
-    const response = await axios.delete(
-      `${process.env.REACT_APP_SERVER_URL}/api/v1/transactions/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }
-    );
-  }
-
   useEffect(() => {
-    getTxns();
+    GetTransactions();
   }, []);
 
   const [posTxns, setPosTxns] = useState({
@@ -93,7 +66,7 @@ export default function SavingsWallet() {
   });
 
   useEffect(() => {
-    getTxns();
+    GetTransactions();
   }, [refresh]);
 
   useEffect(() => {

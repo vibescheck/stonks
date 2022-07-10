@@ -54,7 +54,7 @@ export default function AddTransactionModal({ promptRefresh }) {
         promptRefresh(),
         showSuccessToast('Transaction Added', `${note} has been added.`)
       )
-      .catch((err) => console.log(err));
+      .catch((err) => showErrorToast(err));
     setAmount('');
     setNote('');
     setDate(Date.now);
