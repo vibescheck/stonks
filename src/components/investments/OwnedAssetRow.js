@@ -1,4 +1,4 @@
-import { Tr, Td, IconButton, Heading, Text, VStack, useDisclosure } from '@chakra-ui/react';
+import { Tr, Td, IconButton, Heading, Text, VStack, useDisclosure, Tag } from '@chakra-ui/react';
 import { format, parseISO } from 'date-fns';
 import { DeleteIcon } from '@chakra-ui/icons';
 import useHover from '../hooks/useHover';
@@ -8,7 +8,6 @@ import { serverURL } from '../../services/investmentService';
 export default function OwnedRowAsset({ asset, promptRefresh }) {
   const [hover, handleMouseIn, handleMouseOut] = useHover();
   const { isOpen, onOpen, onClose } = useDisclosure();
-
   return (
     <Tr
       _hover={{ background: 'gray.100' }}
@@ -27,7 +26,14 @@ export default function OwnedRowAsset({ asset, promptRefresh }) {
       </Td>
       <Td>{asset.position}</Td>
       <Td>${asset.cost_basis}</Td>
-      <Td>{asset.type}</Td>
+      <Td>
+        <Tag
+          size="md"
+          variant="solid"
+          colorScheme={asset.type === 'stocks' ? 'facebook' : 'yellow'}>
+          {asset.type}
+        </Tag>
+      </Td>
       <Td>{format(parseISO(asset.date), 'MMM dd, yyyy')}</Td>
       <Td>
         {hover && (
@@ -39,7 +45,7 @@ export default function OwnedRowAsset({ asset, promptRefresh }) {
               assetId={asset?._id}
               name={asset?.name}
               promptRefresh={promptRefresh}
-              serverURL={serverURL}
+              apiRoute={`${serverURL}/api/activeAssets`}
             />
           </>
         )}

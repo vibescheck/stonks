@@ -2,16 +2,16 @@ import axios from 'axios';
 import usStockSymbols from './data/usStocksFCS';
 import cryptoSymbols from './data/cryptoFCS';
 
-const serverURL = `${process.env.REACT_APP_SERVER_URL}/api/v1/assets/`;
+const serverURL = process.env.REACT_APP_SERVER_URL;
 
-const getOwnedAssets = () => {
+/* const getOwnedAssets = () => {
   return axios.get(serverURL);
 };
 
 // Configure asset object based on type
 const addAsset = (assetData) => {
   return axios.post(serverURL, assetData);
-};
+}; */
 
 const findStockSymbol = (keyword) => {
   const key = keyword.toLowerCase();
@@ -68,7 +68,5 @@ export {
   searchStockAPI,
   searchCryptoAPI,
   trendingCrypto,
-  getOwnedAssets,
-  addAsset,
   serverURL
 };

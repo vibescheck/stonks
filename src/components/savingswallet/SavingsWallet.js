@@ -37,7 +37,7 @@ export default function SavingsWallet() {
 
   const getTransactions = async () => {
     const token = await getAccessTokenSilently();
-    const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/v1/transactions/`, {
+    const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/api/transactions/`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -57,7 +57,7 @@ export default function SavingsWallet() {
   async function deleteTransaction(id) {
     const token = await getAccessTokenSilently();
     const response = await axios.delete(
-      `${process.env.REACT_APP_SERVER_URL}/api/v1/transactions/${id}`,
+      `${process.env.REACT_APP_SERVER_URL}/api/transactions/${id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`

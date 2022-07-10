@@ -48,7 +48,12 @@ export default function AssetFormModal({ isOpen, onClose, type, asset, promptRef
     assetData.symbol = type === 'stocks' ? asset.short_name : asset.symbol;
 
     try {
-      await axios.post(serverURL, assetData, { headers: { Authorization: `Bearer ${token}` } });
+      await axios.post(`${serverURL}/api/assets`, assetData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      await axios.post(`${serverURL}/api/activeAssets`, assetData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       showSuccessToast('Asset Added', `${name} has been added.`);
       onClose();
       promptRefresh();
@@ -79,7 +84,7 @@ export default function AssetFormModal({ isOpen, onClose, type, asset, promptRef
             {/* Position & DatePicker */}
             <Box>
               <FormLabel htmlFor="position">Position:</FormLabel>
-              <NumberInput min={0} size="md" id="position" step={1} defaultValue={1} precision={2}>
+              <NumberInput size="md" id="position" step={1} defaultValue={1} precision={2}>
                 <NumberInputField value={position} onChange={handlePositionChange} />
                 <NumberInputStepper>
                   <NumberIncrementStepper />

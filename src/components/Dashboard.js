@@ -13,8 +13,8 @@ export default function Dashboard() {
 
   const getMessage = async () => {
     try {
+      setMessage('Attempting ...');
       const token = await getAccessTokenSilently();
-      /* scope: 'read:messages' */
       const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/details`, {
         headers: {
           Authorization: `Bearer ${token}`
@@ -22,7 +22,6 @@ export default function Dashboard() {
       });
       setMessage(response.data.message);
     } catch (error) {
-      console.log(error);
       navigate('*', { status: 500, message: error.message });
     }
   };
