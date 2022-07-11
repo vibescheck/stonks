@@ -30,7 +30,7 @@ export default function AddTransactionModal({ promptRefresh }) {
   const addTransaction = async () => {
     const token = await getAccessTokenSilently();
     const response = await axios.post(
-      `${process.env.REACT_APP_SERVER_URL}/api/v1/transactions/`,
+      `${process.env.REACT_APP_SERVER_URL}/api/transactions/`,
       {
         user,
         amount,

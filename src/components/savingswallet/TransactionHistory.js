@@ -49,7 +49,7 @@ export default function TransactionHistory({ txn, promptRefresh }) {
               assetId={txn._id}
               name={txn.note}
               promptRefresh={promptRefresh}
-              serverURL={`${process.env.REACT_APP_SERVER_URL}/api/v1/transactions/`}
+              serverURL={`${process.env.REACT_APP_SERVER_URL}/api/transactions/`}
             />
           </>
         ) : (

@@ -2,7 +2,7 @@ import axios from 'axios';
 import usStockSymbols from './data/usStocksFCS';
 import cryptoSymbols from './data/cryptoFCS';
 
-const serverURL = `${process.env.REACT_APP_SERVER_URL}/api/v1/assets/`;
+const serverURL = `${process.env.REACT_APP_SERVER_URL}/api/assets/`;
 
 const getOwnedAssets = () => {
   return axios.get(serverURL);
