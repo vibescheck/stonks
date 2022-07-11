@@ -27,8 +27,8 @@ import AddTransactionModal from './AddTransactionModal';
 import { PieChart } from '../Charts';
 import TransactionHistory from './TransactionHistory';
 import useCompletionToast from '../hooks/useCompletionToast';
-import TransactionContext from '../../contexts/TransactionContext';
-import GetTransactions from './GetTransactions';
+import { TransactionContext } from '../../contexts/TransactionContextProvider';
+import useTransactions from './useTransactions';
 
 export default function SavingsWallet() {
   const { getAccessTokenSilently, user } = useAuth0();
@@ -36,11 +36,12 @@ export default function SavingsWallet() {
   const [refresh, setRefresh] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [showSuccessToast, showErrorToast] = useCompletionToast();
+  const runGetTransactions = useTransactions();
 
   const promptRefresh = () => setRefresh(!refresh);
 
   useEffect(() => {
-    GetTransactions();
+    runGetTransactions();
   }, []);
 
   const [posTxns, setPosTxns] = useState({
@@ -66,7 +67,7 @@ export default function SavingsWallet() {
   });
 
   useEffect(() => {
-    GetTransactions();
+    runGetTransactions();
   }, [refresh]);
 
   useEffect(() => {

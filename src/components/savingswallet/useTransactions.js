@@ -1,11 +1,11 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import axios from 'axios';
 import { useContext } from 'react';
-import TransactionContext from '../../contexts/TransactionContext';
+import { TransactionContext } from '../../contexts/TransactionContextProvider';
 import useCompletionToast from '../hooks/useCompletionToast';
 
-export default function GetTransactions() {
-  const { getAccessTokenSilently } = useAuth0;
+export default function UseTransactions() {
+  const { getAccessTokenSilently } = useAuth0();
   const [showSuccessToast, showErrorToast] = useCompletionToast();
   const { setTransactions } = useContext(TransactionContext);
 
@@ -28,5 +28,5 @@ export default function GetTransactions() {
       .catch((err) => showErrorToast(err));
   };
 
-  return runGetTransactions();
+  return runGetTransactions;
 }
