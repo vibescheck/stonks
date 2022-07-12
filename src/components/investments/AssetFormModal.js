@@ -26,6 +26,8 @@ import { useState } from 'react';
 import axios from 'axios';
 import { serverURL } from '../../services/investmentService';
 import useCompletionToast from '../hooks/useCompletionToast';
+import Loading from '../Loading';
+import LoadingIcon from '../LoadingIcon';
 
 export default function AssetFormModal({ isOpen, onClose, type, asset, promptRefresh }) {
   const [position, setPosition] = useState(1);
@@ -34,31 +36,42 @@ export default function AssetFormModal({ isOpen, onClose, type, asset, promptRef
   const [date, setDate] = useState(Date.now);
   const { getAccessTokenSilently } = useAuth0();
   const [showSuccessToast, showErrorToast] = useCompletionToast();
+  const [isLoading, setLoading] = useState(false);
 
   const onSubmitAdd = async () => {
-    /* Form validation to be improved, include date */
+    setLoading(true);
     if (!asset || !position || !cost) {
       showErrorToast('Missing fields');
       return;
     }
-    const token = await getAccessTokenSilently();
-    /** Query cost_basis based on indicated date and time */
-    const { id, name } = asset;
-    const assetData = { type, name, position, note, cost_basis: cost, api_id: id, date };
-    assetData.symbol = type === 'stocks' ? asset.short_name : asset.symbol;
-
     try {
+      const token = await getAccessTokenSilently();
+      const { id, name, symbol } = asset;
+      const assetData = {
+        type,
+        name,
+        symbol,
+        position,
+        note,
+        cost_basis: cost,
+        date
+      };
+      assetData.api_id = type === 'stocks' ? symbol : id;
+
+      // TODO: Combine to one Promise together instead
       await axios.post(`${serverURL}/api/assets`, assetData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       await axios.post(`${serverURL}/api/activeAssets`, assetData, {
         headers: { Authorization: `Bearer ${token}` }
       });
+      setLoading(false);
       showSuccessToast('Asset Added', `${name} has been added.`);
       onClose();
       promptRefresh();
     } catch (error) {
       showErrorToast(error);
+      setLoading(false);
     }
   };
   const handleNoteChange = (event) => {
@@ -127,7 +140,7 @@ export default function AssetFormModal({ isOpen, onClose, type, asset, promptRef
 
         <ModalFooter>
           <Button colorScheme="green" marginInline={3} onClick={onSubmitAdd}>
-            Add Asset
+            {isLoading ? <LoadingIcon /> : 'Add Asset'}
           </Button>
           <Button onClick={onClose}>Cancel</Button>
         </ModalFooter>

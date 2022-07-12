@@ -51,6 +51,7 @@ export default function Portfolio() {
         setInventory(results.data.data);
       }
       setLoading(false);
+      console.log(inventory);
       // setMetamaskLogin(user.sub.startsWith('oauth2|siwe'));
     } catch (error) {
       console.log(error);
@@ -103,15 +104,15 @@ export default function Portfolio() {
       ) : (
         <Flex
           flexDir="column"
-          maxW="1200px"
           maxH="90%"
-          width={{ base: '90%', md: '5xl' }}
+          width="95%"
           bgColor="white"
           borderRadius={15}
           boxShadow="lg"
           alignItems="center"
-          px={6}
+          px={4}
           py={6}
+          mx="4"
           gap={3}>
           <Flex w="100%" justifyContent="space-between" px={3}>
             <Heading size="lg" my={4}>
@@ -140,6 +141,7 @@ export default function Portfolio() {
                     <Th>COST BASIS</Th>
                     <Th>TYPE</Th>
                     <Th>DATE</Th>
+                    <Th>CURRENT PRICE</Th>
                     <Th>MARKET VALUE</Th>
                     <Th>P/L</Th>
                     <Td />
@@ -147,7 +149,12 @@ export default function Portfolio() {
                 </Thead>
                 <Tbody>
                   {inventory.map((asset) => (
-                    <OwnedAssetRow key={uuidv4()} asset={asset} promptRefresh={promptRefresh} />
+                    <OwnedAssetRow
+                      key={uuidv4()}
+                      asset={asset}
+                      promptRefresh={promptRefresh}
+                      refreshState={refresh}
+                    />
                   ))}
                 </Tbody>
               </Table>
