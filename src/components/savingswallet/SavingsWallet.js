@@ -29,6 +29,7 @@ import TransactionHistory from './TransactionHistory';
 import useCompletionToast from '../hooks/useCompletionToast';
 import { TransactionContext } from '../../contexts/TransactionContextProvider';
 import useTransactions from '../hooks/useTransactions';
+import Streaks from '../Streaks';
 
 export default function SavingsWallet() {
   const { getAccessTokenSilently, user } = useAuth0();
@@ -91,18 +92,6 @@ export default function SavingsWallet() {
 
   const loadMore = () => {};
 
-  const getStreak = () => {
-    if (transactions.length === 0) {
-      console.log('no streak');
-    } else {
-      console.log(
-        [...transactions].sort((a, b) => -a.date.localeCompare(b.date))[transactions.length - 1]
-          .date
-      );
-    }
-    return 1;
-  };
-
   return (
     <Flex
       h="100vh"
@@ -151,7 +140,7 @@ export default function SavingsWallet() {
         ) : null}
       </HStack>
       <AddTransactionModal promptRefresh={promptRefresh} />
-      <Box> Streak: {getStreak()}</Box>
+      <Streaks promptRefresh={promptRefresh} />
       {isLoading ? (
         <LoadingIcon />
       ) : (
