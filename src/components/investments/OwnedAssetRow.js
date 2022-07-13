@@ -14,11 +14,11 @@ import {
 export default function OwnedRowAsset({ asset, promptRefresh, refreshState }) {
   const [hover, handleMouseIn, handleMouseOut] = useHover();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [currentPrice, setCurrentPrice] = useState(-1);
+  const [asset.price, setCurrentPrice] = useState(-1);
   const { getAccessTokenSilently } = useAuth0();
   const [isLoading, setLoading] = useState(false);
 
-  const fetchCurrentPrice = async () => {
+  /* const fetchCurrentPrice = async () => {
     try {
       setLoading(true);
       let price;
@@ -45,7 +45,7 @@ export default function OwnedRowAsset({ asset, promptRefresh, refreshState }) {
     fetchCurrentPrice();
     // TODO: Current implementation only supports updating current price //upon refreshing
     // FIXME: Current bug of causing backend to resend header, when trying to update asset to lower position
-  }, [refreshState]);
+  }, [refreshState]); */
 
   return (
     <Tr
@@ -63,8 +63,6 @@ export default function OwnedRowAsset({ asset, promptRefresh, refreshState }) {
           </Text>
         </VStack>
       </Td>
-      <Td>{asset.position}</Td>
-      <Td>${asset.cost_basis}</Td>
       <Td>
         <Tag
           size="md"
@@ -74,6 +72,8 @@ export default function OwnedRowAsset({ asset, promptRefresh, refreshState }) {
         </Tag>
       </Td>
       <Td>{format(parseISO(asset.date), 'MMM dd, yyyy')}</Td>
+      <Td>{asset.position}</Td>
+      <Td>${asset.cost_basis}</Td>
       {isLoading ? (
         <>
           <Td>Fetching</Td>
@@ -82,9 +82,9 @@ export default function OwnedRowAsset({ asset, promptRefresh, refreshState }) {
         </>
       ) : (
         <>
-          <Td>${currentPrice}</Td>
-          <Td>${currentPrice * asset.position}</Td>
-          <Td>{currentPrice * asset.position - asset.cost_basis}</Td>
+          <Td>${asset.price}</Td>
+          <Td>${asset.price * asset.position}</Td>
+          <Td>{asset.price * asset.position - asset.cost_basis}</Td>
         </>
       )}
       <Td>

@@ -44,7 +44,6 @@ export default function HistoryDrawer() {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (results) {
-        // bruh
         setHistory(results.data.data);
       }
       setLoading(false);
@@ -95,9 +94,9 @@ export default function HistoryDrawer() {
                     <Thead>
                       <Tr color="gray.200">
                         <Th>SYMBOL/NAME</Th>
-                        <Th>UNITS</Th>
                         <Th>TYPE</Th>
                         <Th>DATE</Th>
+                        <Th>UNITS</Th>
                       </Tr>
                     </Thead>
                     <Tbody>
@@ -112,18 +111,25 @@ export default function HistoryDrawer() {
                                 {asset.name}
                               </Text>
                             </VStack>
+                            <Td>
+                              <Tag
+                                size="md"
+                                variant="solid"
+                                colorScheme={asset.type === 'stocks' ? 'facebook' : 'yellow'}>
+                                {asset.type}
+                              </Tag>
+                            </Td>
+                            <Td>{format(parseISO(asset.date), 'MMM dd, yyyy')}</Td>
+                            <Td>{asset.action}</Td>
                           </Td>
-                          <Td>{asset.position}</Td>
                           <Td>
                             <Tag
                               size="md"
-                              variant="solid"
-                              colorScheme={asset.type === 'stocks' ? 'facebook' : 'yellow'}>
-                              {asset.type}
+                              variant="outline"
+                              colorScheme={asset.position > 0 ? 'pink' : 'teal'}>
+                              {asset.position > 0 ? 'Bought' : 'Sold'}
                             </Tag>
                           </Td>
-                          <Td>{format(parseISO(asset.date), 'MMM dd, yyyy')}</Td>
-                          <Td>{asset.action}</Td>
                         </Tr>
                       ))}
                     </Tbody>

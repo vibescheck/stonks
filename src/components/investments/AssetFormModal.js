@@ -106,13 +106,17 @@ export default function AssetFormModal({ isOpen, onClose, type, asset, promptRef
               </NumberInput>
             </Box>
             <Box>
-              <FormLabel htmlFor="cost">COST</FormLabel>
+              <FormLabel htmlFor="cost">COST/RETURNS</FormLabel>
               <InputGroup>
                 <InputLeftAddon pointerEvents="none" color="gray.300" fontSize="1.2em">
                   $
                 </InputLeftAddon>
                 <NumberInput min={0} size="md" id="cost" step={1} defaultValue={1} precision={2}>
-                  <NumberInputField value={cost} onChange={handleCostChange} />
+                  <NumberInputField
+                    value={cost}
+                    onChange={handleCostChange}
+                    placeholder="Only Magnitude, No +/-"
+                  />
                   <NumberInputStepper>
                     <NumberIncrementStepper />
                     <NumberDecrementStepper />
