@@ -14,7 +14,7 @@ import {
 export default function OwnedRowAsset({ asset, promptRefresh, refreshState }) {
   const [hover, handleMouseIn, handleMouseOut] = useHover();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [asset.price, setCurrentPrice] = useState(-1);
+  const [price, setCurrentPrice] = useState(-1);
   const { getAccessTokenSilently } = useAuth0();
   const [isLoading, setLoading] = useState(false);
 

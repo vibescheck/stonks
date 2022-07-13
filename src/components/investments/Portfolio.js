@@ -47,7 +47,7 @@ export default function Portfolio() {
         headers: { Authorization: `Bearer ${token}` }
       });
 
-      if (results) {
+      if (results.data.data) {
         setInventory(results.data.data);
       }
       setLoading(false);
