@@ -1,51 +1,13 @@
 import { Tr, Td, IconButton, Heading, Text, VStack, useDisclosure, Tag } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
 import { format, parseISO, set } from 'date-fns';
-import { useAuth0 } from '@auth0/auth0-react';
 import { DeleteIcon } from '@chakra-ui/icons';
 import useHover from '../hooks/useHover';
 import DeleteAlert from '../DeleteAlert';
-import {
-  getCryptoAPICurrentPrice,
-  getStockAPICurrentPrice,
-  serverURL
-} from '../../services/investmentService';
+import { serverURL } from '../../services/investmentService';
 
 export default function OwnedRowAsset({ asset, promptRefresh, refreshState }) {
   const [hover, handleMouseIn, handleMouseOut] = useHover();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [price, setCurrentPrice] = useState(-1);
-  const { getAccessTokenSilently } = useAuth0();
-  const [isLoading, setLoading] = useState(false);
-
-  /* const fetchCurrentPrice = async () => {
-    try {
-      setLoading(true);
-      let price;
-      if (asset.type === 'crypto') {
-        price = (await getCryptoAPICurrentPrice(asset.api_id)).data.market_data.current_price.sgd;
-        // Will get Number here
-        // TODO: Using SGD prices right now, Finalize USD vs SGD
-      } else {
-        const token = await getAccessTokenSilently();
-        price = (await getStockAPICurrentPrice(asset.symbol, token)).data;
-        console.log(price);
-        // Will get String here
-        // TODO: Using USD prices right now, Finalize USD vs SGD
-      }
-      setLoading(false);
-      // Note difference in typeof price
-      setCurrentPrice(price || -1);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchCurrentPrice();
-    // TODO: Current implementation only supports updating current price //upon refreshing
-    // FIXME: Current bug of causing backend to resend header, when trying to update asset to lower position
-  }, [refreshState]); */
 
   return (
     <Tr
@@ -74,19 +36,9 @@ export default function OwnedRowAsset({ asset, promptRefresh, refreshState }) {
       <Td>{format(parseISO(asset.date), 'MMM dd, yyyy')}</Td>
       <Td>{asset.position}</Td>
       <Td>${asset.cost_basis}</Td>
-      {isLoading ? (
-        <>
-          <Td>Fetching</Td>
-          <Td>...</Td>
-          <Td>...</Td>
-        </>
-      ) : (
-        <>
-          <Td>${asset.price}</Td>
-          <Td>${asset.price * asset.position}</Td>
-          <Td>{asset.price * asset.position - asset.cost_basis}</Td>
-        </>
-      )}
+      <Td>{asset.price || 'API Query Limit reached'}</Td>
+      <Td>{asset.price * asset.position}</Td>
+      <Td>{(asset.price * asset.position - asset.cost_basis).toFixed(2)}</Td>
       <Td>
         {hover && (
           <>

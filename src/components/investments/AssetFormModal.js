@@ -31,9 +31,9 @@ import LoadingIcon from '../LoadingIcon';
 
 export default function AssetFormModal({ isOpen, onClose, type, asset, promptRefresh }) {
   const [position, setPosition] = useState(1);
-  const [cost, setCost] = useState(1);
+  const [cost, setCost] = useState(100);
   const [note, setNote] = useState('');
-  const [date, setDate] = useState(Date.now);
+  const [date, setDate] = useState(Date.now());
   const { getAccessTokenSilently } = useAuth0();
   const [showSuccessToast, showErrorToast] = useCompletionToast();
   const [isLoading, setLoading] = useState(false);
@@ -70,6 +70,7 @@ export default function AssetFormModal({ isOpen, onClose, type, asset, promptRef
       onClose();
       promptRefresh();
     } catch (error) {
+      console.log(error);
       showErrorToast(error);
       setLoading(false);
     }
@@ -78,10 +79,10 @@ export default function AssetFormModal({ isOpen, onClose, type, asset, promptRef
     setNote(event.target.value);
   };
   const handlePositionChange = (event) => {
-    setPosition(event.target.value);
+    setPosition(parseFloat(event.target.value));
   };
   const handleCostChange = (event) => {
-    setCost(event.target.value);
+    setCost(parseFloat(event.target.value));
   };
   const handleDateChange = (event) => {
     setDate(event.target.value);
@@ -97,7 +98,7 @@ export default function AssetFormModal({ isOpen, onClose, type, asset, promptRef
             {/* Position & DatePicker */}
             <Box>
               <FormLabel htmlFor="position">Position:</FormLabel>
-              <NumberInput size="md" id="position" step={1} defaultValue={1} precision={2}>
+              <NumberInput size="md" id="position" step={0.1} defaultValue={position} precision={2}>
                 <NumberInputField value={position} onChange={handlePositionChange} />
                 <NumberInputStepper>
                   <NumberIncrementStepper />
@@ -106,17 +107,13 @@ export default function AssetFormModal({ isOpen, onClose, type, asset, promptRef
               </NumberInput>
             </Box>
             <Box>
-              <FormLabel htmlFor="cost">COST/RETURNS</FormLabel>
+              <FormLabel htmlFor="cost">COST/RETURNS (No +/-)</FormLabel>
               <InputGroup>
-                <InputLeftAddon pointerEvents="none" color="gray.300" fontSize="1.2em">
+                <InputLeftAddon pointerEvents="none" color="gray.500" fontSize="1em">
                   $
                 </InputLeftAddon>
-                <NumberInput min={0} size="md" id="cost" step={1} defaultValue={1} precision={2}>
-                  <NumberInputField
-                    value={cost}
-                    onChange={handleCostChange}
-                    placeholder="Only Magnitude, No +/-"
-                  />
+                <NumberInput min={0} size="md" id="cost" step={1} defaultValue={cost} precision={2}>
+                  <NumberInputField value={cost} onChange={handleCostChange} />
                   <NumberInputStepper>
                     <NumberIncrementStepper />
                     <NumberDecrementStepper />

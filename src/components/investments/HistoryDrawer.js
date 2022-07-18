@@ -65,7 +65,7 @@ export default function HistoryDrawer() {
         textColor="black"
         pos="absolute"
         bottom="0"
-        right="0"
+        right="3"
         zIndex={10}
         m={4}
         p={2}
@@ -89,13 +89,14 @@ export default function HistoryDrawer() {
             ) : (
               <Flex flexDir="column" gap={3} maxH="99%">
                 {/* OverflowX auto if cut out column */}
-                <TableContainer overflowY="auto" overflowX="hidden">
+                <TableContainer overflowY="auto" overflowX="auto">
                   <Table>
                     <Thead>
                       <Tr color="gray.200">
                         <Th>SYMBOL/NAME</Th>
                         <Th>TYPE</Th>
                         <Th>DATE</Th>
+                        <Th>Action</Th>
                         <Th>UNITS</Th>
                       </Tr>
                     </Thead>
@@ -111,25 +112,25 @@ export default function HistoryDrawer() {
                                 {asset.name}
                               </Text>
                             </VStack>
-                            <Td>
-                              <Tag
-                                size="md"
-                                variant="solid"
-                                colorScheme={asset.type === 'stocks' ? 'facebook' : 'yellow'}>
-                                {asset.type}
-                              </Tag>
-                            </Td>
-                            <Td>{format(parseISO(asset.date), 'MMM dd, yyyy')}</Td>
-                            <Td>{asset.action}</Td>
                           </Td>
                           <Td>
                             <Tag
-                              size="md"
+                              size="sm"
+                              variant="solid"
+                              colorScheme={asset.type === 'stocks' ? 'facebook' : 'yellow'}>
+                              {asset.type}
+                            </Tag>
+                          </Td>
+                          <Td>{format(parseISO(asset.date), 'MMM dd, yyyy')}</Td>
+                          <Td>
+                            <Tag
+                              size="sm"
                               variant="outline"
                               colorScheme={asset.position > 0 ? 'pink' : 'teal'}>
                               {asset.position > 0 ? 'Bought' : 'Sold'}
                             </Tag>
                           </Td>
+                          <Td>{asset.position}</Td>
                         </Tr>
                       ))}
                     </Tbody>

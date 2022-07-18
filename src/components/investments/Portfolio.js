@@ -137,13 +137,13 @@ export default function Portfolio() {
                 <Thead>
                   <Tr color="gray.200">
                     <Th>SYMBOL/NAME</Th>
-                    <Th>POSITION</Th>
-                    <Th>COST BASIS</Th>
                     <Th>TYPE</Th>
                     <Th>DATE</Th>
-                    <Th>CURRENT PRICE</Th>
-                    <Th>MARKET VALUE</Th>
-                    <Th>P/L</Th>
+                    <Th>POSITION</Th>
+                    <Th>COST BASIS</Th>
+                    <Th>$ CURRENT PRICE</Th>
+                    <Th>$ MARKET VALUE</Th>
+                    <Th>$ P/L </Th>
                     <Td />
                   </Tr>
                 </Thead>
