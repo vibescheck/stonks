@@ -9,6 +9,9 @@ export default function OwnedRowAsset({ asset, promptRefresh, refreshState }) {
   const [hover, handleMouseIn, handleMouseOut] = useHover();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const hideBoolean = () => asset.position <= 0;
+  const profitLoss = ({ price, position, cost_basis }) => price * position - cost_basis;
+
   return (
     <Tr
       _hover={{ background: 'gray.100' }}
@@ -34,35 +37,51 @@ export default function OwnedRowAsset({ asset, promptRefresh, refreshState }) {
         </Tag>
       </Td>
       <Td>{format(parseISO(asset.date), 'MMM dd, yyyy')}</Td>
-      <Td>{asset.position}</Td>
-      <Td>${asset.cost_basis}</Td>
-      <Td>{asset.price || 'API Query Limit reached'}</Td>
-      <Td>{asset.price * asset.position}</Td>
-      <Td>{(asset.price * asset.position - asset.cost_basis).toFixed(2)}</Td>
-      <Td>
-        {hover && (
-          <>
-            <IconButton
-              size="sm"
-              m={0}
-              p={0}
-              icon={<DeleteIcon />}
-              onClick={onOpen}
-              width={20}
-              aria-label="Delete button appears on hover"
-            />
-            <DeleteAlert
-              isOpen={isOpen}
-              onClose={onClose}
-              assetId={asset?._id}
-              name={asset?.name}
-              promptRefresh={promptRefresh}
-              apiRoute={`${serverURL}/api/activeAssets`}
-            />
-          </>
-        )}
-      </Td>
-      <Td />
+      {hideBoolean() ? (
+        <>
+          <Td>Invalid Position</Td>
+          <Td>-</Td>
+          <Td>-</Td>
+          <Td>-</Td>
+          <Td>-</Td>
+        </>
+      ) : (
+        <>
+          <Td>{asset.position}</Td>
+          <Td>${asset.cost_basis}</Td>
+          <Td>{asset.price || 'API Query Limit reached'}</Td>
+          <Td>{asset.price * asset.position}</Td>
+          <Td>
+            <Text color={profitLoss(asset) > 0 ? 'green' : 'red'}>
+              {profitLoss(asset).toFixed(2)}
+            </Text>
+          </Td>
+          <Td>
+            {hover && (
+              <>
+                <IconButton
+                  size="sm"
+                  m={0}
+                  p={0}
+                  icon={<DeleteIcon />}
+                  onClick={onOpen}
+                  width={20}
+                  aria-label="Delete button appears on hover"
+                />
+                <DeleteAlert
+                  isOpen={isOpen}
+                  onClose={onClose}
+                  assetId={asset?._id}
+                  name={asset?.name}
+                  promptRefresh={promptRefresh}
+                  apiRoute={`${serverURL}/api/activeAssets`}
+                />
+              </>
+            )}
+          </Td>
+          <Td />
+        </>
+      )}
     </Tr>
   );
 }
