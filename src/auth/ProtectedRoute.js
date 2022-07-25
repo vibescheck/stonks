@@ -9,6 +9,7 @@ export default function ProtectedRoute({ component }) {
   const Component = withAuthenticationRequired(component, {
     onRedirecting: redirectLoad
   });
+
   return (
     <>
       <NavBar />
