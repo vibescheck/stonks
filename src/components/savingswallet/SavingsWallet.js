@@ -140,7 +140,7 @@ export default function SavingsWallet() {
         ) : null}
       </HStack>
       <AddTransactionModal promptRefresh={promptRefresh} />
-      <Streaks promptRefresh={promptRefresh} />
+      <Streaks promptRefresh={(promptRefresh, refresh)} />
       {isLoading ? (
         <LoadingIcon />
       ) : (

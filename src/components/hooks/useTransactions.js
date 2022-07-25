@@ -22,7 +22,6 @@ export default function UseTransactions() {
   const runGetTransactions = () => {
     getTransactions()
       .then((response) => {
-        console.log(response.data);
         setTransactions(response.data);
       })
       .catch((err) => showErrorToast(err));

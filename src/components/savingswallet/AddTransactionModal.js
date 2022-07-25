@@ -46,11 +46,29 @@ export default function AddTransactionModal({ promptRefresh }) {
     );
     return response;
   };
+
+  const addCheckin = async () => {
+    const token = await getAccessTokenSilently();
+    const response = await axios.post(
+      `${process.env.REACT_APP_SERVER_URL}/api/checkin/`,
+      {
+        user
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+    return response;
+  };
+
   const onSubmit = (event) => {
     event.preventDefault();
     addTransaction()
       .then(
         onClose,
+        addCheckin(),
         promptRefresh(),
         showSuccessToast('Transaction Added', `${note} has been added.`)
       )
