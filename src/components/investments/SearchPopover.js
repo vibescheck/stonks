@@ -31,29 +31,26 @@ import AssetFormModal from './AssetFormModal';
 export default function SearchPopover({ promptRefresh }) {
   // use CONSTANTS for asset type
   const [search, setSearch] = useState('');
-  const [searchResults, setSearchResults] = useState(null);
+  const [searchResults, setSearchResults] = useState([]);
   const [selected, setSelected] = useState(null);
   const [type, setType] = useState('stocks');
   const [isLoading, setLoading] = useState(false);
   const initialFocusRef = useRef();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  /**
-   * Switch to useReducer as soon as possible!!!
-   */
+
   const updateAssets = async (keyword) => {
-    let results = [];
     setLoading(true);
     try {
       if (!keyword) {
-        setSearchResults(null);
+        setSearchResults([]);
         setLoading(false);
         return;
       }
       if (type === 'stocks') {
-        results = findStockSymbol(keyword);
+        const results = findStockSymbol(keyword);
         setSearchResults(results);
       } else if (type === 'crypto') {
-        results = findCryptoSymbol(keyword);
+        const results = findCryptoSymbol(keyword);
         setSearchResults(results);
       }
       setLoading(false);
@@ -105,7 +102,7 @@ export default function SearchPopover({ promptRefresh }) {
                 </RadioGroup>
 
                 {isLoading && <Loading />}
-                {searchResults ? (
+                {searchResults.length !== 0 ? (
                   /* Search Results Display */
                   <Box maxHeight="300px" overflowY="auto" my={3}>
                     <Table size="sm">
