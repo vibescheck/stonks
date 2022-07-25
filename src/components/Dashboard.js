@@ -14,8 +14,8 @@ export default function Dashboard() {
 
   const getMessage = async () => {
     try {
+      setMessage('Attempting ...');
       const token = await getAccessTokenSilently();
-      /* scope: 'read:messages' */
       const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/details`, {
         headers: {
           Authorization: `Bearer ${token}`

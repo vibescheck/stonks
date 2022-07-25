@@ -10,9 +10,10 @@ import {
   AlertDialogOverlay,
   Button
 } from '@chakra-ui/react';
+import { serverURL } from '../services/investmentService';
 import useCompletionToast from './hooks/useCompletionToast';
 
-export default function DeleteAlert({ isOpen, onClose, assetId, name, promptRefresh, serverURL }) {
+export default function DeleteAlert({ isOpen, onClose, assetId, name, promptRefresh, apiRoute }) {
   const cancelRef = useRef();
   const { getAccessTokenSilently } = useAuth0();
   const [showSuccessToast, showErrorToast] = useCompletionToast();
@@ -20,7 +21,7 @@ export default function DeleteAlert({ isOpen, onClose, assetId, name, promptRefr
   const onClickDelete = async () => {
     try {
       const token = await getAccessTokenSilently();
-      await axios.delete(`${serverURL}${assetId}`, {
+      await axios.delete(`${apiRoute}/${assetId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       showSuccessToast('Asset Deleted', `${name} has been deleted.`);

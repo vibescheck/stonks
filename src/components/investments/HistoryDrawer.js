@@ -18,8 +18,10 @@ import {
   Button,
   useDisclosure,
   Flex,
-  TableContainer
+  TableContainer,
+  Tag
 } from '@chakra-ui/react';
+import { format, parseISO } from 'date-fns';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useState, useEffect } from 'react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
@@ -38,9 +40,10 @@ export default function HistoryDrawer() {
     setLoading(true);
     try {
       const token = await getAccessTokenSilently();
-      const results = await axios.get(serverURL, { headers: { Authorization: `Bearer ${token}` } });
+      const results = await axios.get(`${serverURL}/api/assets`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       if (results) {
-        // bruh
         setHistory(results.data.data);
       }
       setLoading(false);
@@ -59,20 +62,26 @@ export default function HistoryDrawer() {
       <Button
         variant="ghost"
         colorScheme="blackAlpha"
+        textColor="black"
         pos="absolute"
         bottom="0"
-        right="0"
+        right="3"
         zIndex={10}
         m={4}
         p={2}
-        onClick={onOpen}>
+        onClick={onOpen}
+        size="lg">
         view history -{'>'}
       </Button>
       <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="lg">
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>history</DrawerHeader>
+          <DrawerHeader>
+            <Heading size="md" fontWeight="bold" letterSpacing="tight" textAlign="center">
+              history
+            </Heading>
+          </DrawerHeader>
 
           <DrawerBody>
             {isLoading ? (
@@ -80,33 +89,48 @@ export default function HistoryDrawer() {
             ) : (
               <Flex flexDir="column" gap={3} maxH="99%">
                 {/* OverflowX auto if cut out column */}
-                <TableContainer overflowY="auto" overflowX="hidden">
+                <TableContainer overflowY="auto" overflowX="auto">
                   <Table>
                     <Thead>
                       <Tr color="gray.200">
                         <Th>SYMBOL/NAME</Th>
-                        <Th>UNITS</Th>
                         <Th>TYPE</Th>
                         <Th>DATE</Th>
+                        <Th>Action</Th>
+                        <Th>UNITS</Th>
                       </Tr>
                     </Thead>
                     <Tbody>
-                      {history.map((item) => (
+                      {history.map((asset) => (
                         <Tr key={uuidv4()} _hover={{ background: 'gray.100' }}>
                           <Td>
                             <VStack alignItems="start">
                               <Heading size="sm" letterSpacing="tight">
-                                {item.symbol}
+                                {asset.symbol}
                               </Heading>
                               <Text fontWeight="semibold" fontSize="sm">
-                                {item.name}
+                                {asset.name}
                               </Text>
                             </VStack>
                           </Td>
-                          <Td>{item.position}</Td>
-                          <Td>{item.type}</Td>
-                          <Td>{item.date}</Td>
-                          <Td>{item.action}</Td>
+                          <Td>
+                            <Tag
+                              size="sm"
+                              variant="solid"
+                              colorScheme={asset.type === 'stocks' ? 'facebook' : 'yellow'}>
+                              {asset.type}
+                            </Tag>
+                          </Td>
+                          <Td>{format(parseISO(asset.date), 'MMM dd, yyyy')}</Td>
+                          <Td>
+                            <Tag
+                              size="sm"
+                              variant="outline"
+                              colorScheme={asset.position > 0 ? 'pink' : 'teal'}>
+                              {asset.position > 0 ? 'Bought' : 'Sold'}
+                            </Tag>
+                          </Td>
+                          <Td>{asset.position}</Td>
                         </Tr>
                       ))}
                     </Tbody>
