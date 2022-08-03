@@ -25,6 +25,8 @@
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "react/prop-types": "off",
     "no-plusplus": "warn",
-    "no-underscore-dangle": "warn"
+    "no-underscore-dangle": "warn",
+    "camelcase": "warn",
+    "@typescript-eslint/camelcase": "off"
   }
 }

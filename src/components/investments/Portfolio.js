@@ -51,7 +51,6 @@ export default function Portfolio() {
         setInventory(results.data.data);
       }
       setLoading(false);
-      console.log(inventory);
       // setMetamaskLogin(user.sub.startsWith('oauth2|siwe'));
     } catch (error) {
       console.log(error);
@@ -186,7 +185,7 @@ export default function Portfolio() {
         <SearchPopover promptRefresh={promptRefresh} />
       </HStack>
       <HistoryDrawer />
-      <Box pb={10}> </Box>
+      <Box pb={20}> </Box>
     </Flex>
   );
 }
