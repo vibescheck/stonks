@@ -9,9 +9,8 @@ import useTransactions from './hooks/useTransactions';
 
 export default function SavingsWallet() {
   const { user } = useAuth0();
-  const { transactions } = useContext(TransactionContext);
+  const { transactions, isLoading } = useContext(TransactionContext);
   const [refresh, setRefresh] = useState(false);
-  const [isLoading, setLoading] = useState(false);
   const [showSuccessToast, showErrorToast] = useCompletionToast();
   const runGetTransactions = useTransactions();
 
@@ -65,6 +64,8 @@ export default function SavingsWallet() {
       ]
     });
   }, [transactions]);
+
+  if (isLoading) return <div>Fetching user data ...</div>;
 
   return (
     <HStack gap={6} py={4}>

@@ -40,7 +40,7 @@ const findCryptoSymbol = (keyword) => {
     },
     { count: 0 }
   );
-  return results.length > 0 ? results : null;
+  return results.length > 0 ? results : [];
 };
 
 /*  This is previous code for frontend price fetching implementation

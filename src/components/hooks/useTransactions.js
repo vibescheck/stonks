@@ -7,7 +7,7 @@ import useCompletionToast from './useCompletionToast';
 export default function UseTransactions() {
   const { getAccessTokenSilently } = useAuth0();
   const [showErrorToast] = useCompletionToast();
-  const { setTransactions } = useContext(TransactionContext);
+  const { setTransactions, setLoading } = useContext(TransactionContext);
 
   const getTransactions = async () => {
     const token = await getAccessTokenSilently();
@@ -20,11 +20,16 @@ export default function UseTransactions() {
   };
 
   const runGetTransactions = () => {
+    setLoading(true);
     getTransactions()
       .then((response) => {
         setTransactions(response.data);
+        setLoading(false);
       })
-      .catch((err) => showErrorToast(err));
+      .catch((err) => {
+        showErrorToast(err);
+        setLoading(false);
+      });
   };
 
   return runGetTransactions;
