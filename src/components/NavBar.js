@@ -1,13 +1,11 @@
+/* eslint-disable no-unused-vars */
 import {
   Tabs,
   TabList,
   Tab,
   Box,
   Flex,
-  Grid,
   Heading,
-  Text,
-  background,
   useDisclosure,
   Button,
   MenuButton,
@@ -17,9 +15,8 @@ import {
   MenuDivider,
   Avatar
 } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
-import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
-import { useAuth0, withAuthenticationRequired } from '@auth0/auth0-react';
+import { Link, useLocation } from 'react-router-dom';
+import { useAuth0 } from '@auth0/auth0-react';
 
 export default function NavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -27,6 +24,15 @@ export default function NavBar() {
   // const { picture } = user;
 
   // TODO: user avatar, check route for correct tab, responsive UI (hamburger menu)
+
+  const location = useLocation().pathname;
+  let tabIndex = 0;
+  if (location === '/savings') {
+    tabIndex = 1;
+  }
+  if (location === '/investments') {
+    tabIndex = 2;
+  }
 
   return (
     <Flex justifyContent="space-between">
@@ -44,10 +50,16 @@ export default function NavBar() {
         </Heading>
       </Flex>
       <Box>
-        <Heading> </Heading>
+        <Heading> {location}</Heading>
       </Box>
       <Flex bg="black" align="center" justify="center" w="100%" pos="fixed" zIndex={1}>
-        <Tabs isFitted variant="unstyled" size="lg" align="center" color="lightgray">
+        <Tabs
+          isFitted
+          variant="unstyled"
+          size="lg"
+          align="center"
+          color="lightgray"
+          defaultIndex={tabIndex}>
           <TabList gap={50}>
             <Link to="/dashboard">
               <Tab
