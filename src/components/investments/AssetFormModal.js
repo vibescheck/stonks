@@ -1,32 +1,31 @@
+import { useAuth0 } from '@auth0/auth0-react';
 import {
+  Box,
+  Button,
+  FormLabel,
   HStack,
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
-  FormLabel,
-  Box,
-  Input,
-  Textarea,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  Button,
-  InputGroup,
-  InputLeftElement,
-  InputLeftAddon
+  Text,
+  Textarea
 } from '@chakra-ui/react';
-import { useAuth0 } from '@auth0/auth0-react';
-import { useState } from 'react';
 import axios from 'axios';
+import { useState } from 'react';
 import { serverURL } from '../../services/investmentService';
 import useCompletionToast from '../hooks/useCompletionToast';
-import Loading from '../Loading';
 import LoadingIcon from '../LoadingIcon';
 
 export default function AssetFormModal({ isOpen, onClose, type, asset, promptRefresh }) {
@@ -38,7 +37,36 @@ export default function AssetFormModal({ isOpen, onClose, type, asset, promptRef
   const [showSuccessToast, showErrorToast] = useCompletionToast();
   const [isLoading, setLoading] = useState(false);
 
-  const onSubmitAdd = async () => {
+  const addWatchlistItem = async () => {
+    setLoading(true);
+    if (!asset) {
+      showErrorToast('No asset selected');
+      return;
+    }
+    try {
+      const token = await getAccessTokenSilently();
+      const { id, name, symbol } = asset;
+      const itemData = {
+        type,
+        name,
+        symbol
+      };
+      itemData.api_id = type === 'stocks' ? symbol : id;
+
+      // Alternative: Combine to one Promise together instead
+      await axios.post(`${serverURL}/api/watchlist`, itemData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setLoading(false);
+      showSuccessToast(`Asset: ${name} added to Watchlist`);
+      onClose();
+    } catch (error) {
+      console.log(error);
+      showErrorToast(error);
+      setLoading(false);
+    }
+  };
+  const addAsset = async () => {
     setLoading(true);
     if (!asset || !position || !cost) {
       showErrorToast('Missing fields');
@@ -58,7 +86,7 @@ export default function AssetFormModal({ isOpen, onClose, type, asset, promptRef
       };
       assetData.api_id = type === 'stocks' ? symbol : id;
 
-      // TODO: Combine to one Promise together instead
+      // Alternative: Combine to one Promise together instead
       await axios.post(`${serverURL}/api/assets`, assetData, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -66,7 +94,7 @@ export default function AssetFormModal({ isOpen, onClose, type, asset, promptRef
         headers: { Authorization: `Bearer ${token}` }
       });
       setLoading(false);
-      showSuccessToast('Asset Added', `${name} has been added.`);
+      showSuccessToast(`Asset: ${name} has been added.`);
       onClose();
       promptRefresh();
     } catch (error) {
@@ -137,10 +165,18 @@ export default function AssetFormModal({ isOpen, onClose, type, asset, promptRef
               placeholder="Add Note (Optional)"
             />
           </Box>
+          <Box p={4}>
+            <Text color="gray.400" fontSize="sm" m>
+              The fields above will be ignored if added to Watchlist
+            </Text>
+          </Box>
         </ModalBody>
 
         <ModalFooter>
-          <Button colorScheme="green" marginInline={3} onClick={onSubmitAdd}>
+          <Button colorScheme="blackAlpha" marginInline={3} onClick={addWatchlistItem}>
+            {isLoading ? <LoadingIcon /> : 'To Watchlist'}
+          </Button>
+          <Button colorScheme="green" marginInline={3} onClick={addAsset}>
             {isLoading ? <LoadingIcon /> : 'Add Asset'}
           </Button>
           <Button onClick={onClose}>Cancel</Button>

@@ -1,11 +1,11 @@
-import { Tr, Td, IconButton, Heading, Text, VStack, useDisclosure, Tag } from '@chakra-ui/react';
-import { format, parseISO, set } from 'date-fns';
 import { DeleteIcon } from '@chakra-ui/icons';
-import useHover from '../hooks/useHover';
-import DeleteAlert from '../DeleteAlert';
+import { Heading, IconButton, Tag, Td, Text, Tr, useDisclosure, VStack } from '@chakra-ui/react';
+import { format, parseISO } from 'date-fns';
 import { serverURL } from '../../services/investmentService';
+import DeleteAlert from '../DeleteAlert';
+import useHover from '../hooks/useHover';
 
-export default function OwnedRowAsset({ asset, promptRefresh, refreshState }) {
+export default function OwnedRowAsset({ asset, promptRefresh }) {
   const [hover, handleMouseIn, handleMouseOut] = useHover();
   const { isOpen, onOpen, onClose } = useDisclosure();
 

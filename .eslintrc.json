@@ -26,7 +26,10 @@
     "react/prop-types": "off",
     "no-plusplus": "warn",
     "no-underscore-dangle": "warn",
+<<<<<<< Updated upstream
     "camelcase": "warn",
     "@typescript-eslint/camelcase": "off"
+=======
+>>>>>>> Stashed changes
   }
 }

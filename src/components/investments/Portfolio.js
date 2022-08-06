@@ -148,12 +148,7 @@ export default function Portfolio() {
                 </Thead>
                 <Tbody>
                   {inventory.map((asset) => (
-                    <OwnedAssetRow
-                      key={uuidv4()}
-                      asset={asset}
-                      promptRefresh={promptRefresh}
-                      refreshState={refresh}
-                    />
+                    <OwnedAssetRow key={uuidv4()} asset={asset} promptRefresh={promptRefresh} />
                   ))}
                 </Tbody>
               </Table>
