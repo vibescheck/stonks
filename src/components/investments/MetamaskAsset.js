@@ -1,53 +1,88 @@
-import { useState } from 'react';
+import { Button } from '@chakra-ui/react';
 import { ethers } from 'ethers';
-import { Box, Button } from '@chakra-ui/react';
+import { useState } from 'react';
 
 export default function MetamaskAsset() {
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
   const [address, setAddress] = useState('');
   const [balance, setBalance] = useState(null);
+  const [isConnected, setConnected] = useState(false);
 
-  const getBalance = (add) => {
-    // Requesting balance method
-    window.ethereum
-      .request({
-        method: 'eth_getBalance',
-        params: [add, 'latest']
-      })
-      .then((bal) => {
-        // Setting balance
-        setBalance(ethers.utils.formatEther(bal));
-      });
-  };
-
-  const accountChangeHandler = (account) => {
-    // Setting an address data
-    setAddress(account);
-
-    // Setting a balance
-    getBalance(account);
-  };
-
-  const buttonHandler = () => {
-    if (window.ethereum) {
-      window.ethereum
-        .request({ method: 'eth_requestAccounts' })
-        .then((res) => accountChangeHandler(res[0]));
-    } else {
-      alert('Missing metamask extension!!');
+  const updateInventoryForEth = async () => {
+    setLoading(true);
+    if (!asset) {
+      showErrorToast('No asset selected');
+      return;
     }
+    try {
+      const token = await getAccessTokenSilently();
+      const { id, name, symbol } = asset;
+      const itemData = {
+        type,
+        name,
+        symbol
+      };
+      itemData.api_id = type === 'stocks' ? symbol : id;
+
+      // Alternative: Combine to one Promise together instead
+      await axios.post(`${serverURL}/api/activeAsset`, itemData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setLoading(false);
+      showSuccessToast(`Asset: ${name} added to Watchlist`);
+      onClose();
+    } catch (error) {
+      console.log(error);
+      showErrorToast(error);
+      setLoading(false);
+    }
+  };
+
+  const connectMetamask = async () => {
+    if (!window.ethereum) {
+      alert('Install MetaMask extension if you want to use this feature!');
+      return;
+    }
+
+    const accounts = await window.ethereum.request({
+      method: 'eth_requestAccounts'
+    });
+
+    setAddress(accounts[0]);
+    setConnected(true);
+    getBalance();
+  };
+
+  const checkConnection = () => {
+    if (!window.ethereum) return false;
+    return window.ethereum.isConnected();
+  };
+
+  const getBalance = () => {
+    // Requesting balance method
+    provider.getBalance(account).then((bal) => {
+      // Setting balance
+      setBalance(ethers.utils.formatEther(bal));
+    });
   };
 
   return (
     <>
-      <p>
-        <strong>Address: </strong>
-        {address}
-      </p>
-      <p>
-        <strong>Balance: </strong>
-        {balance} ETH
-      </p>
-      <Button onClick={buttonHandler}>Connect to Metamask</Button>
+      {isConnected ? (
+        <>
+          <p>
+            <strong>Address: </strong>
+            {address?.slice(0.4)}...{address?.slice(38, 42)}
+          </p>
+          <p>
+            <strong>Balance: </strong>
+            {balance} ETH
+          </p>
+        </>
+      ) : (
+        <p>Not Connected, Click below to connect</p>
+      )}
+      <Button onClick={() => connectMetamask()}>Connect to Metamask</Button>
     </>
   );
 }
