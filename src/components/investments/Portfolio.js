@@ -1,33 +1,33 @@
-import { useState, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import axios from 'axios';
+import { RepeatIcon } from '@chakra-ui/icons';
 import {
+  Box,
+  Flex,
+  Heading,
+  HStack,
   IconButton,
   Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  Flex,
-  HStack,
-  Heading,
   TableContainer,
-  Box,
-  Text
+  Tbody,
+  Td,
+  Text,
+  Th,
+  Thead,
+  Tr
 } from '@chakra-ui/react';
-import { RepeatIcon, ChevronDownIcon } from '@chakra-ui/icons';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import chroma from 'chroma-js';
 import { serverURL } from '../../services/investmentService';
 
-import LoadingIcon from '../LoadingIcon';
-import SearchPopover from './SearchPopover';
-import HistoryDrawer from './HistoryDrawer';
-import OwnedAssetRow from './OwnedAssetRow';
 import { BarChart } from '../Charts';
+import LoadingIcon from '../LoadingIcon';
+import HistoryDrawer from './HistoryDrawer';
 import MetamaskAsset from './MetamaskAsset';
+import OwnedAssetRow from './OwnedAssetRow';
+import SearchPopover from './SearchPopover';
 
 export default function Portfolio() {
   const [inventory, setInventory] = useState([]);
@@ -77,7 +77,14 @@ export default function Portfolio() {
   // const loadMore = () => {};
 
   return (
-    <Flex h="100vh" flexDir="column" overflow="auto" alignItems="center" gap={4} bgColor="gray.100">
+    <Flex
+      h="100vh"
+      flexDir="column"
+      overflowY="auto"
+      alignItems="center"
+      gap="4"
+      bgColor="gray.100"
+      pb="16">
       <Box display="block" padding={6}>
         {' '}
       </Box>
@@ -175,12 +182,10 @@ export default function Portfolio() {
         gap={3}>
         <MetamaskAsset />
       </Flex>
-      <Box h="14" />
-      <HStack pos="absolute" bottom="0" zIndex={10} m={2}>
+      <HStack pos="fixed" bottom="0" zIndex={10} m={2}>
         <SearchPopover promptRefresh={promptRefresh} />
       </HStack>
       <HistoryDrawer />
-      <Box pb={20}> </Box>
     </Flex>
   );
 }

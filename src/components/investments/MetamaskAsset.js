@@ -3,39 +3,51 @@ import { ethers } from 'ethers';
 import { useState } from 'react';
 
 export default function MetamaskAsset() {
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const [provider, setProvider] = useState();
   const [address, setAddress] = useState('');
   const [balance, setBalance] = useState(null);
   const [isConnected, setConnected] = useState(false);
 
-  const updateInventoryForEth = async () => {
-    setLoading(true);
-    if (!asset) {
-      showErrorToast('No asset selected');
-      return;
-    }
-    try {
-      const token = await getAccessTokenSilently();
-      const { id, name, symbol } = asset;
-      const itemData = {
-        type,
-        name,
-        symbol
-      };
-      itemData.api_id = type === 'stocks' ? symbol : id;
+  // const updateInventoryForEth = async () => {
+  //   setLoading(true);
+  //   if (!asset) {
+  //     showErrorToast('No asset selected');
+  //     return;
+  //   }
+  //   try {
+  //     const token = await getAccessTokenSilently();
+  //     const { id, name, symbol } = asset;
+  //     const itemData = {
+  //       type,
+  //       name,
+  //       symbol
+  //     };
+  //     itemData.api_id = type === 'stocks' ? symbol : id;
 
-      // Alternative: Combine to one Promise together instead
-      await axios.post(`${serverURL}/api/activeAsset`, itemData, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setLoading(false);
-      showSuccessToast(`Asset: ${name} added to Watchlist`);
-      onClose();
-    } catch (error) {
-      console.log(error);
-      showErrorToast(error);
-      setLoading(false);
-    }
+  //     // Alternative: Combine to one Promise together instead
+  //     await axios.post(`${serverURL}/api/activeAsset`, itemData, {
+  //       headers: { Authorization: `Bearer ${token}` }
+  //     });
+  //     setLoading(false);
+  //     showSuccessToast(`Asset: ${name} added to Watchlist`);
+  //     onClose();
+  //   } catch (error) {
+  //     console.log(error);
+  //     showErrorToast(error);
+  //     setLoading(false);
+  //   }
+  // };
+
+  const getBalance = () => {
+    // Requesting balance method
+    provider.getBalance(address).then((bal) => {
+      // Setting balance
+      setBalance(ethers.utils.formatEther(bal));
+    });
+  };
+  const checkConnection = () => {
+    if (!window.ethereum) return false;
+    return window.ethereum.isConnected();
   };
 
   const connectMetamask = async () => {
@@ -44,6 +56,8 @@ export default function MetamaskAsset() {
       return;
     }
 
+    setProvider(new ethers.providers.Web3Provider(window.ethereum));
+
     const accounts = await window.ethereum.request({
       method: 'eth_requestAccounts'
     });
@@ -51,19 +65,6 @@ export default function MetamaskAsset() {
     setAddress(accounts[0]);
     setConnected(true);
     getBalance();
-  };
-
-  const checkConnection = () => {
-    if (!window.ethereum) return false;
-    return window.ethereum.isConnected();
-  };
-
-  const getBalance = () => {
-    // Requesting balance method
-    provider.getBalance(account).then((bal) => {
-      // Setting balance
-      setBalance(ethers.utils.formatEther(bal));
-    });
   };
 
   return (
