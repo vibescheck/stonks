@@ -1,7 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { RepeatIcon } from '@chakra-ui/icons';
 import {
-  Box,
   Flex,
   Heading,
   HStack,
@@ -28,6 +27,7 @@ import HistoryDrawer from './HistoryDrawer';
 import MetamaskAsset from './MetamaskAsset';
 import OwnedAssetRow from './OwnedAssetRow';
 import SearchPopover from './SearchPopover';
+import WatchlistCard from './WatchlistCard';
 
 export default function Portfolio() {
   const [inventory, setInventory] = useState([]);
@@ -84,27 +84,28 @@ export default function Portfolio() {
       alignItems="center"
       gap="4"
       bgColor="gray.100"
-      pb="16">
-      <Box display="block" padding={6}>
-        {' '}
-      </Box>
-      {chartData && (
-        <Flex
-          width={500}
-          flexDir="column"
-          size="md"
-          bgColor="white"
-          borderRadius={15}
-          boxShadow="lg"
-          alignItems="center"
-          px={2}
-          paddingTop={3}
-          paddingBottom={6}
-          gap={3}
-          display="inline-block">
-          <BarChart chartData={chartData} chartTitle="Investments" />
-        </Flex>
-      )}
+      pb="16"
+      pt="6">
+      <Flex flexDir="row" justifyContent="center" gap="8">
+        <WatchlistCard />
+        {chartData && (
+          <Flex
+            width={500}
+            flexDir="column"
+            size="md"
+            bgColor="white"
+            borderRadius={15}
+            boxShadow="lg"
+            alignItems="center"
+            px={2}
+            paddingTop={3}
+            paddingBottom={6}
+            gap={3}
+            display="inline-block">
+            <BarChart chartData={chartData} chartTitle="Investments" />
+          </Flex>
+        )}
+      </Flex>
       {isLoading ? (
         <LoadingIcon message="... fetching assets ..." />
       ) : (

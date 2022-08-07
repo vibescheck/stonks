@@ -165,7 +165,7 @@ export default function AssetFormModal({ isOpen, onClose, type, asset, promptRef
               placeholder="Add Note (Optional)"
             />
           </Box>
-          <Box p={4}>
+          <Box>
             <Text color="gray.400" fontSize="sm" m>
               The fields above will be ignored if added to Watchlist
             </Text>
@@ -173,7 +173,7 @@ export default function AssetFormModal({ isOpen, onClose, type, asset, promptRef
         </ModalBody>
 
         <ModalFooter>
-          <Button colorScheme="blackAlpha" marginInline={3} onClick={addWatchlistItem}>
+          <Button variant="black" marginInline={3} px="10" onClick={addWatchlistItem}>
             {isLoading ? <LoadingIcon /> : 'To Watchlist'}
           </Button>
           <Button colorScheme="green" marginInline={3} onClick={addAsset}>

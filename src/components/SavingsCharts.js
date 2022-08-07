@@ -1,20 +1,14 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import { Flex, HStack } from '@chakra-ui/react';
-import { useEffect, useState, useContext } from 'react';
 import chroma from 'chroma-js';
-import { PieChart } from './Charts';
-import useCompletionToast from './hooks/useCompletionToast';
+import { useContext, useEffect, useState } from 'react';
 import { TransactionContext } from '../contexts/TransactionContextProvider';
+import { PieChart } from './Charts';
 import useTransactions from './hooks/useTransactions';
 
 export default function SavingsWallet() {
-  const { user } = useAuth0();
   const { transactions, isLoading } = useContext(TransactionContext);
   const [refresh, setRefresh] = useState(false);
-  const [showSuccessToast, showErrorToast] = useCompletionToast();
   const runGetTransactions = useTransactions();
-
-  const promptRefresh = () => setRefresh(!refresh);
 
   const [posTxns, setPosTxns] = useState({
     labels: transactions.filter((data) => data.amount > 0).map((data) => data.note),

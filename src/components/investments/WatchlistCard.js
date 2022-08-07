@@ -7,6 +7,7 @@ import {
   Table,
   TableContainer,
   Tbody,
+  Td,
   Text,
   Th,
   Thead,
@@ -49,6 +50,7 @@ export default function WatchlistCard() {
     getWatchlist();
   }, [refresh]);
 
+  if (isLoading) return <LoadingIcon message="... fetching watchlist ..." />;
   return (
     <Flex
       width={500}
@@ -75,12 +77,15 @@ export default function WatchlistCard() {
           width={15}
         />
       </Flex>
-      {isLoading ? (
-        <LoadingIcon message="... fetching watchlist ..." />
-      ) : list.length === 0 ? (
-        <Text fontSize="2xl" p={4}>
-          Inventory is currently empty!
-        </Text>
+      {list.length === 0 ? (
+        <>
+          <Text fontSize="2xl" p={4} textAlign="center">
+            Currently empty!
+          </Text>
+          <Text fontSize="md" textAlign="center" textColor="gray.400">
+            Add asset below to begin
+          </Text>
+        </>
       ) : (
         <TableContainer overflowY="auto">
           <Table>

@@ -1,5 +1,15 @@
 import { DeleteIcon } from '@chakra-ui/icons';
-import { Heading, IconButton, Tag, Td, Text, Tr, useDisclosure, VStack } from '@chakra-ui/react';
+import {
+  Heading,
+  HStack,
+  IconButton,
+  Tag,
+  Td,
+  Text,
+  Tr,
+  useDisclosure,
+  VStack
+} from '@chakra-ui/react';
 import { format, parseISO } from 'date-fns';
 import { serverURL } from '../../services/investmentService';
 import DeleteAlert from '../DeleteAlert';
@@ -19,14 +29,37 @@ export default function OwnedRowAsset({ asset, promptRefresh }) {
       onMouseOut={handleMouseOut}
       blockSize="20">
       <Td>
-        <VStack alignItems="start">
-          <Heading size="sm" letterSpacing="tight">
-            {asset.symbol}
-          </Heading>
-          <Text fontWeight="semibold" fontSize="sm">
-            {asset.name}
-          </Text>
-        </VStack>
+        <HStack>
+          <VStack alignItems="start">
+            <Heading size="sm" letterSpacing="tight">
+              {asset.symbol}
+            </Heading>
+            <Text fontWeight="semibold" fontSize="sm">
+              {asset.name}
+            </Text>
+          </VStack>
+          {hover && (
+            <>
+              <IconButton
+                size="sm"
+                m={0}
+                p={0}
+                icon={<DeleteIcon />}
+                onClick={onOpen}
+                width={20}
+                aria-label="Delete button appears on hover"
+              />
+              <DeleteAlert
+                isOpen={isOpen}
+                onClose={onClose}
+                assetId={asset?._id}
+                name={asset?.name}
+                promptRefresh={promptRefresh}
+                apiRoute={`${serverURL}/api/activeAssets`}
+              />
+            </>
+          )}
+        </HStack>
       </Td>
       <Td>
         <Tag
@@ -56,30 +89,6 @@ export default function OwnedRowAsset({ asset, promptRefresh }) {
               {profitLoss(asset).toFixed(2)}
             </Text>
           </Td>
-          <Td>
-            {hover && (
-              <>
-                <IconButton
-                  size="sm"
-                  m={0}
-                  p={0}
-                  icon={<DeleteIcon />}
-                  onClick={onOpen}
-                  width={20}
-                  aria-label="Delete button appears on hover"
-                />
-                <DeleteAlert
-                  isOpen={isOpen}
-                  onClose={onClose}
-                  assetId={asset?._id}
-                  name={asset?.name}
-                  promptRefresh={promptRefresh}
-                  apiRoute={`${serverURL}/api/activeAssets`}
-                />
-              </>
-            )}
-          </Td>
-          <Td />
         </>
       )}
     </Tr>
