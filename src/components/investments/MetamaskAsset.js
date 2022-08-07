@@ -40,7 +40,7 @@ export default function MetamaskAsset() {
 
   const getBalance = () => {
     // Requesting balance method
-    provider.getBalance(address).then((bal) => {
+    provider?.getBalance(address).then((bal) => {
       // Setting balance
       setBalance(ethers.utils.formatEther(bal));
     });

@@ -30,7 +30,6 @@ export default function SavingsWallet() {
   const { transactions } = useContext(TransactionContext);
   const [refresh, setRefresh] = useState(false);
   const [isLoading, setLoading] = useState(false);
-  const [showSuccessToast, showErrorToast] = useCompletionToast();
   const runGetTransactions = useTransactions();
 
   const promptRefresh = () => setRefresh(!refresh);

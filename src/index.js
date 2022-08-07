@@ -8,6 +8,7 @@ import App from './App';
 import theme from './theme';
 import TransactionContextProvider from './contexts/TransactionContextProvider';
 import AssetContextProvider from './contexts/AssetContextProvider';
+import NetWorthContextProvider from './contexts/NetWorthContextProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -18,7 +19,9 @@ root.render(
         <ChakraProvider theme={theme}>
           <TransactionContextProvider>
             <AssetContextProvider>
-              <App />
+              <NetWorthContextProvider>
+                <App />
+              </NetWorthContextProvider>
             </AssetContextProvider>
           </TransactionContextProvider>
         </ChakraProvider>

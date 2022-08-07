@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AssetsCharts from './investments/AssetsCharts';
-import LogoutButton from './LogoutButton';
+import NetWorthCard from './NetWorthCard';
 import SavingsCharts from './SavingsCharts';
 
 export default function Dashboard() {
@@ -39,13 +39,14 @@ export default function Dashboard() {
         pt="8"
         bgColor="gray.100"
         minH="100vh">
+        <NetWorthCard />
         <HStack gap="10" alignItems="start">
           <Flex flexDir="column" gap="6">
-            <Heading> savings </Heading>
+            <Heading> SAVINGS </Heading>
             <SavingsCharts />
           </Flex>
           <Flex flexDir="column" gap="6">
-            <Heading> investments </Heading>
+            <Heading> INVESTMENTS </Heading>
             <AssetsCharts />
           </Flex>
         </HStack>

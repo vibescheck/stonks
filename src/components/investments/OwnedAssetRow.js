@@ -15,12 +15,13 @@ import { serverURL } from '../../services/investmentService';
 import DeleteAlert from '../DeleteAlert';
 import useHover from '../hooks/useHover';
 
+export const profitLoss = ({ price, position, cost_basis }) => price * position - cost_basis;
+
 export default function OwnedRowAsset({ asset, promptRefresh }) {
   const [hover, handleMouseIn, handleMouseOut] = useHover();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const hideBoolean = () => asset.position <= 0;
-  const profitLoss = ({ price, position, cost_basis }) => price * position - cost_basis;
 
   return (
     <Tr

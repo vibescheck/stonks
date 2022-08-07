@@ -8,14 +8,14 @@ export const AssetContext = createContext(null);
 
 export default function AssetContextProvider({ children }) {
   const [assets, setAssets] = useState([]);
-  const [isLoading, setLoading] = useState(false);
+  const [isLoadingAsset, setLoadingAsset] = useState(false);
   const { isAuthenticated } = useAuth0();
 
   const { getAccessTokenSilently } = useAuth0();
   const [showErrorToast] = useCompletionToast();
 
   const getAssetData = async () => {
-    setLoading(true);
+    setLoadingAsset(true);
     try {
       const token = await getAccessTokenSilently();
       const results = await axios.get(`${serverURL}/api/activeAssets`, {
@@ -25,7 +25,7 @@ export default function AssetContextProvider({ children }) {
       if (results.data.data) {
         setAssets(results.data.data);
       }
-      setLoading(false);
+      setLoadingAsset(false);
       // setMetamaskLogin(user.sub.startsWith('oauth2|siwe'));
     } catch (error) {
       showErrorToast(error);
@@ -45,8 +45,8 @@ export default function AssetContextProvider({ children }) {
         () => ({
           assets,
           setAssets,
-          isLoading,
-          setLoading,
+          isLoadingAsset,
+          setLoadingAsset,
           getAssetData
         }),
         [assets]

@@ -6,7 +6,7 @@ import { PieChart } from './Charts';
 import useTransactions from './hooks/useTransactions';
 
 export default function SavingsCharts() {
-  const { transactions, isLoading } = useContext(TransactionContext);
+  const { transactions, isLoadingTransaction } = useContext(TransactionContext);
   const runGetTransactions = useTransactions();
 
   const [posTxns, setPosTxns] = useState({
@@ -58,7 +58,7 @@ export default function SavingsCharts() {
     });
   }, [transactions]);
 
-  if (isLoading) return <div>Fetching user data ...</div>;
+  if (isLoadingTransaction) return <div>Fetching user data ...</div>;
 
   return (
     <HStack gap={6}>

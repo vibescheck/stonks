@@ -28,7 +28,7 @@ import AssetsCharts from './AssetsCharts';
 export default function Portfolio() {
   const [refresh, setRefresh] = useState(false);
   const { user } = useAuth0();
-  const { getAssetData, assets, isLoading } = useContext(AssetContext);
+  const { getAssetData, assets, isLoadingAsset } = useContext(AssetContext);
 
   /* For auto-triggering Metamask retrieval if logged in with Siwe
   const [metamaskLogin, setMetamaskLogin] = useState(false); */
@@ -51,7 +51,7 @@ export default function Portfolio() {
         <WatchlistCard />
         <AssetsCharts />
       </Flex>
-      {isLoading ? (
+      {isLoadingAsset ? (
         <LoadingIcon message="... fetching assets ..." />
       ) : (
         <Flex

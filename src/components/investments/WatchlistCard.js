@@ -94,7 +94,7 @@ export default function WatchlistCard() {
                 <Th>SYMBOL/NAME</Th>
                 <Th>TYPE</Th>
                 <Th>$ CURRENT PRICE</Th>
-                <Th>Movement</Th>
+                {/* <Th>Movement</Th> */}
                 <Td />
               </Tr>
             </Thead>

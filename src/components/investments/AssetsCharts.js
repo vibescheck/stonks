@@ -5,7 +5,7 @@ import { BarChart } from '../Charts';
 import { AssetContext } from '../../contexts/AssetContextProvider';
 
 export default function AssetsCharts() {
-  const { assets, isLoading, getAssetData } = useContext(AssetContext);
+  const { assets, isLoadingAsset, getAssetData } = useContext(AssetContext);
   const [chartData, setChartData] = useState();
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export default function AssetsCharts() {
     });
   }, [assets]);
 
-  if (isLoading) return <div>Loading assets infographics ...</div>;
+  if (isLoadingAsset) return <div>Loading assets infographics ...</div>;
 
   return (
     <Flex

@@ -4,15 +4,15 @@ export const TransactionContext = createContext(null);
 
 export default function TransactionContextProvider({ children }) {
   const [transactions, setTransactions] = useState([]);
-  const [isLoading, setLoading] = useState(false);
+  const [isLoadingTransaction, setLoadingTransaction] = useState(false);
   return (
     <TransactionContext.Provider
       value={useMemo(
         () => ({
           transactions,
           setTransactions,
-          isLoading,
-          setLoading
+          isLoadingTransaction,
+          setLoadingTransaction
         }),
         [transactions]
       )}>
