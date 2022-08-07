@@ -40,13 +40,7 @@ export default function SavingsWallet() {
   }, [refresh]);
 
   return (
-    <Flex
-      h="100vh"
-      flexDir="column"
-      overflowY="auto"
-      alignItems="center"
-      gap={4}
-      bgColor="gray.100">
+    <Flex flexDir="column" overflowY="auto" alignItems="center" gap={4} bgColor="gray.100">
       <Box display="block" padding={6}>
         {' '}
       </Box>

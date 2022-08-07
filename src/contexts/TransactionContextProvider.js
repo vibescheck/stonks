@@ -6,7 +6,6 @@ export default function TransactionContextProvider({ children }) {
   const [transactions, setTransactions] = useState([]);
   const [isLoading, setLoading] = useState(false);
   return (
-    // eslint-disable-next-line react/jsx-no-constructed-context-values
     <TransactionContext.Provider
       value={useMemo(
         () => ({

@@ -14,71 +14,32 @@ import {
   Thead,
   Tr
 } from '@chakra-ui/react';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-
-import chroma from 'chroma-js';
-import { serverURL } from '../../services/investmentService';
-
-import { BarChart } from '../Charts';
 import LoadingIcon from '../LoadingIcon';
 import HistoryDrawer from './HistoryDrawer';
 import MetamaskAsset from './MetamaskAsset';
 import OwnedAssetRow from './OwnedAssetRow';
 import SearchPopover from './SearchPopover';
 import WatchlistCard from './WatchlistCard';
+import { AssetContext } from '../../contexts/AssetContextProvider';
+import AssetsCharts from './AssetsCharts';
 
 export default function Portfolio() {
-  const [inventory, setInventory] = useState([]);
-  const [isLoading, setLoading] = useState(false);
   const [refresh, setRefresh] = useState(false);
-  const [chartData, setChartData] = useState();
-  const { getAccessTokenSilently, user } = useAuth0();
+  const { user } = useAuth0();
+  const { getAssetData, assets, isLoading } = useContext(AssetContext);
+
   /* For auto-triggering Metamask retrieval if logged in with Siwe
   const [metamaskLogin, setMetamaskLogin] = useState(false); */
-  /* Prop drilling of assets and Refresh state, consider Context */
   const promptRefresh = () => setRefresh(!refresh);
-  const getAssetData = async () => {
-    setLoading(true);
-    try {
-      const token = await getAccessTokenSilently();
-      const results = await axios.get(`${serverURL}/api/activeAssets`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-
-      if (results.data.data) {
-        setInventory(results.data.data);
-      }
-      setLoading(false);
-      // setMetamaskLogin(user.sub.startsWith('oauth2|siwe'));
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   useEffect(() => {
     getAssetData();
   }, [refresh]);
 
-  useEffect(() => {
-    setChartData({
-      labels: inventory.map((asset) => asset.symbol),
-      datasets: [
-        {
-          label: 'Amount',
-          data: inventory.map((asset) => asset.position * asset.cost_basis),
-          backgroundColor: chroma.scale('Spectral').padding(0.7).colors(inventory.length)
-        }
-      ]
-    });
-  }, [inventory]);
-
-  // const loadMore = () => {};
-
   return (
     <Flex
-      h="100vh"
       flexDir="column"
       overflowY="auto"
       alignItems="center"
@@ -88,23 +49,7 @@ export default function Portfolio() {
       pt="6">
       <Flex flexDir="row" justifyContent="center" gap="8">
         <WatchlistCard />
-        {chartData && (
-          <Flex
-            width={500}
-            flexDir="column"
-            size="md"
-            bgColor="white"
-            borderRadius={15}
-            boxShadow="lg"
-            alignItems="center"
-            px={2}
-            paddingTop={3}
-            paddingBottom={6}
-            gap={3}
-            display="inline-block">
-            <BarChart chartData={chartData} chartTitle="Investments" />
-          </Flex>
-        )}
+        <AssetsCharts />
       </Flex>
       {isLoading ? (
         <LoadingIcon message="... fetching assets ..." />
@@ -134,7 +79,7 @@ export default function Portfolio() {
               width={15}
             />
           </Flex>
-          {inventory.length === 0 ? (
+          {assets.length === 0 ? (
             <Text fontSize="2xl" p={4}>
               Inventory is currently empty!
             </Text>
@@ -155,7 +100,7 @@ export default function Portfolio() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {inventory.map((asset) => (
+                  {assets.map((asset) => (
                     <OwnedAssetRow key={uuidv4()} asset={asset} promptRefresh={promptRefresh} />
                   ))}
                 </Tbody>

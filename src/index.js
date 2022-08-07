@@ -7,6 +7,7 @@ import './index.css';
 import App from './App';
 import theme from './theme';
 import TransactionContextProvider from './contexts/TransactionContextProvider';
+import AssetContextProvider from './contexts/AssetContextProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -16,7 +17,9 @@ root.render(
       <Auth0ProviderWithHistory>
         <ChakraProvider theme={theme}>
           <TransactionContextProvider>
-            <App />
+            <AssetContextProvider>
+              <App />
+            </AssetContextProvider>
           </TransactionContextProvider>
         </ChakraProvider>
       </Auth0ProviderWithHistory>

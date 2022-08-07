@@ -5,9 +5,8 @@ import { TransactionContext } from '../contexts/TransactionContextProvider';
 import { PieChart } from './Charts';
 import useTransactions from './hooks/useTransactions';
 
-export default function SavingsWallet() {
+export default function SavingsCharts() {
   const { transactions, isLoading } = useContext(TransactionContext);
-  const [refresh, setRefresh] = useState(false);
   const runGetTransactions = useTransactions();
 
   const [posTxns, setPosTxns] = useState({
@@ -34,7 +33,7 @@ export default function SavingsWallet() {
 
   useEffect(() => {
     runGetTransactions();
-  }, [refresh]);
+  }, []);
 
   useEffect(() => {
     setPosTxns({
@@ -62,7 +61,7 @@ export default function SavingsWallet() {
   if (isLoading) return <div>Fetching user data ...</div>;
 
   return (
-    <HStack gap={6} py={4}>
+    <HStack gap={6}>
       {posTxns.labels.length ? (
         <Flex
           width={350}
