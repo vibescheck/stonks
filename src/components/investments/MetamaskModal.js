@@ -28,75 +28,36 @@ import { serverURL } from '../../services/investmentService';
 import useCompletionToast from '../hooks/useCompletionToast';
 import LoadingIcon from '../LoadingIcon';
 
-export default function AssetFormModal({ isOpen, onClose, type, asset, promptRefresh }) {
-  const [position, setPosition] = useState(1);
+export default function MetamaskModal({ isOpen, onClose, position }) {
   const [cost, setCost] = useState(100);
   const [note, setNote] = useState('');
   const [date, setDate] = useState(Date.now());
   const { getAccessTokenSilently } = useAuth0();
   const [showSuccessToast, showErrorToast] = useCompletionToast();
   const [isLoading, setLoading] = useState(false);
-
-  const addWatchlistItem = async () => {
-    setLoading(true);
-    if (!asset) {
-      showErrorToast('No asset selected');
-      return;
-    }
-    try {
-      const token = await getAccessTokenSilently();
-      const { id, name, symbol } = asset;
-      const itemData = {
-        type,
-        name,
-        symbol
-      };
-      itemData.api_id = type === 'stocks' ? symbol : id;
-
-      // Alternative: Combine to one Promise together instead
-      await axios.post(`${serverURL}/api/watchlist`, itemData, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setLoading(false);
-      showSuccessToast(`Asset: ${name} added to Watchlist`);
-      onClose();
-    } catch (error) {
-      console.log(error);
-      showErrorToast(error);
-      setLoading(false);
-    }
-  };
   const addAsset = async () => {
+    // PARSEFLOAT
     setLoading(true);
-    if (!asset || !position || !cost) {
+    if (!position || !cost) {
       showErrorToast('Missing fields');
       return;
     }
     try {
       const token = await getAccessTokenSilently();
-      const { id, name, symbol } = asset;
       const assetData = {
-        type,
-        name,
-        symbol,
-        position,
+        position: parseFloat(position),
         note,
         cost_basis: cost,
         date
       };
-      assetData.api_id = type === 'stocks' ? symbol : id;
 
-      // Alternative: Combine to one Promise together instead
-      await axios.post(`${serverURL}/api/assets`, assetData, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      await axios.post(`${serverURL}/api/activeAssets`, assetData, {
+      // We will not add records to History (list of past assets)
+      await axios.post(`${serverURL}/api/activeAssets/metamask`, assetData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setLoading(false);
-      showSuccessToast(`Asset: ${name} has been added.`);
+      showSuccessToast(`Asset: Metamask's Ethereum has been saved to Inventory.`);
       onClose();
-      promptRefresh();
     } catch (error) {
       console.log(error);
       showErrorToast(error);
@@ -105,9 +66,6 @@ export default function AssetFormModal({ isOpen, onClose, type, asset, promptRef
   };
   const handleNoteChange = (event) => {
     setNote(event.target.value);
-  };
-  const handlePositionChange = (event) => {
-    setPosition(parseFloat(event.target.value));
   };
   const handleCostChange = (event) => {
     setCost(parseFloat(event.target.value));
@@ -119,21 +77,11 @@ export default function AssetFormModal({ isOpen, onClose, type, asset, promptRef
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader fontStyle="italic">{asset?.name}</ModalHeader>
+        <ModalHeader fontStyle="italic">Save Metamask Eth to Active Assets</ModalHeader>
         <ModalCloseButton />
         <ModalBody display="flex" flexDir="column" gap={5}>
           <HStack justifyContent="space-evenly">
             {/* Position & DatePicker */}
-            <Box>
-              <FormLabel htmlFor="position">Position:</FormLabel>
-              <NumberInput size="md" id="position" step={0.1} defaultValue={position} precision={2}>
-                <NumberInputField value={position} onChange={handlePositionChange} />
-                <NumberInputStepper>
-                  <NumberIncrementStepper />
-                  <NumberDecrementStepper />
-                </NumberInputStepper>
-              </NumberInput>
-            </Box>
             <Box>
               <FormLabel htmlFor="cost">COST/RETURNS (No +/-)</FormLabel>
               <InputGroup>
@@ -167,17 +115,14 @@ export default function AssetFormModal({ isOpen, onClose, type, asset, promptRef
           </Box>
           <Box>
             <Text color="gray.400" fontSize="sm">
-              The fields above will be ignored if added to Watchlist
+              This will replace your current Metamask Ethereum entry in Active Assets (If Any).
             </Text>
           </Box>
         </ModalBody>
 
         <ModalFooter>
-          <Button variant="black" marginInline={3} px="10" onClick={addWatchlistItem}>
-            {isLoading ? <LoadingIcon /> : 'To Watchlist'}
-          </Button>
           <Button colorScheme="green" marginInline={3} onClick={addAsset}>
-            {isLoading ? <LoadingIcon /> : 'Add Asset'}
+            {isLoading ? <LoadingIcon /> : 'Save Eth'}
           </Button>
           <Button onClick={onClose}>Cancel</Button>
         </ModalFooter>

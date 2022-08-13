@@ -1,42 +1,14 @@
-import { Button } from '@chakra-ui/react';
+import { Button, useDisclosure } from '@chakra-ui/react';
 import { ethers } from 'ethers';
 import { useState } from 'react';
+import MetamaskModal from './MetamaskModal';
 
 export default function MetamaskAsset() {
   const [provider, setProvider] = useState();
   const [address, setAddress] = useState('');
   const [balance, setBalance] = useState(null);
   const [isConnected, setConnected] = useState(false);
-
-  // const updateInventoryForEth = async () => {
-  //   setLoading(true);
-  //   if (!asset) {
-  //     showErrorToast('No asset selected');
-  //     return;
-  //   }
-  //   try {
-  //     const token = await getAccessTokenSilently();
-  //     const { id, name, symbol } = asset;
-  //     const itemData = {
-  //       type,
-  //       name,
-  //       symbol
-  //     };
-  //     itemData.api_id = type === 'stocks' ? symbol : id;
-
-  //     // Alternative: Combine to one Promise together instead
-  //     await axios.post(`${serverURL}/api/activeAsset`, itemData, {
-  //       headers: { Authorization: `Bearer ${token}` }
-  //     });
-  //     setLoading(false);
-  //     showSuccessToast(`Asset: ${name} added to Watchlist`);
-  //     onClose();
-  //   } catch (error) {
-  //     console.log(error);
-  //     showErrorToast(error);
-  //     setLoading(false);
-  //   }
-  // };
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const getBalance = () => {
     // Requesting balance method
@@ -83,7 +55,19 @@ export default function MetamaskAsset() {
       ) : (
         <p>Not Connected, Click below to connect</p>
       )}
-      <Button onClick={() => connectMetamask()}>Connect to Metamask</Button>
+      {isConnected ? (
+        <>
+          <Button
+            onClick={() => {
+              onOpen();
+            }}>
+            Save to Active Assets
+          </Button>
+          <MetamaskModal isOpen={isOpen} onClose={onClose} position={balance} />
+        </>
+      ) : (
+        <Button onClick={() => connectMetamask()}>Connect to Metamask</Button>
+      )}
     </>
   );
 }
