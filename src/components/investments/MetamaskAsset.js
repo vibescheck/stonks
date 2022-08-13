@@ -1,25 +1,29 @@
 import { Button, useDisclosure } from '@chakra-ui/react';
 import { ethers } from 'ethers';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import MetamaskModal from './MetamaskModal';
 
 export default function MetamaskAsset() {
-  const [provider, setProvider] = useState();
-  const [address, setAddress] = useState('');
+  const [address, setAddress] = useState();
   const [balance, setBalance] = useState(null);
   const [isConnected, setConnected] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const getBalance = () => {
+  // useEffect(()=> {}, [])
+
+  const getBalance = (ethAddress) => {
     // Requesting balance method
-    provider?.getBalance(address).then((bal) => {
-      // Setting balance
-      setBalance(ethers.utils.formatEther(bal));
-    });
-  };
-  const checkConnection = () => {
-    if (!window.ethereum) return false;
-    return window.ethereum.isConnected();
+    window.ethereum
+      .request({
+        method: 'eth_getBalance',
+        params: [ethAddress, 'latest']
+      })
+      .then((weiBalance) => {
+        setBalance(ethers.utils.formatEther(weiBalance));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const connectMetamask = async () => {
@@ -28,15 +32,19 @@ export default function MetamaskAsset() {
       return;
     }
 
-    setProvider(new ethers.providers.Web3Provider(window.ethereum));
-
-    const accounts = await window.ethereum.request({
+    window.ethereum
+      .request({ method: 'eth_requestAccounts' })
+      .then((acc) => {
+        setAddress(acc[0]);
+        getBalance(acc[0]);
+        setConnected(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    /* const accounts = await window.ethereum.request({
       method: 'eth_requestAccounts'
-    });
-
-    setAddress(accounts[0]);
-    setConnected(true);
-    getBalance();
+    }); */
   };
 
   return (

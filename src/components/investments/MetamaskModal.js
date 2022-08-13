@@ -77,11 +77,12 @@ export default function MetamaskModal({ isOpen, onClose, position }) {
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader fontStyle="italic">Save Metamask Eth to Active Assets</ModalHeader>
+        <ModalHeader fontStyle="italic">Metamask Ethereum</ModalHeader>
         <ModalCloseButton />
         <ModalBody display="flex" flexDir="column" gap={5}>
           <HStack justifyContent="space-evenly">
             {/* Position & DatePicker */}
+            <FormLabel>Position: {position}</FormLabel>
             <Box>
               <FormLabel htmlFor="cost">COST/RETURNS (No +/-)</FormLabel>
               <InputGroup>
@@ -115,7 +116,7 @@ export default function MetamaskModal({ isOpen, onClose, position }) {
           </Box>
           <Box>
             <Text color="gray.400" fontSize="sm">
-              This will replace your current Metamask Ethereum entry in Active Assets (If Any).
+              This will replace your current Metamask Ethereum entry in Active Assets (if any).
             </Text>
           </Box>
         </ModalBody>
