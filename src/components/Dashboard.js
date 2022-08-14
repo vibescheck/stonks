@@ -28,29 +28,27 @@ export default function Dashboard() {
   };
 
   return (
-    <main>
-      <Flex
-        h="100vh"
-        flexDir="column"
-        overflowY="auto"
-        alignItems="center"
-        gap={4}
-        bgColor="gray.100">
-        <Box display="block" padding={6}>
-          {' '}
-        </Box>
-        <Heading> Your savings </Heading>
-        <SavingsCharts />
-        <Heading> Your investments (WIP) </Heading>
-        <Box display="block" padding={7}>
-          {' '}
-        </Box>
-        <Button type="button" variant="black" onClick={getMessage}>
-          Get Message
-        </Button>
-        <h1>{message}</h1>
-        <LogoutButton />
-      </Flex>
-    </main>
+    <Flex
+      h="100vh"
+      flexDir="column"
+      overflowY="auto"
+      alignItems="center"
+      gap={4}
+      bgColor="gray.100">
+      <Box display="block" padding={6}>
+        {' '}
+      </Box>
+      <Heading> Your savings </Heading>
+      <SavingsCharts />
+      <Heading> Your investments (WIP) </Heading>
+      <Box display="block" padding={7}>
+        {' '}
+      </Box>
+      <Button type="button" variant="black" onClick={getMessage}>
+        Get Message
+      </Button>
+      <h1>{message}</h1>
+      <LogoutButton />
+    </Flex>
   );
 }

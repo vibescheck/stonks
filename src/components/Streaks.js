@@ -31,5 +31,5 @@ export default function Streaks({ refresh }) {
     runGetStreak();
   }, [refresh]);
 
-  return <Box> Streak: {streak} </Box>;
+  return <> {streak} </>;
 }

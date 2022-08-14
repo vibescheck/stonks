@@ -22,9 +22,9 @@ export default function AddTransactionModal({ promptRefresh }) {
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState(Date.now);
   const [category, setCategory] = useState('');
-  const [note, setNote] = useState('');
+  const [label, setLabel] = useState('');
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const noteInputRef = useRef();
+  const labelInputRef = useRef();
   const [showSuccessToast, showErrorToast] = useCompletionToast();
 
   const addTransaction = async () => {
@@ -33,10 +33,10 @@ export default function AddTransactionModal({ promptRefresh }) {
       `${process.env.REACT_APP_SERVER_URL}/api/transactions/`,
       {
         user,
+        label,
         amount,
         date,
-        category,
-        note
+        category
       },
       {
         headers: {
@@ -70,11 +70,11 @@ export default function AddTransactionModal({ promptRefresh }) {
         onClose,
         addCheckin(),
         promptRefresh(),
-        showSuccessToast('Transaction Added', `${note} has been added.`)
+        showSuccessToast('Transaction Added', `${label} has been added.`)
       )
       .catch((err) => showErrorToast(err));
     setAmount('');
-    setNote('');
+    setLabel('');
     setDate(Date.now);
     setCategory('');
   };
@@ -82,12 +82,12 @@ export default function AddTransactionModal({ promptRefresh }) {
   return (
     <>
       <Box justify="center" align="center" pb={2}>
-        <Button onClick={onOpen} variant="black">
-          Add New Transaction
+        <Button onClick={onOpen} colorScheme="green">
+          Add Transaction
         </Button>
       </Box>
 
-      <Modal isOpen={isOpen} onClose={onClose} initialFocusRef={noteInputRef} isCentered>
+      <Modal isOpen={isOpen} onClose={onClose} initialFocusRef={labelInputRef} isCentered>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Add Transaction</ModalHeader>
@@ -96,20 +96,20 @@ export default function AddTransactionModal({ promptRefresh }) {
             <ModalBody>
               <Box>
                 <div>
-                  <FormLabel htmlFor="Note">
+                  <FormLabel htmlFor="Label">
                     Transaction Label:
                     <Input
                       type="text"
-                      value={note}
-                      onChange={(e) => setNote(e.target.value)}
+                      value={label}
+                      onChange={(e) => setLabel(e.target.value)}
                       placeholder="Enter transaction label"
-                      ref={noteInputRef}
+                      ref={labelInputRef}
                       required
                     />
                   </FormLabel>
                 </div>
                 <div>
-                  <FormLabel htmlFor="amount">
+                  <FormLabel htmlFor="Amount">
                     Amount:
                     {/* TODO form validation: prevent zero input */}
                     <Input
@@ -122,7 +122,7 @@ export default function AddTransactionModal({ promptRefresh }) {
                   </FormLabel>
                 </div>
                 <div>
-                  <FormLabel htmlFor="date">
+                  <FormLabel htmlFor="Date">
                     Date:
                     <Input
                       type="Date"
