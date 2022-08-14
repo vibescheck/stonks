@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useContext, useRef } from 'react';
 import axios from 'axios';
 import { useAuth0 } from '@auth0/auth0-react';
 import {
@@ -10,13 +10,14 @@ import {
   AlertDialogOverlay,
   Button
 } from '@chakra-ui/react';
-import { serverURL } from '../services/investmentService';
 import useCompletionToast from './hooks/useCompletionToast';
+import { AssetContext } from '../contexts/AssetContextProvider';
 
-export default function DeleteAlert({ isOpen, onClose, assetId, name, promptRefresh, apiRoute }) {
+export default function DeleteAlert({ isOpen, onClose, assetId, name, apiRoute }) {
   const cancelRef = useRef();
   const { getAccessTokenSilently } = useAuth0();
-  const [showSuccessToast, showErrorToast] = useCompletionToast();
+  const { showSuccessToast, showErrorToast } = useCompletionToast();
+  const { promptRefresh } = useContext(AssetContext);
 
   const onClickDelete = async () => {
     try {
@@ -28,7 +29,7 @@ export default function DeleteAlert({ isOpen, onClose, assetId, name, promptRefr
       onClose();
       promptRefresh();
     } catch (error) {
-      showErrorToast(error);
+      showErrorToast(error.message);
     }
   };
 

@@ -11,16 +11,14 @@ import useTransactions from './hooks/useTransactions';
 import useBudget from './hooks/useBudget';
 import BudgetCharts from './BudgetCharts';
 
-export default function SavingsWallet() {
+export default function SavingsCharts() {
+  const { transactions, isLoadingTransaction } = useContext(TransactionContext);
   const { user } = useAuth0();
-  const { transactions, isLoading } = useContext(TransactionContext);
   const { budget } = useContext(BudgetContext);
   const [refresh, setRefresh] = useState(false);
   const [showSuccessToast, showErrorToast] = useCompletionToast();
   const runGetTransactions = useTransactions();
   const runGetBudget = useBudget();
-
-  const promptRefresh = () => setRefresh(!refresh);
 
   const [posTxns, setPosTxns] = useState({
     labels: transactions.filter((data) => data.amount > 0).map((data) => data.note),
@@ -86,6 +84,8 @@ export default function SavingsWallet() {
       ]
     });
   }, [transactions]);
+
+  if (isLoadingTransaction) return <div>Fetching user data ...</div>;
 
   let date;
   let txnsByMonth;

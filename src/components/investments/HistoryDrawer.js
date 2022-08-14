@@ -1,32 +1,32 @@
+import { useAuth0 } from '@auth0/auth0-react';
+import { ChevronDownIcon } from '@chakra-ui/icons';
 import {
+  Button,
   Drawer,
   DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
   DrawerHeader,
   DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
+  Flex,
+  Heading,
+  IconButton,
   Table,
-  Thead,
-  Tr,
-  Th,
+  TableContainer,
+  Tag,
   Tbody,
   Td,
-  Heading,
   Text,
-  VStack,
-  IconButton,
-  Button,
+  Th,
+  Thead,
+  Tr,
   useDisclosure,
-  Flex,
-  TableContainer,
-  Tag
+  VStack
 } from '@chakra-ui/react';
-import { format, parseISO } from 'date-fns';
-import { useAuth0 } from '@auth0/auth0-react';
-import { useState, useEffect } from 'react';
-import { ChevronDownIcon } from '@chakra-ui/icons';
-import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
+import { format, parseISO } from 'date-fns';
+import { useEffect, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { serverURL } from '../../services/investmentService';
 import Loading from '../Loading';
 
@@ -63,7 +63,7 @@ export default function HistoryDrawer() {
         variant="ghost"
         colorScheme="blackAlpha"
         textColor="black"
-        pos="absolute"
+        pos="fixed"
         bottom="0"
         right="3"
         zIndex={10}
@@ -71,7 +71,7 @@ export default function HistoryDrawer() {
         p={2}
         onClick={onOpen}
         size="lg">
-        view history -{'>'}
+        history {'>>>'}
       </Button>
       <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="lg">
         <DrawerOverlay />

@@ -40,7 +40,8 @@ export default function SavingsWallet() {
   const [refresh, setRefresh] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [isTodayCheckin, setIsTodayCheckin] = useState(false);
-  const [showSuccessToast, showErrorToast] = useCompletionToast();
+  const { showSuccessToast, showErrorToast } = useCompletionToast();
+
   const runGetTransactions = useTransactions();
   const runGetBudget = useBudget();
 
@@ -100,13 +101,7 @@ export default function SavingsWallet() {
   }
 
   return (
-    <Flex
-      h="100vh"
-      flexDir="column"
-      overflowY="auto"
-      alignItems="center"
-      gap={4}
-      bgColor="gray.100">
+    <Flex flexDir="column" overflowY="auto" alignItems="center" gap={4} bgColor="gray.100">
       <Box display="block" padding={6}>
         {' '}
       </Box>

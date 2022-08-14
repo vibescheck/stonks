@@ -1,16 +1,33 @@
-import { Tr, Td, IconButton, Heading, Text, VStack, useDisclosure, Tag } from '@chakra-ui/react';
-import { format, parseISO, set } from 'date-fns';
 import { DeleteIcon } from '@chakra-ui/icons';
-import useHover from '../hooks/useHover';
-import DeleteAlert from '../DeleteAlert';
+import {
+  Heading,
+  HStack,
+  IconButton,
+  Stat,
+  StatArrow,
+  StatHelpText,
+  Tag,
+  Td,
+  Text,
+  Tr,
+  useDisclosure,
+  VStack
+} from '@chakra-ui/react';
+import { format, parseISO } from 'date-fns';
 import { serverURL } from '../../services/investmentService';
+import DeleteAlert from '../DeleteAlert';
+import useHover from '../hooks/useHover';
 
-export default function OwnedRowAsset({ asset, promptRefresh, refreshState }) {
+const profitLoss = ({ price, position, cost_basis }) => {
+  if (!price) return price;
+  return price * position - cost_basis;
+};
+
+export default function OwnedRowAsset({ asset }) {
   const [hover, handleMouseIn, handleMouseOut] = useHover();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const hideBoolean = () => asset.position <= 0;
-  const profitLoss = ({ price, position, cost_basis }) => price * position - cost_basis;
 
   return (
     <Tr
@@ -19,14 +36,36 @@ export default function OwnedRowAsset({ asset, promptRefresh, refreshState }) {
       onMouseOut={handleMouseOut}
       blockSize="20">
       <Td>
-        <VStack alignItems="start">
-          <Heading size="sm" letterSpacing="tight">
-            {asset.symbol}
-          </Heading>
-          <Text fontWeight="semibold" fontSize="sm">
-            {asset.name}
-          </Text>
-        </VStack>
+        <HStack>
+          <VStack alignItems="start">
+            <Heading size="sm" letterSpacing="tight">
+              {asset.symbol}
+            </Heading>
+            <Text fontWeight="semibold" fontSize="sm">
+              {asset.name}
+            </Text>
+          </VStack>
+          {hover && (
+            <>
+              <IconButton
+                size="sm"
+                m={0}
+                p={0}
+                icon={<DeleteIcon />}
+                onClick={onOpen}
+                width={20}
+                aria-label="Delete button appears on hover"
+              />
+              <DeleteAlert
+                isOpen={isOpen}
+                onClose={onClose}
+                assetId={asset?._id}
+                name={asset?.name}
+                apiRoute={`${serverURL}/api/activeAssets`}
+              />
+            </>
+          )}
+        </HStack>
       </Td>
       <Td>
         <Tag
@@ -49,37 +88,25 @@ export default function OwnedRowAsset({ asset, promptRefresh, refreshState }) {
         <>
           <Td>{asset.position}</Td>
           <Td>${asset.cost_basis}</Td>
-          <Td>{asset.price || 'API Query Limit reached'}</Td>
+          <Td>{asset.price || 'QL'}</Td>
+          <Td>
+            {asset.percentageChange ? (
+              <Stat>
+                <StatHelpText>
+                  <StatArrow type={asset.percentageChange >= 0 ? 'increase' : 'decrease'} />
+                  {asset.percentageChange}
+                </StatHelpText>
+              </Stat>
+            ) : (
+              'QL'
+            )}
+          </Td>
           <Td>{asset.price * asset.position}</Td>
           <Td>
             <Text color={profitLoss(asset) > 0 ? 'green' : 'red'}>
-              {profitLoss(asset).toFixed(2)}
+              {profitLoss(asset)?.toFixed(2) || 'QL'}
             </Text>
           </Td>
-          <Td>
-            {hover && (
-              <>
-                <IconButton
-                  size="sm"
-                  m={0}
-                  p={0}
-                  icon={<DeleteIcon />}
-                  onClick={onOpen}
-                  width={20}
-                  aria-label="Delete button appears on hover"
-                />
-                <DeleteAlert
-                  isOpen={isOpen}
-                  onClose={onClose}
-                  assetId={asset?._id}
-                  name={asset?.name}
-                  promptRefresh={promptRefresh}
-                  apiRoute={`${serverURL}/api/activeAssets`}
-                />
-              </>
-            )}
-          </Td>
-          <Td />
         </>
       )}
     </Tr>
