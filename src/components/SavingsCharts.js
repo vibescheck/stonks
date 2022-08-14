@@ -16,9 +16,11 @@ export default function SavingsCharts() {
   const { user } = useAuth0();
   const { budget } = useContext(BudgetContext);
   const [refresh, setRefresh] = useState(false);
-  const [showSuccessToast, showErrorToast] = useCompletionToast();
+  const { showSuccessToast, showErrorToast } = useCompletionToast();
   const runGetTransactions = useTransactions();
   const runGetBudget = useBudget();
+
+  const promptRefresh = () => setRefresh(!refresh);
 
   const [posTxns, setPosTxns] = useState({
     labels: transactions.filter((data) => data.amount > 0).map((data) => data.note),
@@ -92,7 +94,7 @@ export default function SavingsCharts() {
 
   useEffect(() => {
     if (transactions.length > 0) {
-      const txns = [...transactions].sort((a, b) => -a.date.localeCompare(b.date));
+      const txns = [...transactions].sort((a, b) => a.date.localeCompare(b.date));
       date = parseISO(txns[0].date);
       txnsByMonth = [txns[0]];
       for (let i = 1; i < txns.length; i++) {
@@ -109,18 +111,18 @@ export default function SavingsCharts() {
 
     console.log(txnsByMonth);
     setMonthlyBalance({
-      labels: txnsByMonth.map((data) => getMonth(parseISO(data.date))),
+      labels: txnsByMonth.map((data) => getMonth(parseISO(data.date)) + 1),
       datasets: [
         {
           label: 'Monthly Balance',
           data: txnsByMonth.map((data) => data.amount),
-          backgroundColor: chroma.scale('BuGn').gamma(0.8).padding(0.9).colors(transactions.length)
+          backgroundColor: 'black'
         }
       ]
     });
-  }, [refresh]);
+  }, [refresh, transactions]);
 
-  if (isLoading) return <div>Fetching user data ...</div>;
+  if (isLoadingTransaction) return <div>Fetching user data ...</div>;
 
   return (
     <>

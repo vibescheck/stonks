@@ -18,7 +18,7 @@ export default function NetWorthCard() {
       py={4}
       display="inline-block">
       <Heading size="md">Net Worth</Heading>
-      <Heading size="lg">${net}</Heading>
+      <Heading size="lg">${net.toFixed(2)}</Heading>
     </Flex>
   );
 }

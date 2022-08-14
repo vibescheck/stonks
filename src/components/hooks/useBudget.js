@@ -6,7 +6,7 @@ import useCompletionToast from './useCompletionToast';
 
 export default function UseBudget() {
   const { getAccessTokenSilently } = useAuth0();
-  const [showErrorToast] = useCompletionToast();
+  const { showErrorToast } = useCompletionToast();
   const { setBudget, setLoading } = useContext(BudgetContext);
 
   const getBudget = async () => {

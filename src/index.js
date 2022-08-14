@@ -11,7 +11,6 @@ import AssetContextProvider from './contexts/AssetContextProvider';
 import NetWorthContextProvider from './contexts/NetWorthContextProvider';
 import BudgetContextProvider from './contexts/BudgetContextProvider';
 
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(

@@ -29,32 +29,32 @@ export default function Dashboard() {
   };
 
   return (
-      <Flex
-        h="full"
-        flexDir="column"
-        overflowY="auto"
-        alignItems="center"
-        gap="8"
-        pt="8"
-        bgColor="gray.100"
-        minH="100vh">
-        <NetWorthCard />
-        <HStack gap="10" alignItems="start">
-          <Flex flexDir="column" gap="6">
-            <Heading> Savings </Heading>
-            <SavingsCharts />
-          </Flex>
-          <Flex flexDir="column" gap="6">
-            <Heading> Investments </Heading>
-            <AssetsCharts />
-          </Flex>
-        </HStack>
-        <VStack m="4">
-          <Button type="button" variant="black" onClick={getMessage}>
-            Get Message
-          </Button>
-          <h1>{message}</h1>
-        </VStack>
-      </Flex>
+    <Flex
+      h="full"
+      flexDir="column"
+      overflowY="auto"
+      alignItems="center"
+      gap="8"
+      pt="8"
+      bgColor="gray.100"
+      minH="100vh">
+      <NetWorthCard />
+      <HStack gap="10" alignItems="start">
+        <Flex flexDir="column" gap="6">
+          <Heading> Savings </Heading>
+          <SavingsCharts />
+        </Flex>
+        <Flex flexDir="column" gap="6">
+          <Heading> Investments </Heading>
+          <AssetsCharts />
+        </Flex>
+      </HStack>
+      <VStack m="4">
+        <Button type="button" variant="black" onClick={getMessage}>
+          Get Message
+        </Button>
+        <h1>{message}</h1>
+      </VStack>
+    </Flex>
   );
 }

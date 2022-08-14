@@ -17,11 +17,7 @@ import {
   useDisclosure
 } from '@chakra-ui/react';
 import { Link, useLocation } from 'react-router-dom';
-
-
-import { useAuth0 } from '@auth0/auth0-react';
 import Streaks from './Streaks';
-
 
 export default function NavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();

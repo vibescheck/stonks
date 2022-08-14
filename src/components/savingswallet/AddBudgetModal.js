@@ -29,7 +29,7 @@ export default function AddBudgetModal({ promptRefresh }) {
   const [label, setLabel] = useState('');
   const { isOpen, onOpen, onClose } = useDisclosure();
   const labelInputRef = useRef();
-  const [showSuccessToast, showErrorToast] = useCompletionToast();
+  const { showSuccessToast, showErrorToast } = useCompletionToast();
 
   const addBudget = async () => {
     const token = await getAccessTokenSilently();
