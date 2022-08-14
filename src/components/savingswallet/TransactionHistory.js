@@ -19,13 +19,9 @@ export default function TransactionHistory({ txn, promptRefresh }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Tr
-      _hover={{ background: 'gray.100' }}
-      onMouseOver={handleMouseIn}
-      onMouseOut={handleMouseOut}
-      blockSize="20">
+    <Tr onMouseOver={handleMouseIn} onMouseOut={handleMouseOut} blockSize="20">
       <Td>
-        <Heading size="sm">{txn.note || '-'}</Heading>
+        <Heading size="sm">{txn.label || '-'}</Heading>
       </Td>
       <Td>
         <Text color={txn.amount > 0 ? 'green' : 'red'}>
@@ -47,7 +43,7 @@ export default function TransactionHistory({ txn, promptRefresh }) {
               isOpen={isOpen}
               onClose={onClose}
               assetId={txn._id}
-              name={txn.note}
+              name={txn.label}
               promptRefresh={promptRefresh}
               apiRoute={`${process.env.REACT_APP_SERVER_URL}/api/transactions/`}
             />

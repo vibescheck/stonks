@@ -29,7 +29,6 @@ export default function Dashboard() {
   };
 
   return (
-    <main>
       <Flex
         h="full"
         flexDir="column"
@@ -42,11 +41,11 @@ export default function Dashboard() {
         <NetWorthCard />
         <HStack gap="10" alignItems="start">
           <Flex flexDir="column" gap="6">
-            <Heading> SAVINGS </Heading>
+            <Heading> Savings </Heading>
             <SavingsCharts />
           </Flex>
           <Flex flexDir="column" gap="6">
-            <Heading> INVESTMENTS </Heading>
+            <Heading> Investments </Heading>
             <AssetsCharts />
           </Flex>
         </HStack>
@@ -57,6 +56,5 @@ export default function Dashboard() {
           <h1>{message}</h1>
         </VStack>
       </Flex>
-    </main>
   );
 }

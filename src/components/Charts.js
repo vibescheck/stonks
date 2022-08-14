@@ -20,3 +20,14 @@ export function PieChart({ chartData, chartTitle }) {
     />
   );
 }
+
+export function HorizontalBarChart({ chartData }) {
+  return (
+    <Bar
+      data={chartData}
+      options={{
+        indexAxis: 'y'
+      }}
+    />
+  );
+}
