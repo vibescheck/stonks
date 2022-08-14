@@ -6,7 +6,7 @@ import useCompletionToast from './hooks/useCompletionToast';
 
 export default function Streaks({ refresh }) {
   const { getAccessTokenSilently } = useAuth0();
-  const [showErrorToast] = useCompletionToast();
+  const { showErrorToast } = useCompletionToast();
   const [streak, setStreak] = useState();
 
   const getStreak = async () => {
@@ -24,7 +24,7 @@ export default function Streaks({ refresh }) {
       .then((response) => {
         setStreak(response.data);
       })
-      .catch((err) => showErrorToast(err));
+      .catch((err) => showErrorToast(err.message));
   };
 
   useEffect(() => {

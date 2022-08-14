@@ -3,6 +3,9 @@ import {
   Heading,
   HStack,
   IconButton,
+  Stat,
+  StatArrow,
+  StatHelpText,
   Tag,
   Td,
   Text,
@@ -15,9 +18,12 @@ import { serverURL } from '../../services/investmentService';
 import DeleteAlert from '../DeleteAlert';
 import useHover from '../hooks/useHover';
 
-export const profitLoss = ({ price, position, cost_basis }) => price * position - cost_basis;
+const profitLoss = ({ price, position, cost_basis }) => {
+  if (!price) return price;
+  return price * position - cost_basis;
+};
 
-export default function OwnedRowAsset({ asset, promptRefresh }) {
+export default function OwnedRowAsset({ asset }) {
   const [hover, handleMouseIn, handleMouseOut] = useHover();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -55,7 +61,6 @@ export default function OwnedRowAsset({ asset, promptRefresh }) {
                 onClose={onClose}
                 assetId={asset?._id}
                 name={asset?.name}
-                promptRefresh={promptRefresh}
                 apiRoute={`${serverURL}/api/activeAssets`}
               />
             </>
@@ -83,11 +88,23 @@ export default function OwnedRowAsset({ asset, promptRefresh }) {
         <>
           <Td>{asset.position}</Td>
           <Td>${asset.cost_basis}</Td>
-          <Td>{asset.price || 'API Query Limit reached'}</Td>
+          <Td>{asset.price || 'QL'}</Td>
+          <Td>
+            {asset.percentageChange ? (
+              <Stat>
+                <StatHelpText>
+                  <StatArrow type={asset.percentageChange >= 0 ? 'increase' : 'decrease'} />
+                  {asset.percentageChange}
+                </StatHelpText>
+              </Stat>
+            ) : (
+              'QL'
+            )}
+          </Td>
           <Td>{asset.price * asset.position}</Td>
           <Td>
             <Text color={profitLoss(asset) > 0 ? 'green' : 'red'}>
-              {profitLoss(asset).toFixed(2)}
+              {profitLoss(asset)?.toFixed(2) || 'QL'}
             </Text>
           </Td>
         </>

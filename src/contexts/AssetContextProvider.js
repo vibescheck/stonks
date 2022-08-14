@@ -10,9 +10,11 @@ export default function AssetContextProvider({ children }) {
   const [assets, setAssets] = useState([]);
   const [isLoadingAsset, setLoadingAsset] = useState(false);
   const { isAuthenticated } = useAuth0();
-
+  const [refresh, setRefresh] = useState(false);
   const { getAccessTokenSilently } = useAuth0();
-  const [showErrorToast] = useCompletionToast();
+  const { showErrorToast } = useCompletionToast();
+
+  const promptRefresh = () => setRefresh(!refresh);
 
   const getAssetData = async () => {
     setLoadingAsset(true);
@@ -26,9 +28,8 @@ export default function AssetContextProvider({ children }) {
         setAssets(results.data.data);
       }
       setLoadingAsset(false);
-      // setMetamaskLogin(user.sub.startsWith('oauth2|siwe'));
     } catch (error) {
-      showErrorToast(error);
+      showErrorToast(error.message);
       console.log(error);
     }
   };
@@ -44,12 +45,13 @@ export default function AssetContextProvider({ children }) {
       value={useMemo(
         () => ({
           assets,
-          setAssets,
-          isLoadingAsset,
           setLoadingAsset,
-          getAssetData
+          getAssetData,
+          promptRefresh,
+          isLoadingAsset,
+          refresh
         }),
-        [assets]
+        [assets, refresh, isLoadingAsset]
       )}>
       {children}
     </AssetContext.Provider>

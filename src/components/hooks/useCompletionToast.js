@@ -12,15 +12,15 @@ export default function useCompletionToast() {
       isClosable: true
     });
   };
-  const showErrorToast = (err) => {
+  const showErrorToast = (errMessage) => {
     toast({
       title: 'Error occurred',
-      description: `${err}`,
+      description: `${errMessage}`,
       status: 'error',
       duration: 3000,
       isClosable: true
     });
   };
 
-  return [showSuccessToast, showErrorToast];
+  return { showSuccessToast, showErrorToast };
 }

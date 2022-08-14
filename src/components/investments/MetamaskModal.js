@@ -33,7 +33,7 @@ export default function MetamaskModal({ isOpen, onClose, position }) {
   const [note, setNote] = useState('');
   const [date, setDate] = useState(Date.now());
   const { getAccessTokenSilently } = useAuth0();
-  const [showSuccessToast, showErrorToast] = useCompletionToast();
+  const { showSuccessToast, showErrorToast } = useCompletionToast();
   const [isLoading, setLoading] = useState(false);
   const addAsset = async () => {
     // PARSEFLOAT
@@ -60,7 +60,7 @@ export default function MetamaskModal({ isOpen, onClose, position }) {
       onClose();
     } catch (error) {
       console.log(error);
-      showErrorToast(error);
+      showErrorToast(error.message);
       setLoading(false);
     }
   };

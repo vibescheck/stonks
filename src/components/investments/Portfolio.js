@@ -6,10 +6,12 @@ import {
   HStack,
   IconButton,
   Table,
+  TableCaption,
   TableContainer,
   Tbody,
   Td,
   Text,
+  Tfoot,
   Th,
   Thead,
   Tr
@@ -26,13 +28,8 @@ import { AssetContext } from '../../contexts/AssetContextProvider';
 import AssetsCharts from './AssetsCharts';
 
 export default function Portfolio() {
-  const [refresh, setRefresh] = useState(false);
   const { user } = useAuth0();
-  const { getAssetData, assets, isLoadingAsset } = useContext(AssetContext);
-
-  /* For auto-triggering Metamask retrieval if logged in with Siwe
-  const [metamaskLogin, setMetamaskLogin] = useState(false); */
-  const promptRefresh = () => setRefresh(!refresh);
+  const { getAssetData, assets, isLoadingAsset, refresh, promptRefresh } = useContext(AssetContext);
 
   useEffect(() => {
     getAssetData();
@@ -86,6 +83,9 @@ export default function Portfolio() {
           ) : (
             <TableContainer overflowY="auto">
               <Table>
+                <TableCaption>
+                  {`'QL'`} indicates reaching API query limit. Try refreshing in a while.
+                </TableCaption>
                 <Thead>
                   <Tr color="gray.200">
                     <Th>SYMBOL/NAME</Th>
@@ -94,6 +94,7 @@ export default function Portfolio() {
                     <Th>POSITION</Th>
                     <Th>COST BASIS</Th>
                     <Th>$ CURRENT PRICE</Th>
+                    <Th>% CHANGE</Th>
                     <Th>$ MARKET VALUE</Th>
                     <Th>$ P/L </Th>
                     <Td />
@@ -101,7 +102,7 @@ export default function Portfolio() {
                 </Thead>
                 <Tbody>
                   {assets.map((asset) => (
-                    <OwnedAssetRow key={uuidv4()} asset={asset} promptRefresh={promptRefresh} />
+                    <OwnedAssetRow key={uuidv4()} asset={asset} />
                   ))}
                 </Tbody>
               </Table>
@@ -129,7 +130,7 @@ export default function Portfolio() {
         <MetamaskAsset />
       </Flex>
       <HStack pos="fixed" bottom="0" zIndex={10} m={2}>
-        <SearchPopover promptRefresh={promptRefresh} />
+        <SearchPopover />
       </HStack>
       <HistoryDrawer />
     </Flex>

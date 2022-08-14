@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 
 import {
   Flex,
@@ -28,7 +28,7 @@ import SearchAssetRow from './SearchAssetRow';
 import { findCryptoSymbol, findStockSymbol } from '../../services/investmentService';
 import AssetFormModal from './AssetFormModal';
 
-export default function SearchPopover({ promptRefresh }) {
+export default function SearchPopover() {
   // use CONSTANTS for asset type
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState([]);
@@ -136,13 +136,7 @@ export default function SearchPopover({ promptRefresh }) {
         </Portal>
       </Popover>
 
-      <AssetFormModal
-        isOpen={isOpen}
-        onClose={onClose}
-        type={type}
-        asset={selected}
-        promptRefresh={promptRefresh}
-      />
+      <AssetFormModal isOpen={isOpen} onClose={onClose} type={type} asset={selected} />
     </>
   );
 }

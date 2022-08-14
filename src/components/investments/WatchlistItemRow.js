@@ -4,6 +4,10 @@ import {
   Heading,
   HStack,
   IconButton,
+  Stat,
+  StatArrow,
+  StatHelpText,
+  StatNumber,
   Tag,
   Td,
   Text,
@@ -15,7 +19,7 @@ import { serverURL } from '../../services/investmentService';
 import DeleteAlert from '../DeleteAlert';
 import useHover from '../hooks/useHover';
 
-export default function WatchlistItemRow({ item, promptRefresh }) {
+export default function WatchlistItemRow({ item }) {
   const [hover, handleMouseIn, handleMouseOut] = useHover();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -51,7 +55,6 @@ export default function WatchlistItemRow({ item, promptRefresh }) {
                 onClose={onClose}
                 assetId={item?._id}
                 name={item?.name}
-                promptRefresh={promptRefresh}
                 apiRoute={`${serverURL}/api/watchlist`}
               />
             </Box>
@@ -63,7 +66,19 @@ export default function WatchlistItemRow({ item, promptRefresh }) {
           {item.type}
         </Tag>
       </Td>
-      <Td>{item.price || 'API Query Limit reached'}</Td>
+      <Td>
+        {item.price ? (
+          <Stat>
+            <StatNumber>{item.price}</StatNumber>
+            <StatHelpText>
+              <StatArrow type={item.percentageChange >= 0 ? 'increase' : 'decrease'} />
+              {item.percentageChange}
+            </StatHelpText>
+          </Stat>
+        ) : (
+          'QL'
+        )}
+      </Td>
     </Tr>
   );
 }

@@ -5,6 +5,7 @@ import {
   Heading,
   IconButton,
   Table,
+  TableCaption,
   TableContainer,
   Tbody,
   Td,
@@ -14,19 +15,18 @@ import {
   Tr
 } from '@chakra-ui/react';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { serverURL } from '../../services/investmentService';
 import LoadingIcon from '../LoadingIcon';
 import WatchlistItemRow from './WatchlistItemRow';
+import { AssetContext } from '../../contexts/AssetContextProvider';
 
 export default function WatchlistCard() {
   const [list, setList] = useState([]);
   const [isLoading, setLoading] = useState(false);
-  const [refresh, setRefresh] = useState(false);
   const { getAccessTokenSilently } = useAuth0();
-
-  const promptRefresh = () => setRefresh(!refresh);
+  const { refresh, promptRefresh } = useContext(AssetContext);
 
   const getWatchlist = async () => {
     setLoading(true);
@@ -89,12 +89,14 @@ export default function WatchlistCard() {
       ) : (
         <TableContainer overflowY="auto">
           <Table>
+            <TableCaption>
+              {`'QL'`} indicates reaching API query limit. Try refreshing in a while.
+            </TableCaption>
             <Thead>
               <Tr color="gray.200">
                 <Th>SYMBOL/NAME</Th>
                 <Th>TYPE</Th>
                 <Th>$ CURRENT PRICE</Th>
-                {/* <Th>Movement</Th> */}
                 <Td />
               </Tr>
             </Thead>

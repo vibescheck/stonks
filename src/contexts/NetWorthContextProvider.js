@@ -3,7 +3,6 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import useCompletionToast from '../components/hooks/useCompletionToast';
 import { TransactionContext } from './TransactionContextProvider';
 import { AssetContext } from './AssetContextProvider';
-import { profitLoss } from '../components/investments/OwnedAssetRow';
 
 export const NetWorthContext = createContext(null);
 
@@ -14,7 +13,7 @@ export default function NetWorthContextProvider({ children }) {
   const { transactions, isLoadingTransaction } = useContext(TransactionContext);
   const { assets, isLoadingAsset } = useContext(AssetContext);
 
-  const [showErrorToast] = useCompletionToast();
+  const { showErrorToast } = useCompletionToast();
 
   const calculateNet = async () => {
     if (transactions?.length === 0 && assets?.length === 0) {
@@ -37,7 +36,7 @@ export default function NetWorthContextProvider({ children }) {
       setNet(netValue);
       setCalculatingState(false);
     } catch (error) {
-      showErrorToast(error);
+      showErrorToast(error.message);
       console.log(error);
       setCalculatingState(false);
     }

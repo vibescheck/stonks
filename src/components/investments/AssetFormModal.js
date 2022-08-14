@@ -23,19 +23,21 @@ import {
   Textarea
 } from '@chakra-ui/react';
 import axios from 'axios';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { serverURL } from '../../services/investmentService';
 import useCompletionToast from '../hooks/useCompletionToast';
 import LoadingIcon from '../LoadingIcon';
+import { AssetContext } from '../../contexts/AssetContextProvider';
 
-export default function AssetFormModal({ isOpen, onClose, type, asset, promptRefresh }) {
+export default function AssetFormModal({ isOpen, onClose, type, asset }) {
   const [position, setPosition] = useState(1);
   const [cost, setCost] = useState(100);
   const [note, setNote] = useState('');
   const [date, setDate] = useState(Date.now());
   const { getAccessTokenSilently } = useAuth0();
-  const [showSuccessToast, showErrorToast] = useCompletionToast();
+  const { showSuccessToast, showErrorToast } = useCompletionToast();
   const [isLoading, setLoading] = useState(false);
+  const { promptRefresh } = useContext(AssetContext);
 
   const addWatchlistItem = async () => {
     setLoading(true);
@@ -60,9 +62,10 @@ export default function AssetFormModal({ isOpen, onClose, type, asset, promptRef
       setLoading(false);
       showSuccessToast(`Asset: ${name} added to Watchlist`);
       onClose();
+      promptRefresh();
     } catch (error) {
       console.log(error);
-      showErrorToast(error);
+      showErrorToast(error.message);
       setLoading(false);
     }
   };
@@ -99,7 +102,7 @@ export default function AssetFormModal({ isOpen, onClose, type, asset, promptRef
       promptRefresh();
     } catch (error) {
       console.log(error);
-      showErrorToast(error);
+      showErrorToast(error.message);
       setLoading(false);
     }
   };
