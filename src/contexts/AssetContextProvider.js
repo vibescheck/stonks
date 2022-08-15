@@ -17,10 +17,6 @@ export default function AssetContextProvider({ children }) {
 
   const promptRefresh = () => setRefresh(!refresh);
   const calculateAssetSum = () => {
-    if (assets?.length === 0) {
-      setInventorySum(0);
-    }
-
     let sum = 0;
     assets.forEach((asset) => {
       if (typeof asset?.price === 'number') {
@@ -36,14 +32,14 @@ export default function AssetContextProvider({ children }) {
     try {
       const token = await getAccessTokenSilently();
       const results = await axios.get(`${serverURL}/api/activeAssets`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
+        timeout: 5000
       });
 
       if (results.data.data) {
         setAssets(results.data.data);
       }
 
-      calculateAssetSum();
       setLoadingAsset(false);
     } catch (error) {
       showErrorToast(error.message);
@@ -56,21 +52,23 @@ export default function AssetContextProvider({ children }) {
     if (isAuthenticated) {
       getAssetData();
     }
-  }, [refresh]);
+  }, [refresh, isAuthenticated]);
+
+  useEffect(() => {
+    calculateAssetSum();
+  }, [assets]);
 
   return (
     <AssetContext.Provider
       value={useMemo(
         () => ({
           assets,
-          setLoadingAsset,
-          getAssetData,
           promptRefresh,
           isLoadingAsset,
           refresh,
           inventorySum
         }),
-        [assets, refresh, isLoadingAsset]
+        [assets, refresh, isLoadingAsset, inventorySum]
       )}>
       {children}
     </AssetContext.Provider>

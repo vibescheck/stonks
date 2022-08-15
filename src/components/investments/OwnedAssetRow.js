@@ -86,7 +86,7 @@ export default function OwnedRowAsset({ asset }) {
         </>
       ) : (
         <>
-          <Td>{asset.position}</Td>
+          <Td>{asset.position.toString().slice(0, 8)}...</Td>
           <Td>${asset.cost_basis}</Td>
           <Td>{asset.price || 'QL'}</Td>
           <Td>
@@ -101,12 +101,12 @@ export default function OwnedRowAsset({ asset }) {
               'QL'
             )}
           </Td>
-          <Td>{asset.price * asset.position}</Td>
           <Td>
-            <Text color={profitLoss(asset) > 0 ? 'green' : 'red'}>
+            <Text color={profitLoss(asset) > 0 ? 'green' : 'red'} fontWeight="semibold">
               {profitLoss(asset)?.toFixed(2) || 'QL'}
             </Text>
           </Td>
+          <Td>{asset.price * asset.position}</Td>
         </>
       )}
     </Tr>

@@ -18,15 +18,15 @@ root.render(
     <BrowserRouter>
       <Auth0ProviderWithHistory>
         <ChakraProvider theme={theme}>
-          <TransactionContextProvider>
-            <BudgetContextProvider>
-              <AssetContextProvider>
+          <AssetContextProvider>
+            <TransactionContextProvider>
+              <BudgetContextProvider>
                 <NetWorthContextProvider>
                   <App />
                 </NetWorthContextProvider>
-              </AssetContextProvider>
-            </BudgetContextProvider>
-          </TransactionContextProvider>
+              </BudgetContextProvider>
+            </TransactionContextProvider>
+          </AssetContextProvider>
         </ChakraProvider>
       </Auth0ProviderWithHistory>
     </BrowserRouter>

@@ -53,7 +53,7 @@ export default function MetamaskAsset() {
         <>
           <p>
             <strong>Address: </strong>
-            {address?.slice(0.4)}...{address?.slice(38, 42)}
+            {address?.slice(0, 4)}...{address?.slice(38, 42)}
           </p>
           <p>
             <strong>Balance: </strong>

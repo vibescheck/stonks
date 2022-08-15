@@ -32,7 +32,6 @@ export default function Portfolio() {
   const { user } = useAuth0();
   const { assets, isLoadingAsset, promptRefresh } = useContext(AssetContext);
 
-  if (isLoadingAsset) return <Loading message="fetching assets" />;
   return (
     <Flex
       flexDir="column"
