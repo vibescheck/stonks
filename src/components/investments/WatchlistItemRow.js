@@ -18,6 +18,7 @@ import {
 import { serverURL } from '../../services/investmentService';
 import DeleteAlert from '../DeleteAlert';
 import useHover from '../hooks/useHover';
+import { checkChangePositiveSign } from './OwnedAssetRow';
 
 export default function WatchlistItemRow({ item }) {
   const [hover, handleMouseIn, handleMouseOut] = useHover();
@@ -71,7 +72,9 @@ export default function WatchlistItemRow({ item }) {
           <Stat>
             <StatNumber>{item.price}</StatNumber>
             <StatHelpText>
-              <StatArrow type={item.percentageChange >= 0 ? 'increase' : 'decrease'} />
+              <StatArrow
+                type={checkChangePositiveSign(item.percentageChange) ? 'increase' : 'decrease'}
+              />
               {item.percentageChange}
             </StatHelpText>
           </Stat>
