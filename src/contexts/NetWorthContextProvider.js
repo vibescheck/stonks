@@ -1,8 +1,8 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import useCompletionToast from '../components/hooks/useCompletionToast';
-import { TransactionContext } from './TransactionContextProvider';
 import { AssetContext } from './AssetContextProvider';
+import { TransactionContext } from './TransactionContextProvider';
 
 export const NetWorthContext = createContext(null);
 
@@ -11,7 +11,7 @@ export default function NetWorthContextProvider({ children }) {
   const [isCalculating, setCalculatingState] = useState(false);
   const { isAuthenticated } = useAuth0();
   const { transactions, isLoadingTransaction } = useContext(TransactionContext);
-  const { assets, isLoadingAsset } = useContext(AssetContext);
+  const { assets, isLoadingAsset, inventorySum } = useContext(AssetContext);
 
   const { showErrorToast } = useCompletionToast();
 
@@ -27,11 +27,7 @@ export default function NetWorthContextProvider({ children }) {
         netValue += transaction.amount;
       });
 
-      assets.forEach((asset) => {
-        if (typeof asset?.price === 'number') {
-          netValue += asset.price * asset.position;
-        }
-      });
+      netValue += inventorySum;
 
       setNet(netValue);
       setCalculatingState(false);

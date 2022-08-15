@@ -11,30 +11,28 @@ import {
   Tbody,
   Td,
   Text,
-  Tfoot,
   Th,
   Thead,
   Tr
 } from '@chakra-ui/react';
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { AssetContext } from '../../contexts/AssetContextProvider';
+import Loading from '../Loading';
 import LoadingIcon from '../LoadingIcon';
+import AssetsCharts from './AssetsCharts';
 import HistoryDrawer from './HistoryDrawer';
 import MetamaskAsset from './MetamaskAsset';
 import OwnedAssetRow from './OwnedAssetRow';
 import SearchPopover from './SearchPopover';
+import SumValue from './SumValue';
 import WatchlistCard from './WatchlistCard';
-import { AssetContext } from '../../contexts/AssetContextProvider';
-import AssetsCharts from './AssetsCharts';
 
 export default function Portfolio() {
   const { user } = useAuth0();
-  const { getAssetData, assets, isLoadingAsset, refresh, promptRefresh } = useContext(AssetContext);
+  const { assets, isLoadingAsset, promptRefresh } = useContext(AssetContext);
 
-  useEffect(() => {
-    getAssetData();
-  }, [refresh]);
-
+  if (isLoadingAsset) return <Loading message="fetching assets" />;
   return (
     <Flex
       flexDir="column"
@@ -44,6 +42,7 @@ export default function Portfolio() {
       bgColor="gray.100"
       pb="16"
       pt="6">
+      <SumValue />
       <Flex flexDir="row" justifyContent="center" gap="8">
         <WatchlistCard />
         <AssetsCharts />
