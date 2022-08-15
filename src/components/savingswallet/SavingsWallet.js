@@ -1,4 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import { RepeatIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
@@ -9,29 +10,23 @@ import {
   Table,
   TableContainer,
   Tbody,
-  Text,
   Th,
   Thead,
   Tr
 } from '@chakra-ui/react';
-import { RepeatIcon } from '@chakra-ui/icons';
-import { useEffect, useState, useContext } from 'react';
-import chroma from 'chroma-js';
-import { Chart } from 'react-chartjs-2';
 import axios from 'axios';
-import Confetti from 'react-confetti';
-import LoadingIcon from '../LoadingIcon';
-import AddTransactionModal from './AddTransactionModal';
-import { PieChart } from '../Charts';
-import TransactionHistory from './TransactionHistory';
-import useCompletionToast from '../hooks/useCompletionToast';
-import { TransactionContext } from '../../contexts/TransactionContextProvider';
+import { useContext, useEffect, useState } from 'react';
 import { BudgetContext } from '../../contexts/BudgetContextProvider';
-import useTransactions from '../hooks/useTransactions';
+import { TransactionContext } from '../../contexts/TransactionContextProvider';
 import useBudget from '../hooks/useBudget';
-import Streaks from '../Streaks';
+import useCompletionToast from '../hooks/useCompletionToast';
+import useTransactions from '../hooks/useTransactions';
+import LoadingIcon from '../LoadingIcon';
 import SavingsCharts from '../SavingsCharts';
+import Streaks from '../Streaks';
 import AddBudgetModal from './AddBudgetModal';
+import AddTransactionModal from './AddTransactionModal';
+import TransactionHistory from './TransactionHistory';
 
 export default function SavingsWallet() {
   const { getAccessTokenSilently, user } = useAuth0();
@@ -99,7 +94,7 @@ export default function SavingsWallet() {
   for (let i = 0; i < transactions.length; i++) {
     totalBalance += transactions[i].amount;
   }
-
+  const roundedBalance = Math.round(totalBalance * 100) / 100;
   return (
     <Flex flexDir="column" overflowY="auto" alignItems="center" gap={4} bgColor="gray.100">
       <Box display="block" padding={6}>
@@ -112,7 +107,9 @@ export default function SavingsWallet() {
           </Heading>
         </Flex>
         <Flex bgColor="white" borderRadius={15} boxShadow="lg" alignItems="center" p={5}>
-          <Heading size="md">Total Balance: ${Math.round(totalBalance * 100) / 100}</Heading>
+          <Heading size="md">
+            Total Balance: {roundedBalance >= 0 ? `$${roundedBalance}` : `-$${0 - roundedBalance}`}
+          </Heading>
         </Flex>
       </HStack>
       <SavingsCharts />

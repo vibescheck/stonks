@@ -17,10 +17,10 @@ import {
 import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { AssetContext } from '../../contexts/AssetContextProvider';
 import { serverURL } from '../../services/investmentService';
 import LoadingIcon from '../LoadingIcon';
 import WatchlistItemRow from './WatchlistItemRow';
-import { AssetContext } from '../../contexts/AssetContextProvider';
 
 export default function WatchlistCard() {
   const [list, setList] = useState([]);

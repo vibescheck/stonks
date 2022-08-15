@@ -1,8 +1,9 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { Button, Box, Flex, Heading, HStack, VStack } from '@chakra-ui/react';
+import { Button, Flex, Heading, Text, VStack } from '@chakra-ui/react';
 import axios from 'axios';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AssetContext } from '../contexts/AssetContextProvider';
 import AssetsCharts from './investments/AssetsCharts';
 import NetWorthCard from './NetWorthCard';
 import SavingsCharts from './SavingsCharts';
@@ -12,6 +13,8 @@ export default function Dashboard() {
 
   const [message, setMessage] = useState('');
   const { getAccessTokenSilently } = useAuth0();
+
+  const { assets } = useContext(AssetContext);
 
   const getMessage = async () => {
     try {
@@ -36,22 +39,29 @@ export default function Dashboard() {
       alignItems="center"
       gap="8"
       pt="8"
+      px="8"
       bgColor="gray.100"
       minH="100vh">
       <NetWorthCard />
-      <HStack gap="10" alignItems="start">
+      <VStack gap="10" alignItems="start" maxW="full" overflowX="auto">
         <Flex flexDir="column" gap="6">
           <Heading> Savings </Heading>
           <SavingsCharts />
         </Flex>
         <Flex flexDir="column" gap="6">
           <Heading> Investments </Heading>
-          <AssetsCharts />
+          {assets.length === 0 ? (
+            <Text fontSize="2xl" p={4}>
+              No Assets!
+            </Text>
+          ) : (
+            <AssetsCharts />
+          )}
         </Flex>
-      </HStack>
+      </VStack>
       <VStack m="4">
         <Button type="button" variant="black" onClick={getMessage}>
-          Get Message
+          Test Authentication
         </Button>
         <h1>{message}</h1>
       </VStack>

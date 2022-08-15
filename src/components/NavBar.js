@@ -21,6 +21,7 @@ import { Link, useLocation } from 'react-router-dom';
 export default function NavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { user, logout } = useAuth0();
+  console.log(user);
   // const { picture } = user;
 
   // TODO: user avatar, check route for correct tab, responsive UI (hamburger menu)
@@ -108,8 +109,7 @@ export default function NavBar() {
               w="50px"
               pt={2.5}
               _focusVisible="false">
-              <Avatar size="sm" />
-              {/* <Avatar size="sm" src={picture} /> */}
+              <Avatar size="sm" src={user?.picture} />
             </MenuButton>
             <MenuList>
               <Link to="/profile">

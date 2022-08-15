@@ -1,15 +1,15 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { Flex, Heading, HStack, useButtonGroup } from '@chakra-ui/react';
-import { useEffect, useState, useContext } from 'react';
+import { Flex, HStack, Text, VStack } from '@chakra-ui/react';
 import chroma from 'chroma-js';
-import { getMonth, isSameMonth, parse, parseISO, setMonth } from 'date-fns';
-import { PieChart, HorizontalBarChart, BarChart } from './Charts';
-import useCompletionToast from './hooks/useCompletionToast';
-import { TransactionContext } from '../contexts/TransactionContextProvider';
+import { getMonth, isSameMonth, parseISO } from 'date-fns';
+import { useContext, useEffect, useState } from 'react';
 import { BudgetContext } from '../contexts/BudgetContextProvider';
-import useTransactions from './hooks/useTransactions';
-import useBudget from './hooks/useBudget';
+import { TransactionContext } from '../contexts/TransactionContextProvider';
 import BudgetCharts from './BudgetCharts';
+import { BarChart, PieChart } from './Charts';
+import useBudget from './hooks/useBudget';
+import useCompletionToast from './hooks/useCompletionToast';
+import useTransactions from './hooks/useTransactions';
 
 export default function SavingsCharts() {
   const { transactions, isLoadingTransaction } = useContext(TransactionContext);
@@ -128,10 +128,14 @@ export default function SavingsCharts() {
     });
   }, [refresh, transactions]);
 
-  if (isLoadingTransaction) return <div>Fetching user data ...</div>;
-
+  if (transactions?.length === 0)
+    return (
+      <Text fontSize="2xl" p={4}>
+        No savings!
+      </Text>
+    );
   return (
-    <>
+    <VStack gap={6}>
       <HStack gap={6}>
         {posTxns.labels.length ? (
           <Flex
@@ -167,23 +171,6 @@ export default function SavingsCharts() {
             <PieChart chartData={negTxns} chartTitle="Expenses" />
           </Flex>
         ) : null}
-        {transactions.length > 0 ? (
-          <Flex
-            width={350}
-            flexDir="column"
-            size="md"
-            bgColor="white"
-            borderRadius={15}
-            boxShadow="lg"
-            alignItems="center"
-            px={2}
-            paddingTop={3}
-            paddingBottom={6}
-            gap={3}
-            display="inline-block">
-            <BarChart chartData={monthlyBalance} chartTitle="Monthly Balance" />
-          </Flex>
-        ) : null}
       </HStack>
       <HStack gap={6} py={4}>
         {[...budget].map((bgt) => (
@@ -197,6 +184,23 @@ export default function SavingsCharts() {
           />
         ))}
       </HStack>
-    </>
+      {transactions.length > 0 ? (
+        <Flex
+          width={350}
+          flexDir="column"
+          size="md"
+          bgColor="white"
+          borderRadius={15}
+          boxShadow="lg"
+          alignItems="center"
+          px={2}
+          paddingTop={3}
+          paddingBottom={6}
+          gap={3}
+          display="inline-block">
+          <BarChart chartData={monthlyBalance} chartTitle="Monthly Balance" />
+        </Flex>
+      ) : null}
+    </VStack>
   );
 }

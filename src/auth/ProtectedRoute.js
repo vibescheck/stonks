@@ -1,6 +1,5 @@
 import { withAuthenticationRequired } from '@auth0/auth0-react';
-import { Box, Flex } from '@chakra-ui/react';
-import { useMemo, useState } from 'react';
+import { Box } from '@chakra-ui/react';
 import Loading from '../components/Loading';
 import NavBar from '../components/NavBar';
 
@@ -11,9 +10,9 @@ export default function ProtectedRoute({ component }) {
   });
 
   return (
-    <>
+    <Box w="full" h="full" bgColor="gray.100">
       <NavBar />
       <Component />
-    </>
+    </Box>
   );
 }

@@ -5,12 +5,8 @@ import { BarChart } from '../Charts';
 import { AssetContext } from '../../contexts/AssetContextProvider';
 
 export default function AssetsCharts() {
-  const { assets, isLoadingAsset, getAssetData } = useContext(AssetContext);
+  const { assets, isLoadingAsset } = useContext(AssetContext);
   const [chartData, setChartData] = useState();
-
-  useEffect(() => {
-    getAssetData();
-  }, []);
 
   useEffect(() => {
     setChartData({
