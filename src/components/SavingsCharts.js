@@ -96,12 +96,12 @@ export default function SavingsCharts() {
     if (transactions.length > 0) {
       const txns = [...transactions].sort((a, b) => a.date.localeCompare(b.date));
       date = parseISO(txns[0].date);
-      txnsByMonth = [txns[0]];
+      txnsByMonth = [{ date: txns[0].date, amount: txns[0].amount }];
       for (let i = 1; i < txns.length; i++) {
         if (isSameMonth(date, parseISO(txns[i].date))) {
           txnsByMonth[txnsByMonth.length - 1].amount += txns[i].amount;
         } else {
-          txnsByMonth.push(txns[i]);
+          txnsByMonth.push({ date: txns[i].date, amount: txns[i].amount });
           date = parseISO(txns[i].date);
         }
       }
