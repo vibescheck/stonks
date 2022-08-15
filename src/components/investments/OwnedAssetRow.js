@@ -33,7 +33,6 @@ export default function OwnedRowAsset({ asset }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const hideBoolean = () => asset.position <= 0;
-  console.log(typeof asset.percentageChange);
   return (
     <Tr
       _hover={{ background: 'gray.100' }}
