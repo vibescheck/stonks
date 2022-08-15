@@ -10,6 +10,7 @@ import {
   Table,
   TableContainer,
   Tbody,
+  Text,
   Th,
   Thead,
   Tr
@@ -124,7 +125,6 @@ export default function SavingsWallet() {
               promptRefresh();
             }}
             isDisabled={isTodayCheckin}>
-            {/* TODO: isDisabled based on isTodayCheckin */}
             Check In 🔥
           </Button>
           {/* <Confetti /> */}

@@ -111,7 +111,6 @@ export default function AddTransactionModal({ promptRefresh }) {
                 <div>
                   <FormLabel htmlFor="Amount">
                     Amount:
-                    {/* TODO form validation: prevent zero input */}
                     <Input
                       type="Number"
                       value={amount}

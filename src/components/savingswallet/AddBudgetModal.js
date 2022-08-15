@@ -53,7 +53,11 @@ export default function AddBudgetModal({ promptRefresh }) {
   const onSubmit = (event) => {
     event.preventDefault();
     addBudget()
-      .then(onClose, promptRefresh(), showSuccessToast('Budget set', `${label} has been added.`))
+      .then(() => {
+        onClose();
+        promptRefresh();
+        showSuccessToast('Budget set', `${label} has been added.`);
+      })
       .catch((err) => showErrorToast(err));
     setLimit('');
     setLabel('');

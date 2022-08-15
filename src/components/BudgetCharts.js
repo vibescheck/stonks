@@ -87,8 +87,8 @@ export default function BudgetCharts({ transactions, budget, promptRefresh }) {
             onClose={onClose}
             assetId={budget._id}
             name={budget.label}
-            promptRefresh={promptRefresh}
             apiRoute={`${process.env.REACT_APP_SERVER_URL}/api/budget/`}
+            runRefresh={promptRefresh}
           />
         </Box>
       ) : (

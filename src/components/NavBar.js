@@ -21,10 +21,6 @@ import { Link, useLocation } from 'react-router-dom';
 export default function NavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { user, logout } = useAuth0();
-  console.log(user);
-  // const { picture } = user;
-
-  // TODO: user avatar, check route for correct tab, responsive UI (hamburger menu)
 
   const location = useLocation().pathname;
   let tabIndex = 0;
