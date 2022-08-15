@@ -120,7 +120,13 @@ export default function SavingsWallet() {
       <HStack spacing={6}>
         <AddTransactionModal promptRefresh={promptRefresh} />
         <Box justify="center" align="center" pb={2}>
-          <Button colorScheme="green" onClick={() => addCheckin()} isDisabled>
+          <Button
+            colorScheme="green"
+            onClick={() => {
+              addCheckin();
+              promptRefresh();
+            }}
+            isDisabled={isTodayCheckin}>
             {/* TODO: isDisabled based on isTodayCheckin */}
             Check In 🔥
           </Button>
@@ -145,7 +151,7 @@ export default function SavingsWallet() {
           gap={3}>
           <Flex w="100%" justifyContent="space-between" px={4}>
             <Heading size="lg" my={4}>
-              {`${user.name || user.nickname}'s `}savings
+              {`${user.nickname || user.name}'s `}savings
             </Heading>
             <IconButton
               icon={<RepeatIcon />}
@@ -155,26 +161,32 @@ export default function SavingsWallet() {
               width={20}
             />
           </Flex>
-          <TableContainer overflowY="auto" w={800}>
-            <Table colorScheme="blackAlpha">
-              <Thead alignItems="center">
-                <Tr color="gray.200">
-                  <Th> TRANSACTION </Th>
-                  <Th> AMOUNT </Th>
-                  <Th> CATEGORY </Th>
-                  <Th> DATE </Th>
-                  <Th> </Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {[...transactions]
-                  .sort((a, b) => -a.date.localeCompare(b.date))
-                  .map((txn) => (
-                    <TransactionHistory key={txn._id} txn={txn} promptRefresh={promptRefresh} />
-                  ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
+          {transactions.length > 0 ? (
+            <TableContainer overflowY="auto" w={800}>
+              <Table colorScheme="blackAlpha">
+                <Thead alignItems="center">
+                  <Tr color="gray.200">
+                    <Th> TRANSACTION </Th>
+                    <Th> AMOUNT </Th>
+                    <Th> CATEGORY </Th>
+                    <Th> DATE </Th>
+                    <Th> </Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {[...transactions]
+                    .sort((a, b) => -a.date.localeCompare(b.date))
+                    .map((txn) => (
+                      <TransactionHistory key={txn._id} txn={txn} promptRefresh={promptRefresh} />
+                    ))}
+                </Tbody>
+              </Table>
+            </TableContainer>
+          ) : (
+            <Text fontSize="2xl" p={4}>
+              No transactions found. Add one today!
+            </Text>
+          )}
           {/* <IconButton
             variant="ghost"
             size="sm"

@@ -44,8 +44,8 @@ export default function TransactionHistory({ txn, promptRefresh }) {
               onClose={onClose}
               assetId={txn._id}
               name={txn.label}
-              promptRefresh={promptRefresh}
               apiRoute={`${process.env.REACT_APP_SERVER_URL}/api/transactions/`}
+              savingsRefresh={promptRefresh}
             />
           </>
         ) : (

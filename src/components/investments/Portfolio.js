@@ -65,7 +65,7 @@ export default function Portfolio() {
           gap={3}>
           <Flex w="100%" justifyContent="space-between" px={3}>
             <Heading size="lg" my={4}>
-              {`${user.name || user.nickname}'s `} active assets
+              {`${user.nickname || user.name}'s `} active assets
             </Heading>
             <IconButton
               icon={<RepeatIcon />}

@@ -17,7 +17,6 @@ import {
   useDisclosure
 } from '@chakra-ui/react';
 import { Link, useLocation } from 'react-router-dom';
-import Streaks from './Streaks';
 
 export default function NavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -100,9 +99,6 @@ export default function NavBar() {
       </Flex>
       <Flex top={0} right={0} pos="fixed" zIndex={2} pr={4}>
         <Flex align="center" justify="center">
-          <Heading color="white" size="md" mt={2}>
-            🔥 <Streaks />
-          </Heading>
           <Menu>
             <MenuButton
               as={Button}

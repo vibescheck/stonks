@@ -13,7 +13,7 @@ import {
 import useCompletionToast from './hooks/useCompletionToast';
 import { AssetContext } from '../contexts/AssetContextProvider';
 
-export default function DeleteAlert({ isOpen, onClose, assetId, name, apiRoute }) {
+export default function DeleteAlert({ isOpen, onClose, assetId, name, apiRoute, savingsRefresh }) {
   const cancelRef = useRef();
   const { getAccessTokenSilently } = useAuth0();
   const { showSuccessToast, showErrorToast } = useCompletionToast();
@@ -27,7 +27,7 @@ export default function DeleteAlert({ isOpen, onClose, assetId, name, apiRoute }
       });
       showSuccessToast('Asset Deleted', `${name} has been deleted.`);
       onClose();
-      promptRefresh();
+      savingsRefresh();
     } catch (error) {
       showErrorToast(error.message);
     }

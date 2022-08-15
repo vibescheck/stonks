@@ -66,12 +66,12 @@ export default function AddTransactionModal({ promptRefresh }) {
   const onSubmit = (event) => {
     event.preventDefault();
     addTransaction()
-      .then(
-        onClose,
-        addCheckin(),
-        promptRefresh(),
-        showSuccessToast('Transaction Added', `${label} has been added.`)
-      )
+      .then(() => {
+        onClose();
+        addCheckin();
+        promptRefresh();
+        showSuccessToast('Transaction Added', `${label} has been added.`);
+      })
       .catch((err) => showErrorToast(err.message));
     setAmount('');
     setLabel('');

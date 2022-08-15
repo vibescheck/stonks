@@ -91,7 +91,7 @@ export default function SavingsCharts() {
 
   let date;
   let txnsByMonth;
-
+  const monthlyChartColors = [];
   useEffect(() => {
     if (transactions.length > 0) {
       const txns = [...transactions].sort((a, b) => a.date.localeCompare(b.date));
@@ -109,14 +109,20 @@ export default function SavingsCharts() {
       txnsByMonth = [];
     }
 
-    console.log(txnsByMonth);
+    for (let i = 0; i < txnsByMonth.length; i++) {
+      if (txnsByMonth[i].amount >= 0) {
+        monthlyChartColors.push('#3cb371');
+      } else {
+        monthlyChartColors.push('#dc143c');
+      }
+    }
     setMonthlyBalance({
       labels: txnsByMonth.map((data) => getMonth(parseISO(data.date)) + 1),
       datasets: [
         {
           label: 'Monthly Balance',
           data: txnsByMonth.map((data) => data.amount),
-          backgroundColor: 'black'
+          backgroundColor: monthlyChartColors
         }
       ]
     });
