@@ -23,12 +23,17 @@ const profitLoss = ({ price, position, cost_basis }) => {
   return price * position - cost_basis;
 };
 
+export const checkChangePositiveSign = (percentageChangeString) => {
+  if (!percentageChangeString) return percentageChangeString;
+  return parseFloat(percentageChangeString.slice(0, percentageChangeString.length - 2)) >= 0;
+};
+
 export default function OwnedRowAsset({ asset }) {
   const [hover, handleMouseIn, handleMouseOut] = useHover();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const hideBoolean = () => asset.position <= 0;
-
+  console.log(typeof asset.percentageChange);
   return (
     <Tr
       _hover={{ background: 'gray.100' }}
@@ -93,7 +98,9 @@ export default function OwnedRowAsset({ asset }) {
             {asset.percentageChange ? (
               <Stat>
                 <StatHelpText>
-                  <StatArrow type={asset.percentageChange >= 0 ? 'increase' : 'decrease'} />
+                  <StatArrow
+                    type={checkChangePositiveSign(asset.percentageChange) ? 'increase' : 'decrease'}
+                  />
                   {asset.percentageChange}
                 </StatHelpText>
               </Stat>
