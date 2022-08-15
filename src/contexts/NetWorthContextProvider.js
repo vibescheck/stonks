@@ -42,7 +42,7 @@ export default function NetWorthContextProvider({ children }) {
     if (isAuthenticated && !isLoadingTransaction && !isLoadingAsset) {
       calculateNet();
     }
-  }, [transactions, assets, isLoadingAsset, isLoadingTransaction]);
+  }, [transactions, assets, isLoadingAsset, isLoadingTransaction, inventorySum]);
 
   return (
     <NetWorthContext.Provider
